@@ -9,7 +9,6 @@ using namespace std;
 bool test_sum_rule=true;
 double *** rho_red_temp;
 double (*pf)(double,double);
-
 void density_of_state(void)
 {
     double dos1_up(double);

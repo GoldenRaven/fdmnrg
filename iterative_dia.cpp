@@ -6,7 +6,6 @@
 #include<mkl.h>
 #include<omp.h>
 #include"setup.h"
-
 int num_block;
 int num_kept;
 int N_max;
