@@ -8,6 +8,11 @@
 #include"setup.h"
 
 int num_block;
+int num_kept;
+int N_max;
+double Beta;
+double temperature;
+double omega0;
 BASIS ** block;
 int * num_basis_block;
 double *** H_bij;
@@ -15,12 +20,6 @@ double ** temp1;
 double ** temp2;
 double ** temp3;
 double ** temp4;
-
-int num_kept;
-int N_max;
-double Beta;
-double temperature;
-double omega0;
 double *** vect;
 double *** c_dag_up_basis;
 double *** c_dag_down_basis;
