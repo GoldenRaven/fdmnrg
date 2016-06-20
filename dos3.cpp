@@ -50,7 +50,8 @@ void density_of_state(void)
 	double DOS1_UP,DOS2_UP,DOS3_UP,DOS1_DOWN,DOS2_DOWN,DOS3_DOWN;
 	//test sum rule
 	freqency=1.0;
-	pf=P_lorentz;
+	pf=P_G;
+	//pf=P_lorentz;
 	DOS1_UP=dos1_up(freqency);
 	DOS2_UP=dos2_up(freqency);
 	DOS3_UP=dos3_up(freqency);
@@ -73,7 +74,8 @@ void density_of_state(void)
     test_sum_rule=false;
 	while (!f_freqency.eof()){//???????????
 		f_freqency >> freqency;
-		pf=P_lorentz;
+		//pf=P_lorentz;
+		pf=P_LG;
 	    DOS1_UP=dos1_up(freqency);
 	    DOS2_UP=dos2_up(freqency);
 	    DOS3_UP=dos3_up(freqency);
@@ -89,6 +91,24 @@ void density_of_state(void)
 		cout << setw(14) << setprecision(5) << DOS2_DOWN;
 		cout << setw(14) << setprecision(5) << DOS3_DOWN;
 		cout << endl;
+		if (fabs(freqency) < omega0){
+			pf=P_G;
+	        DOS1_UP=dos1_up(freqency);
+	        DOS2_UP=dos2_up(freqency);
+	        DOS3_UP=dos3_up(freqency);
+	        DOS1_DOWN=dos1_down(freqency);
+	        DOS2_DOWN=dos2_down(freqency);
+	        DOS3_DOWN=dos3_down(freqency);
+		    cout << "  smeared   ";
+		    cout << setw(14) << setprecision(5) << freqency;
+		    cout << setw(14) << setprecision(5) << DOS1_UP;
+		    cout << setw(14) << setprecision(5) << DOS2_UP;
+		    cout << setw(14) << setprecision(5) << DOS3_UP;
+		    cout << setw(14) << setprecision(5) << DOS1_DOWN;
+		    cout << setw(14) << setprecision(5) << DOS2_DOWN;
+		    cout << setw(14) << setprecision(5) << DOS3_DOWN;
+		    cout << endl;
+		}
 		f_dos_unsmeared << left;
 		f_dos_unsmeared << setw(20) << setprecision(10) << freqency;
 		f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;

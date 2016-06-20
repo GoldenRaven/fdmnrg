@@ -49,7 +49,7 @@ void iterative_dia(void)
 	ifstream f_T("temperature");
 	f_T >> temperature;//T \equiv k_B T / D.
 	Beta=1.0/temperature;
-	omega0=0.005*temperature;
+	omega0=0.5*temperature;
 	N = int(1-2 * log(Beta_bar/Beta)/log(Lambda));//site -1,0,...,N_max
 	//N_max = 3;//!!!!!!!!!!!!!!!!!!!!
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
