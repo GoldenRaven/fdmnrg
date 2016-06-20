@@ -33,7 +33,6 @@ int * num_eigen_kept;// no. of |k;n>.
 EIGEN_STATE  ** eigen;
 BASIS ** basis_ordered;
 NEW_BASIS *** basis_kj;
-
 void genoutput(void);
 void delete_iter_dia(int);
 int func_delta(int a, int b){
