@@ -5,6 +5,7 @@
 #include<math.h>
 #include<mkl.h>
 #include<omp.h>
+#include<string.h>
 #include"setup.h"
 int num_block;
 int num_kept;
@@ -50,8 +51,6 @@ void iterative_dia(void)
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 	ifstream f_num_kept("num_kept");
 	f_num_kept >> num_kept;
-	ofstream f_eig_val_odd("eig_val_odd.dat");
-	ofstream f_eig_val_even("eig_val_even.dat");
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
 	double pe_up[N_max+1];
@@ -209,6 +208,23 @@ void iterative_dia(void)
         }
     }                                                      
 	for (int n=1;n<N_max+2;n++){
+		char str0[20],str1[15];
+		sprintf(str0,"%d",n);
+		strcpy(str1,"_U.dat");
+		strcat(str0,str1);
+	    ofstream f_U(str0);
+		char str2[15];
+		strcpy(str2,"_eigenvalue.dat");
+		strcat(str0,str2);
+	    ofstream f_eig_val(str0);
+		char str3[15];
+		strcpy(str3,"_d_up.dat");
+		strcat(str0,str3);
+	    ofstream f_d_up(str0);
+		char str4[15];
+		strcpy(str4,"_d_down.dat");
+		strcat(str0,str4);
+	    ofstream f_d_down(str0);
 		{int i=0;
 	    for (int k=0;k<num_eigen_kept[n-1];k++){
 	        for (int j=0;j<dim_dot;j++){
@@ -533,15 +549,6 @@ void iterative_dia(void)
 			//cout << "in eigen  " << eigen[n][i].k-1 << endl;
 			//cout << n << "  " << basis_ordered[n][i].quant_num_totalnum <<" | "<<  basis_ordered[n][i].k <<"  "<< basis_ordered[n][i].j << " | " << eigen[n][i].sort << endl;
 		}
-		if (n%2==0){
-		    for (int i=0;i<num_basis[n];i++){
-		        f_eig_val_even << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
-		    }
-		}else{
-		    for (int i=0;i<num_basis[n];i++){
-		        f_eig_val_odd << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
-		    }
-		}
 		//local operators.
 #pragma omp parallel for 
 		for (int j=0;j<dim_dot;j++){
@@ -596,6 +603,14 @@ void iterative_dia(void)
 			}
 		}
 		//ofstream cup("cup",ios::binary);
+		for (int i=0;i<num_basis[n];i++){
+		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
+			for (int j=0;j<num_basis[n];j++){
+			    f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
+				f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
+				f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
+			}
+		}
 		cout << "    ";cout << "Time leaved:    ";date_time();
 		delete_iter_dia(n);
 	}
