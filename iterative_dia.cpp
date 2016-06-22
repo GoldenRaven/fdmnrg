@@ -538,7 +538,7 @@ void iterative_dia(void)
 			//cout << n << "  " << basis_ordered[n][i].quant_num_totalnum <<" | "<<  basis_ordered[n][i].k <<"  "<< basis_ordered[n][i].j << " | " << eigen[n][i].sort << endl;
 		}
 		for (int i=0;i<num_basis[n];i++){
-		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
+		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
 			//f_eig_val << "Dot  " << n << "  total_electron_number_" << basis_ordered[n][i].quant_num_totalnum << "  eig_val_relat    " << eigen[n][i].eig_val_relat << endl;
 		}
 		//local operators.
