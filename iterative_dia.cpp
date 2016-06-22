@@ -55,7 +55,8 @@ void iterative_dia(void)
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 	ifstream f_num_kept("num_kept");
 	f_num_kept >> num_kept;
-	ofstream f_eig_val("eig_val.dat");
+	ofstream f_eig_val_odd("eig_val_odd.dat");
+	ofstream f_eig_val_even("eig_val_even.dat");
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
 	double pe_up[N_max+1];
@@ -537,9 +538,14 @@ void iterative_dia(void)
 			//cout << "in eigen  " << eigen[n][i].k-1 << endl;
 			//cout << n << "  " << basis_ordered[n][i].quant_num_totalnum <<" | "<<  basis_ordered[n][i].k <<"  "<< basis_ordered[n][i].j << " | " << eigen[n][i].sort << endl;
 		}
-		for (int i=0;i<num_basis[n];i++){
-		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
-			//f_eig_val << "Dot  " << n << "  total_electron_number_" << basis_ordered[n][i].quant_num_totalnum << "  eig_val_relat    " << eigen[n][i].eig_val_relat << endl;
+		if (n%2==0){
+		    for (int i=0;i<num_basis[n];i++){
+		        f_eig_val_even << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
+		    }
+		}else{
+		    for (int i=0;i<num_basis[n];i++){
+		        f_eig_val_odd << "Dot  " << n << "  total_electron_number_" << left << setw(5) << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
+		    }
 		}
 		//local operators.
 #pragma omp parallel for 
