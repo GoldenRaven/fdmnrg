@@ -27,7 +27,7 @@ extern double *** c_dag_up_eigen;
 extern double *** c_dag_down_eigen;
 extern double *** c_up_eigen;
 extern double *** c_down_eigen;
-extern bool smear_both;
+extern bool smear;
 
 struct EIGEN_STATE{
 	int sort,k,n,quant_num_totalnum,quant_num_upnum,quant_num_downnum;//dim_imp;

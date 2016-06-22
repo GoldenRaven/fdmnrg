@@ -17,7 +17,7 @@ void genoutput(void)
 	cout << "  " << " Lambda    = " << left << setw(15) << Lambda     << " :Logarithmic descritization parameter" <<  endl;
 	cout << "  " << " alpha     = " << left << setw(15) << alpha      << " :Width in log-Gaussian" <<  endl;
 	cout << "  " << " omega0    = " << left << setw(15) << omega0     << " :Width in Gaussian" <<  endl;
-	cout << "  " << " smear_both= " << left << setw(15) << smear_both << " :smear or unsmear" <<  endl;
+	cout << "  " << " smear     = " << left << setw(15) << smear << " :smear or unsmear" <<  endl;
 	cout << "  #############################################################################" << endl;
 	//char ch;
 	//ifstream setup("../../setup.cpp");

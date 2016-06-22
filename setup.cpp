@@ -10,4 +10,4 @@ double U=0.12;// in unit of D
 double Ed=-1.0*U/3.0;//in unite of D
 double Lambda=2.0;
 double alpha=0.3;
-bool smear_both=false;
+bool smear=false;

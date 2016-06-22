@@ -8,7 +8,8 @@
 using namespace std;
 bool test_sum_rule=true;
 double *** rho_red_temp;
-double (*pf)(double,double);
+//double (*pf)(double,double);
+double (*pf)(double);
 void density_of_state(void)
 {
     double dos1_up(double);
@@ -50,8 +51,6 @@ void density_of_state(void)
 	double DOS1_UP,DOS2_UP,DOS3_UP,DOS1_DOWN,DOS2_DOWN,DOS3_DOWN;
 	//test sum rule
 	freqency=1.0;
-	pf=P_G;
-	//pf=P_lorentz;
 	DOS1_UP=dos1_up(freqency);
 	DOS2_UP=dos2_up(freqency);
 	DOS3_UP=dos3_up(freqency);
@@ -74,8 +73,6 @@ void density_of_state(void)
     test_sum_rule=false;
 	while (!f_freqency.eof()){//???????????
 		f_freqency >> freqency;
-		//pf=P_lorentz;
-		pf=P_LG;
 	    DOS1_UP=dos1_up(freqency);
 	    DOS2_UP=dos2_up(freqency);
 	    DOS3_UP=dos3_up(freqency);
@@ -92,7 +89,6 @@ void density_of_state(void)
 		cout << setw(14) << setprecision(5) << DOS3_DOWN;
 		cout << endl;
 		if (fabs(freqency) < omega0){
-			pf=P_G;
 	        DOS1_UP=dos1_up(freqency);
 	        DOS2_UP=dos2_up(freqency);
 	        DOS3_UP=dos3_up(freqency);
@@ -317,6 +313,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 double dos1_up(double freqency)
 {
 	double sum=0;
+	double P_K(double,double);
 	for (int n=n0;n<N_max+1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
@@ -324,7 +321,7 @@ double dos1_up(double freqency)
 		    for (int j=num_kept;j<num_basis[n];j++){
 				double omegan=0;
 				omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen[n][i].eig_val_relat-eigen[n][j].eig_val_relat);
-				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*(*pf)(freqency,-1.0*omegan);
+				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*P_K(freqency,-1.0*omegan);
 			}
 		}
 		sum=sum+pow(4,N_max+1-n)*sum_n;
@@ -336,7 +333,7 @@ double dos1_up(double freqency)
 		    for (int j=0;j<num_basis[n];j++){
 				double omegan=0;
 				omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat-pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat;
-				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*(*pf)(freqency,-1.0*omegan);
+				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*P_K(freqency,-1.0*omegan);
 			}
 		}
 		sum=sum+pow(4,N_max+1-n)*sum_n;
@@ -346,6 +343,9 @@ double dos1_up(double freqency)
 double dos1_down(double freqency)
 {
 	double sum=0;
+	double P_K(double,double);
+    double P_h_unsmeared(double freqency);
+    double P_h_smeared(double freqency);
 	for (int n=n0;n<N_max+1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
@@ -353,7 +353,7 @@ double dos1_down(double freqency)
 		    for (int j=num_kept;j<num_basis[n];j++){
 				double omegan=0;
 				omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat-pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat;
-				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*(*pf)(freqency,-1.0*omegan);
+				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*P_K(freqency,-1.0*omegan);
 			}
 		}
 		sum=sum+pow(4,N_max+1-n)*sum_n;
@@ -365,7 +365,7 @@ double dos1_down(double freqency)
 		    for (int j=0;j<num_basis[n];j++){
 				double omegan=0;
 				omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat-pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat;
-				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*(*pf)(freqency,-1.0*omegan);
+				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat))*P_K(freqency,-1.0*omegan);
 			}
 		}
 		sum=sum+pow(4,N_max+1-n)*sum_n;
@@ -375,6 +375,9 @@ double dos1_down(double freqency)
 double dos2_up(double freqency)
 {
 	double sum=0;
+	double P_K(double,double);
+    double P_h_unsmeared(double freqency);
+    double P_h_smeared(double freqency);
 	for (int n=n0;n<N_max+1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
@@ -382,7 +385,7 @@ double dos2_up(double freqency)
 			for (int j=0;j<num_kept;j++){
 				double omegan=0;
 				omegan=eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0)-eigen[n][j].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0);
-				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*(*pf)(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*(*pf)(freqency,omegan);
+				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
 			}
 		}
 		sum=sum+sum_n*pow(4,N_max+1-n);
@@ -392,6 +395,9 @@ double dos2_up(double freqency)
 double dos2_down(double freqency)
 {
 	double sum=0;
+	double P_K(double,double);
+    double P_h_unsmeared(double freqency);
+    double P_h_smeared(double freqency);
 	for (int n=n0;n<N_max+1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
@@ -399,7 +405,7 @@ double dos2_down(double freqency)
 			for (int j=0;j<num_kept;j++){
 				double omegan=0;
 				omegan=eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0)-eigen[n][j].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0);
-				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*(*pf)(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*(*pf)(freqency,omegan);
+				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
 				}
 		}
 		sum=sum+sum_n*pow(4,N_max+1-n);
@@ -410,7 +416,8 @@ double dos3_up(double freqency)
 {
 	double sum=0;
 	double P_K(double,double);
-	double P_lorentz(double,double);
+    double P_h_unsmeared(double freqency);
+    double P_h_smeared(double freqency);
 	//ofstream f_up("up.dat");
 	for (int n=n0;n<N_max+1;n++){
 		double sum_n=0;
@@ -425,7 +432,7 @@ double dos3_up(double freqency)
 					//cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << "  f=  " << freqency << "  P= " << (*pf)(freqency,-1.0*omegan) << endl;
 				//}
 				for (int k=0;k<num_kept;k++){
-					sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,omegan);
+					sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][k]*rho_red_temp[n][k][i]*P_K(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][k]*rho_red_temp[n][k][i]*P_K(freqency,omegan);
 				}
 				//f_up << freqency << "  " << omegan << "  " << (*pf)(freqency,-1.0*omegan) << endl;
 			}
@@ -438,6 +445,8 @@ double dos3_down(double freqency)
 {
 	double sum=0;
 	double P_K(double,double);
+    double P_h_unsmeared(double freqency);
+    double P_h_smeared(double freqency);
 	//ofstream f_down("down.dat");
 	for (int n=n0;n<N_max+1;n++){
 		double sum_n=0;
@@ -447,7 +456,7 @@ double dos3_down(double freqency)
 				double omegan=0;
 				omegan=eigen[n][i].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0)-eigen[n][j].eig_val_relat*pow(Lambda,-1.0*(n-1-1)/2.0);
 				for (int k=0;k<num_kept;k++){
-					sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,omegan);
+					sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][k]*rho_red_temp[n][k][i]*P_K(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][k]*rho_red_temp[n][k][i]*P_K(freqency,omegan);
 				}
 				//f_down << freqency << "  " << omegan << "  " << (*pf)(freqency,-1.0*omegan) << endl;
 			}
@@ -456,92 +465,58 @@ double dos3_down(double freqency)
 	}
 	return sum;
 }
-double P_LG(double freqency,double omegan)//---> omega + omega_n !!!!!!!!!!!!
-{
-	double Pi=3.14159265357L;
-	if (test_sum_rule) {
-		return 1.0;
-	}else{
-		if (fabs(omegan)<pow(10,-20)){
-			//cout << "xxx =0  " << sqrt(omegan*omegan);
-			return 0;
-		}else{
-		    return exp(-1.0*alpha*alpha/4.0)/(alpha*fabs(omegan)*sqrt(Pi))*exp(-1.0*pow(log(fabs(freqency))-log(fabs(omegan)),2)/alpha/alpha);
-		}
-	}
-}
 
-double P_G(double freqency,double omegan)// ---> omega - omega_n !!!!!!!!!!!!
+double P_K(double freqency, double omegan)//centered at omegan! not -1.0*omegan.
 {
-	double Pi=3.14159265357L;
-	if (test_sum_rule) {
-		return 1.0;
-	}else{
-		return 1.0/(omega0*sqrt(Pi))*exp(-pow((freqency-omegan)/omega0,2));
-	}
-}
-double P_lorentz(double freqency,double omegan)
-{
-	double Pi=3.14159265357L;
-	double ans;
+	double P_L(double,double);
+	double P_G(double,double);
+	double P_h(double);
+	double ans=0;
 	if (test_sum_rule){
 		ans=1.0;
 	}else{
-	    ans=alpha/(Pi*(pow(freqency-omegan,2)+alpha*alpha));
+		ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));
+		//ans=P_L(freqency,omegan)*(*pf)(freqency)+P_G(freqency,omegan)*(1-(*pf)(freqency));
 	}
 	return ans;
 }
-
-/*
- *double P_K(double freqency, double omegan)//centered at omegan! not -1.0*omegan.
- *{
- *    double P_L(double,double);
- *    double P_G(double,double);
- *    double ans=0;
- *    if (test_sum_rule){
- *        ans=1.0;
- *    }else{
- *        ans=P_L(freqency,omegan)*(*pf)(omegan)+P_G(freqency,omegan)*(1-(*pf)(omegan));
- *        //ans=P_L(freqency,omegan)*(*pf)(freqency)+P_G(freqency,omegan)*(1-(*pf)(freqency));
- *    }
- *    return ans;
- *}
- *double P_L(double freqency,double omegan)
- *{
- *    double theta(double);
- *    double Pi=3.14159265357L,gamma=alpha/4.0;
- *    double ans;
- *    ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
- *    //ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
- *}
- *double P_G(double freqency,double omegan)
- *{
- *    double Pi=3.14159265357L,ans;
- *    ans=1.0/(omega0*sqrt(Pi))*exp(-pow((freqency-omegan)/omega0,2));
- *    return ans;
- *}
- *double theta(double freqency)
- *{
- *    double ans;
- *    if (freqency > 1e-20 ){
- *        ans=1.0;
- *    }else if (freqency > 0 && freqency < 1e-20){
- *        ans=1.0/2.0;
- *    }else {
- *        ans=0.0;
- *    }
- *    return ans;
- *}
- *double P_h_unsmeared(double freqency)
- *{
- *    double ans;
- *    ans=1.0;
- *    return ans;
- *}
- *double P_h_smeared(double freqency)
- *{
- *    double ans;
- *    ans=exp(-pow(log(fabs(freqency/omega0))/alpha,2));
- *    return ans;
- *}
- */
+double P_L(double freqency,double omegan)
+{
+	double theta(double);
+	double Pi=3.14159265357L,gamma=alpha/4.0;
+	double ans;
+	//ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
+	ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
+}
+double P_G(double freqency,double omegan)
+{
+	double Pi=3.14159265357L,ans;
+	ans=1.0/(omega0*sqrt(Pi))*exp(-pow((freqency-omegan)/omega0,2));
+	return ans;
+}
+double theta(double freqency)
+{
+	double ans;
+	if (freqency > 1e-20 ){
+		ans=1.0;
+	}else if (freqency > 0 && freqency < 1e-20){
+		ans=1.0/2.0;
+	}else {
+		ans=0.0;
+	}
+	return ans;
+}
+double P_h(double omegan)
+{
+	double ans;
+	if (smear){
+	    if (fabs(omegan) >= omega0 ){
+	    	ans=1.0;
+	    }else{
+	        ans=exp(-pow(log(fabs(omegan/omega0))/alpha,2));
+	    }
+	}else{
+		ans=1.0;
+	}
+	return ans;
+}
