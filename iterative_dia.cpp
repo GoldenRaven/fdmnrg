@@ -10,8 +10,6 @@ int num_block;
 int num_kept;
 int N_max;
 double Beta;
-double temperature;
-double omega0;
 int * num_basis_block;
 BASIS ** block;
 double *** H_bij;
@@ -46,10 +44,7 @@ int func_delta(int a, int b){
 void iterative_dia(void)
 {
     using namespace std;
-	ifstream f_T("temperature");
-	f_T >> temperature;//T \equiv k_B T / D.
 	Beta=1.0/temperature;
-	omega0=0.5*temperature;
 	N = int(1-2 * log(Beta_bar/Beta)/log(Lambda));//site -1,0,...,N_max
 	//N_max = 3;//!!!!!!!!!!!!!!!!!!!!
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
