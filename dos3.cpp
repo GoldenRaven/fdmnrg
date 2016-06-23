@@ -192,7 +192,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 	        for (int i=0;i<num_kept;i++){
 	        	for (int j=0;j<num_kept;j++){
 	    			for (int k=k_start;k<k_finish;k++){
-	        		    temp[sigma][i][j]=temp[sigma][i][j]+eigen_sigma[n2][sigma][i][k]*eigen_sigma[n2][sigma][j][k]*exp(-1.0*Beta*pow(Lambda,-(n2-1-1)/2.0)*eigen[n2][k].eig_val_relat);
+	        		    temp[sigma][i][j]=temp[sigma][i][j]+eigen_sigma[n2][sigma][i][k]*eigen_sigma[n2][sigma][j][k]*exp(-1.0*Beta*pow(Lambda,-(n2-1-1)/2.0)*eigen[n2][k].eig_val);
 	    			}
 	        	}
 	        }
