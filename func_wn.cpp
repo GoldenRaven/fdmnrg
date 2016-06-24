@@ -18,7 +18,6 @@ void func_wn(void)
 	for (int n=n0;n<N_max+1;n++){//partition function: \sum_{n_0}^{N_max} Zn
 		for (int s=num_kept;s<num_basis[n];s++){
 			Zn[n]=Zn[n]+exp(-1.0*pow(Lambda,-(n-1-1)/2.0)*Beta*eigen[n][s].eig_val);
-		    //cout << "Beta*eigen[n][s].eig_val= " << Beta*eigen[n][s].eig_val << endl;
 		}
 		//cout << "Zn= " << Zn[n] << endl;
 		Z=Z+Zn[n]*pow(dim_dot,N_max-(n-1));
