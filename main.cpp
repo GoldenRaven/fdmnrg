@@ -2,6 +2,7 @@
 //2016/03/03只剩对角化与文件读入tn与en.
 //2016/03/09完成对角化.
 #include<iostream>
+#include<cstdlib>
 //void impurity(void);
 void iterative_dia(void);
 void func_wn(void);
@@ -16,6 +17,7 @@ int main()
 	start=clock();
 	//impurity();
 	iterative_dia();
+	exit(0);
 	func_wn();
 	density_of_state();
 	deallocate();
