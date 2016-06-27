@@ -8,7 +8,7 @@ objects=main.o setup.o genoutput.o iterative_dia.o dos3.o date_time.o deallocate
 #CPPFLAGS=-O0 -g
 #CPPFLAGS=-O3
 MKL_FLAGS=-mkl=sequential
-OPENMP_FLAGS=-qopenmp
+#OPENMP_FLAGS=-qopenmp
 
 $(name): $(objects)
 	$(cc) $(CPPFLAGS) $(MKL_FLAGS) $(OPENMP_FLAGS) -o $(name) $(objects) 
