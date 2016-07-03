@@ -1,4 +1,4 @@
-.SILENT:
+#.SILENT:
 cc=icc
 name=work_dir/fdmnrg.x 
 #objects=main.o setup.o genoutput.o iterative_dia.o dos.o date_time.o deallocate.o func_wn.o
