@@ -302,7 +302,7 @@ void iterative_dia(void)
 	        for (int b=0;b<num_block;b++){
 	            //cout << "    ";cout << "Basis number in block "<< setw(4) << left << b << " : " << setw(4) << num_basis_block[b] << ";    Total electon number: " << setw(4) << block[b][0].quant_num_totalnum << endl;
 	            for (int i=0;i<num_basis_block[b];i++){
-					cout << "| " << block[b][i].k << " , " << block[b][i].j << " ; " << n-1 << " > " << block[b][i].quant_num_totalnum << "  " << eigen[n-1][block[b][i].k-1].quant_num_totalnum << "  " << quant_num_totalnum_dot[block[b][i].j-1] << "  " << eigen[n-1][block[b][i].k-1].eig_val_relat << endl;
+					//cout << "| " << block[b][i].k << " , " << block[b][i].j << " ; " << n-1 << " > " << block[b][i].quant_num_totalnum << "  " << eigen[n-1][block[b][i].k-1].quant_num_totalnum << "  " << quant_num_totalnum_dot[block[b][i].j-1] << "  " << eigen[n-1][block[b][i].k-1].eig_val_relat << endl;
 			        //cout<<"i= "<< i <<"  "<< block[b][i].quant_num_totalnum << "  " << block[b][i].k << "  " << block[b][i].j << "  " << block[b][i].n << endl;
 	                for (int j=0;j<num_basis_block[b];j++){
 	        		    double sum_up=0;double sum_down=0;
@@ -431,19 +431,13 @@ void iterative_dia(void)
 					}
 				}
 			}
-			//for (int i=0;i<num_basis[n-1];i++){
-				//for (int j=0;j<num_basis[n-1];j++){
-					//if (fabs(c_down_dot_eigen[i][j] - c_dag_down_dot_eigen[j][i]) > 1e-12){
-						//cout << scientific << setprecision(12) << setw(20) << c_down_dot_eigen[i][j] << setw(20) << c_dag_down_dot_eigen[j][i] << "  xn  " << i << "  " << j << "  " << n << fabs(c_down_dot_eigen[i][j] - c_dag_down_dot_eigen[j][i]) << endl;
-					//}
-					//if (fabs(c_up_dot_eigen[i][j] - c_dag_up_dot_eigen[j][i]) > 1e-12){
-						//cout << setw(20) << c_up_dot_eigen[i][j] << setw(20) << c_dag_up_dot_eigen[j][i] << "  up  " << i << "  " << j << "  " << n << fabs(c_up_dot_eigen[i][j] - c_dag_up_dot_eigen[j][i]) << endl;
-					//}
+			for (int i=0;i<num_basis[n-1];i++){
+				for (int j=0;j<num_basis[n-1];j++){
+					cout << setw(10) << c_up_dot_basis[i][j] << " basis" << " |  " << setw(3) << basis_ordered[n-1][i].k-1 << "  " << setw(3) << basis_ordered[n-1][i].j-1 << " |  " << setw(3) << basis_ordered[n-1][j].k-1 << "  " << setw(3) << basis_ordered[n-1][j].j-1 << endl;
 					//cout << setw(10) << c_up_dot_basis[i][j] << setw(10) << c_dag_up_dot_basis[j][i] << "  up  " << i << "  " << j << "  " << n << endl;
 					//cout << setw(10) << c_up_dot_basis[i][j] << "  up  " << i << "  " << j << " |  " << basis_ordered[n-1][i].k-1 << "  " << basis_ordered[n-1][i].j-1 << " |  " << basis_ordered[n-1][j].k-1 << "  " << basis_ordered[n-1][j].j-1 << endl;
-					//cout << setw(10) << c_up_dot_basis[i][j] << "  up  " << i << "  " << j << " |  " << basis_ordered[n-1][i].k-1 << "  " << basis_ordered[n-1][i].j-1 << " |  " << basis_ordered[n-1][j].k-1 << "  " << basis_ordered[n-1][j].j-1 << endl;
-				//}
-			//}
+				}
+			}
 			int sum=0;
 			int kk=0;
 			BASIS * basis_old=new BASIS [num_basis[n-1]];//n=0
@@ -463,7 +457,7 @@ void iterative_dia(void)
 						if (fabs(H_bij[b][i][j]) <= 1e-12){
 							H_bij[b][i][j]=0;
 						}
-						cout << setw(10) << setprecision(5) << H_bij[b][i][j] << " | " << setw(4) << block[b][i].k << setw(4) << block[b][i].j << setw(4) << block[b][i].n << " | " << setw(4) << block[b][j].k << setw(4) << block[b][j].j << setw(4) << block[b][j].n << " | " << setw(4) << block[b][0].quant_num_totalnum << setw(12) << (sqrt(Lambda)*eigen[n-1][block[b][i].k-1].eig_val_relat )*func_delta(block[b][i].k,block[b][j].k)*func_delta(block[b][i].j,block[b][j].j) << endl;
+						cout << setw(12) << setprecision(9) << H_bij[b][i][j] << " | " << setw(4) << block[b][i].k << setw(4) << block[b][i].j << setw(4) << block[b][i].n << " | " << setw(4) << block[b][j].k << setw(4) << block[b][j].j << setw(4) << block[b][j].n << " | " << setw(4) << block[b][i].quant_num_totalnum << setw(4) << block[b][i].quant_num_totalnum << " | c_N_" << block[b][i].k-1 << "_" << block[b][j].k-1 << setw(15) << right << c_dag_up_dot_eigen[block[b][i].k-1][block[b][j].k-1] << setw(3) << i+1 << setw(3) << j+1 << left << endl;
 		    		}
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val << endl;
 		    	}
@@ -546,7 +540,7 @@ void iterative_dia(void)
 			sum2=sum2+num_basis_block[b];
 			for (int i=0;i<num_basis_block[b];i++){
 			    eigen[n][i].quant_num_totalnum=block[b][0].quant_num_totalnum;
-				cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  " << eigen[n][i].eig_val << endl;
+				cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  " << setprecision(12) << eigen[n][i].eig_val << endl;
 			}
 		}
 		for(int b=1;b<num_block;b++){//initionialization of quantum number.
@@ -554,7 +548,7 @@ void iterative_dia(void)
 			sum1=sum1+num_basis_block[b-1];
 			for (int i=sum1;i<sum2;i++){
 			    eigen[n][i].quant_num_totalnum=block[b][0].quant_num_totalnum;
-				cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  " << eigen[n][i].eig_val << endl;
+				cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  "<< setprecision(12)  << eigen[n][i].eig_val << endl;
 			}
 		}}
 	    for (int k=1;k<=num_basis[n]-1;k++){//sort of eigen_value.
@@ -572,7 +566,7 @@ void iterative_dia(void)
 		for (int i=0;i<num_basis[n];i++){
 		    eigen[n][i].eig_val_relat=eigen[n][i].eig_val-eigen[n][0].eig_val;
 			//cout << "in eigen  " << eigen[n][i].k-1 << endl;
-			cout << n << "   after  " << eigen[n][i].quant_num_totalnum <<" | "<< eigen[n][i].sort << "  " << basis_ordered[n][eigen[n][i].sort-1].k << "  " << basis_ordered[n][eigen[n][i].sort-1].j  << "  " << eigen[n][i].k << "  "<< eigen[n][i].eig_val << endl;
+			cout << n << "   after  " << eigen[n][i].quant_num_totalnum <<" | "<< setw(3) << eigen[n][i].sort << "  " << setw(3) << basis_ordered[n][eigen[n][i].sort-1].k << "  " << setw(3) << basis_ordered[n][eigen[n][i].sort-1].j  << "  " << setw(3) << eigen[n][i].k << "  "<< eigen[n][i].eig_val << endl;
 		}
 		//local operators.
 /*
