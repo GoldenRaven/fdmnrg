@@ -20,8 +20,8 @@ int main()
 	/*
 	 *func_wn();
 	 *density_of_state();
+	 *deallocate();
 	 */
-	deallocate();
 	finish=clock();
 	std::cout << "CPU time used:    " << (double)(finish - start)/CLOCKS_PER_SEC << " seconds" << std::endl;
 	std::cout << "Job finished on:    ";date_time();
