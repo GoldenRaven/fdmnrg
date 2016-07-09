@@ -10,6 +10,6 @@ double U=0.12;// in unit of D
 double Ed=-1.0*U/2.0;//in unite of D
 double Lambda=2.0;
 double alpha=0.69;
-double temperature=2.185e-6;
+double temperature=2.0e-6;
 double omega0=0.005*temperature;
 bool smear=true;

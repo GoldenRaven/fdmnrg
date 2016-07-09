@@ -47,8 +47,8 @@ void iterative_dia(void)
     using namespace std;
 	Beta=1.0/temperature;
 	N = int(1-2 * log(Beta_bar/Beta)/log(Lambda));//site -1,0,...,N_max
-	N_max = 2;//!!!!!!!!!!!!!!!!!!!!
-	//N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
+	//N_max = 2;//!!!!!!!!!!!!!!!!!!!!
+	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 	ifstream f_num_kept("num_kept");
 	f_num_kept >> num_kept;
     double coupling_imp_dot_up;
@@ -100,8 +100,8 @@ void iterative_dia(void)
 	        num_eigen_kept[n]=num_eigen_kept[9];//n=0,1,...    9 means big enough.
 		}
 	}
-	//for (int n=0;n<6;n++){
-	for (int n=0;n<N_max+2;n++){
+	for (int n=0;n<6;n++){
+	//for (int n=0;n<N_max+2;n++){
 		cout << "    " << setw(2) << n << "        " << setw(2) << num_basis[n] << "                " << setw(2) << num_eigen_kept[n] << "            " << setw(2) << n0 << endl;
 	}
 	cout << "  step starting to discard state: " << n0 << endl;
@@ -311,10 +311,12 @@ void iterative_dia(void)
 	        			sum_down=sum_down+c_down_dot[block[b][i].j-1][block[b][j].j-1]*c_dag_down_imp[block[b][i].k-1][block[b][j].k-1]*pow(-1,eigen[n-1][block[b][j].k-1].quant_num_totalnum);
 	        			sum_down=sum_down+c_dag_down_dot[block[b][i].j-1][block[b][j].j-1]*c_down_imp[block[b][i].k-1][block[b][j].k-1]*pow(-1,eigen[n-1][block[b][i].k-1].quant_num_totalnum);
 	        			H_bij[b][i][j]=(sqrt(Lambda)*eigen[n-1][block[b][i].k-1].eig_val_relat + pow(Lambda,-1.0/2.0)*(pe_up[n-1]*quant_num_upnum_dot[block[b][i].j-1] + pe_down[n-1]*quant_num_downnum_dot[block[b][i].j-1]))*func_delta(block[b][i].k,block[b][j].k)*func_delta(block[b][i].j,block[b][j].j) + pow(Lambda,-1.0/2.0)*(coupling_imp_dot_up*sum_up+coupling_imp_dot_down*sum_down); //  H_bij=<block[b][i]|H|block[b][j]>. Attention! eigen[n+1][block[b][i].k-1].eigen_value?截断后重新连续排序!
-						if (fabs(H_bij[b][i][j]) <= 1e-12){
-							H_bij[b][i][j]=0;
-						}
-						cout << setw(8) << H_bij[b][i][j] << " | " << block[b][i].k << "  " << block[b][i].j << "  " << block[b][i].n << " | " << block[b][j].k << "  " << block[b][j].j << "  " << block[b][j].n << "  | " << block[b][0].quant_num_totalnum << endl;
+						/*
+						 *if (fabs(H_bij[b][i][j]) <= 1e-12){
+						 *    H_bij[b][i][j]=0;
+						 *}
+						 */
+						//cout << setw(8) << H_bij[b][i][j] << " | " << block[b][i].k << "  " << block[b][i].j << "  " << block[b][i].n << " | " << block[b][j].k << "  " << block[b][j].j << "  " << block[b][j].n << "  | " << block[b][0].quant_num_totalnum << endl;
 	        		}
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val_relat << endl;
 	        	}
@@ -627,7 +629,7 @@ void iterative_dia(void)
 		}
 		//ofstream cup("cup",ios::binary);
 		for (int i=0;i<num_basis[n];i++){
-		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			for (int j=0;j<num_basis[n];j++){
 			    f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
 				f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
