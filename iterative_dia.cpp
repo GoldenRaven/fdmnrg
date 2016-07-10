@@ -47,8 +47,8 @@ void iterative_dia(void)
     using namespace std;
 	Beta=1.0/temperature;
 	N = int(1-2 * log(Beta_bar/Beta)/log(Lambda));//site -1,0,...,N_max
-	//N_max = 3;//!!!!!!!!!!!!!!!!!!!!
-	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
+	N_max = 3;//!!!!!!!!!!!!!!!!!!!!
+	//N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 	ifstream f_num_kept("num_kept");
 	f_num_kept >> num_kept;
     double coupling_imp_dot_up;
@@ -559,14 +559,27 @@ void iterative_dia(void)
 		for (int j=0;j<dim_dot;j++){
 			for (int k=0;k<num_eigen_kept[n-1];k++){
 			//cout << k << "  " << eigen[n-1][k].eig_val << " a " << endl;
-			    for (int kk=0;kk<num_eigen_kept[n-1];kk++){
+				for (int kk=0;kk<num_eigen_kept[n-1];kk++){
+					c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_up_eigen[n-1][k][kk];
+					c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_down_eigen[n-1][k][kk];
 					c_dag_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_up_eigen[n-1][k][kk];
-		            c_dag_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_down_eigen[n-1][k][kk];
-		            c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_up_eigen[n-1][k][kk];
-		            c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_down_eigen[n-1][k][kk];
+					c_dag_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_down_eigen[n-1][k][kk];
 					//cout << "x  " << n << "  " << j << "  " << k << "  " << kk << endl;
-					//cout << basis_kj[n][k][j].sort << " | " << basis_kj[n][kk][j].sort << " | " << c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << "  " << c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << endl;
+					cout << basis_kj[n][k][j].sort << "  " << basis_kj[n][kk][j].sort << " | " << c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << "  old " << endl;
 				}
+			}
+		}
+		for (int i=0;i<num_basis[n];i++){
+			for (int j=0;j<num_basis[n];j++){
+				c_up_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_up_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+				c_down_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_down_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+				c_dag_up_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_dag_up_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+				c_dag_down_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_dag_down_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+			}
+		}
+		for (int i=0;i<num_basis[n];i++){
+			for (int j=0;j<num_basis[n];j++){
+				cout << i << "  " << j << " | " << c_up_basis[n][i][j] << "  old " << endl;
 			}
 		}
 		temp1=new double * [num_basis[n]];
