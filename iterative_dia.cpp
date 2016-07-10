@@ -198,26 +198,28 @@ void iterative_dia(void)
         }
     }                                                      
 	for (int n=1;n<N_max+2;n++){
-		char str0[20],str1[15];
-		sprintf(str0,"%d",n);
-		strcpy(str1,"_U.dat");
-		strcat(str0,str1);
-	    ofstream f_U(str0);
-		char str02[20],str2[15];
-		sprintf(str02,"%d",n);
-		strcpy(str2,"_eigenvalue.dat");
-		strcat(str02,str2);
-	    ofstream f_eig_val(str02);
-		char str03[20],str3[15];
-		sprintf(str03,"%d",n);
-		strcpy(str3,"_d_up.dat");
-		strcat(str03,str3);
-	    ofstream f_d_up(str03);
-		char str04[20],str4[15];
-		sprintf(str04,"%d",n);
-		strcpy(str4,"_d_down.dat");
-		strcat(str04,str4);
-	    ofstream f_d_down(str04);
+		/*
+		 *char str0[20],str1[15];
+		 *sprintf(str0,"%d",n);
+		 *strcpy(str1,"_U.dat");
+		 *strcat(str0,str1);
+		 *ofstream f_U(str0);
+		 *char str02[20],str2[15];
+		 *sprintf(str02,"%d",n);
+		 *strcpy(str2,"_eigenvalue.dat");
+		 *strcat(str02,str2);
+		 *ofstream f_eig_val(str02);
+		 *char str03[20],str3[15];
+		 *sprintf(str03,"%d",n);
+		 *strcpy(str3,"_d_up.dat");
+		 *strcat(str03,str3);
+		 *ofstream f_d_up(str03);
+		 *char str04[20],str4[15];
+		 *sprintf(str04,"%d",n);
+		 *strcpy(str4,"_d_down.dat");
+		 *strcat(str04,str4);
+		 *ofstream f_d_down(str04);
+		 */
 		{int i=0;
 	    for (int k=0;k<num_eigen_kept[n-1];k++){
 	        for (int j=0;j<dim_dot;j++){
@@ -628,14 +630,16 @@ void iterative_dia(void)
 			}
 		}
 		//ofstream cup("cup",ios::binary);
-		for (int i=0;i<num_basis[n];i++){
-		    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
-			for (int j=0;j<num_basis[n];j++){
-			    f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
-				f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
-				f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
-			}
-		}
+		/*
+		 *for (int i=0;i<num_basis[n];i++){
+		 *    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+		 *    for (int j=0;j<num_basis[n];j++){
+		 *        f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
+		 *        f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
+		 *        f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
+		 *    }
+		 *}
+		 */
 		cout << "    ";cout << "Time leaved:    ";date_time();
 		//delete_iter_dia(n);
 	}
