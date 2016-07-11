@@ -497,7 +497,7 @@ double P_G(double freqency,double omegan)
 double theta(double freqency)
 {
 	double ans;
-	if (freqency > 1e-20 ){
+	if (freqency > 0 ){
 		ans=1.0;
 	//}else if (freqency > 0 && freqency < 1e-20){
 		//ans=1.0/2.0;
