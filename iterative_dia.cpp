@@ -47,8 +47,8 @@ void iterative_dia(void)
     using namespace std;
 	Beta=1.0/temperature;
 	N = int(1-2 * log(Beta_bar/Beta)/log(Lambda));//site -1,0,...,N_max
-	N_max = 2;//!!!!!!!!!!!!!!!!!!!!
-	//N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
+	//N_max = 2;//!!!!!!!!!!!!!!!!!!!!
+	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 	ifstream f_num_kept("num_kept");
 	f_num_kept >> num_kept;
     double coupling_imp_dot_up;
@@ -626,11 +626,13 @@ void iterative_dia(void)
 		//ofstream cup("cup",ios::binary);
 		for (int i=0;i<num_basis[n];i++){
 			f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
-			for (int j=0;j<num_basis[n];j++){
-				f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
-				f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
-				f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
-			}
+			/*
+			 *for (int j=0;j<num_basis[n];j++){
+			 *    f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
+			 *    f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
+			 *    f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
+			 *}
+			 */
 		}
 		cout << "    ";cout << "Time leaved:    ";date_time();
 		delete_iter_dia(n);
