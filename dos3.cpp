@@ -81,7 +81,8 @@ void density_of_state(void)
 	    DOS1_DOWN=dos1_down(freqency);
 	    DOS2_DOWN=dos2_down(freqency);
 	    DOS3_DOWN=dos3_down(freqency);
-		cout << "  unsmeared ";
+		cout << "           ";
+		//cout << "  unsmeared ";
 		cout << setw(14) << setprecision(5) << freqency;
 		cout << setw(14) << setprecision(5) << DOS1_UP;
 		cout << setw(14) << setprecision(5) << DOS2_UP;
@@ -89,7 +90,7 @@ void density_of_state(void)
 		cout << setw(14) << setprecision(5) << DOS1_DOWN;
 		cout << setw(14) << setprecision(5) << DOS2_DOWN;
 		cout << setw(14) << setprecision(5) << DOS3_DOWN;
-		cout << endl;
+		date_time();cout << endl;
 		f_dos_unsmeared << left;
 		f_dos_unsmeared << setw(20) << setprecision(10) << freqency;
 		f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;

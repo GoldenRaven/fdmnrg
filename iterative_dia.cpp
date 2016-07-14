@@ -200,7 +200,7 @@ void iterative_dia(void)
 		sprintf(str0,"%d",n);
 		strcpy(str1,"_U.dat");
 		strcat(str0,str1);
-		ofstream f_U(str0);
+		//ofstream f_U(str0);
 		char str02[20],str2[15];
 		sprintf(str02,"%d",n);
 		strcpy(str2,"_eigenvalue.dat");
@@ -210,12 +210,12 @@ void iterative_dia(void)
 		sprintf(str03,"%d",n);
 		strcpy(str3,"_d_up.dat");
 		strcat(str03,str3);
-		ofstream f_d_up(str03);
+		//ofstream f_d_up(str03);
 		char str04[20],str4[15];
 		sprintf(str04,"%d",n);
 		strcpy(str4,"_d_down.dat");
 		strcat(str04,str4);
-		ofstream f_d_down(str04);
+		//ofstream f_d_down(str04);
 		{int i=0;
 	    for (int k=0;k<num_eigen_kept[n-1];k++){
 	        for (int j=0;j<dim_dot;j++){
