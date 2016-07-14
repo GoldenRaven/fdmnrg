@@ -1,9 +1,19 @@
 #include<fstream>
+#include<iomanip>
+#include<math.h>
 using namespace std;
 int main(void)
 {
+	void uniform(void);
+	void logarithm(void);
+	//uniform();
+	logarithm();
+	return 0;
+}
+
+void uniform(void)
+{
     ofstream f_freq("freqency");
-	double freqency;
 	double a,b,c,d;
 	int N1,N2,N3;
 	double dx1,dx2,dx3;
@@ -44,6 +54,20 @@ int main(void)
 	for (int i=1;i<=N3;i++){
 		f_freq << c+i*dx3 << endl;
 	}
-	return 0;
 }
-
+void logarithm(void)
+{
+    ofstream f_freq("freqency");
+	int N;
+	double lambda;
+	N=500;
+	lambda=0.94025;
+	f_freq << left << setw(25) << setprecision(15);
+	for (int i=0;i<=N/2;i++){
+		f_freq << -1.0*pow(lambda,i) << endl;
+	}
+	f_freq << 0 << endl;
+	for (int i=N/2;i>=0;i--){
+		f_freq << pow(lambda,i) << endl;
+	}
+}
