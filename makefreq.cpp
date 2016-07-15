@@ -60,7 +60,7 @@ void logarithm(void)
     ofstream f_freq("freqency");
 	int N;
 	double lambda;
-	N=500;
+	N=600;
 	lambda=0.94025;
 	f_freq << left << setw(25) << setprecision(15);
 	for (int i=0;i<=N/2;i++){
