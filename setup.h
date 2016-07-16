@@ -7,6 +7,7 @@ extern int num_kept;//=16;
 extern int N;
 extern int N_max;//=3;//200; No. of dots added.
 extern int n0;//number of step starting discarding states.num_basis_new[n0]>num_kept
+extern int quant_tmp;
 extern double Ed;//=-2.0;
 extern double U;//=1.0;
 extern double Lambda;//=5.0;
