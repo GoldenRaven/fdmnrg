@@ -76,6 +76,10 @@ void iterative_dia(void)
 			//cout << scientific << setw(5) << i << setw(30) << setprecision(20) << ptn_up[i] << setw(30) << setprecision(20) << ptn_down[i] << setw(30) << setprecision(20) << pe_up[i] << setw(30) << setprecision(20) << pe_down[i] << endl;
 		}
 	}
+	for (int i=0;i<N_max+1;i++){
+		pe_up[i]=0;
+		pe_down[i]=0;
+	}
 	num_basis=new int [N_max+2];//num_basis_new --> num_basis
     num_eigen_kept=new int [N_max+2];
 	cout << "   " << " n  " << "  num_basis[n]  " << "  num_eigen_kept[n]  " << "  n0 " << endl;
@@ -100,8 +104,8 @@ void iterative_dia(void)
 	        num_eigen_kept[n]=num_eigen_kept[9];//n=0,1,...    9 means big enough.
 		}
 	}
-	for (int n=0;n<6;n++){
-	//for (int n=0;n<N_max+2;n++){
+	for (int n=0;n<N_max+2;n++){
+	//for (int n=0;n<6;n++){
 		cout << "    " << setw(2) << n << "        " << setw(2) << num_basis[n] << "                " << setw(2) << num_eigen_kept[n] << "            " << setw(2) << n0 << endl;
 	}
 	cout << "  step starting to discard state: " << n0 << endl;
@@ -198,28 +202,26 @@ void iterative_dia(void)
         }
     }                                                      
 	for (int n=1;n<N_max+2;n++){
-		/*
-		 *char str0[20],str1[15];
-		 *sprintf(str0,"%d",n);
-		 *strcpy(str1,"_U.dat");
-		 *strcat(str0,str1);
-		 *ofstream f_U(str0);
-		 *char str02[20],str2[15];
-		 *sprintf(str02,"%d",n);
-		 *strcpy(str2,"_eigenvalue.dat");
-		 *strcat(str02,str2);
-		 *ofstream f_eig_val(str02);
-		 *char str03[20],str3[15];
-		 *sprintf(str03,"%d",n);
-		 *strcpy(str3,"_d_up.dat");
-		 *strcat(str03,str3);
-		 *ofstream f_d_up(str03);
-		 *char str04[20],str4[15];
-		 *sprintf(str04,"%d",n);
-		 *strcpy(str4,"_d_down.dat");
-		 *strcat(str04,str4);
-		 *ofstream f_d_down(str04);
-		 */
+		char str0[20],str1[15];
+		sprintf(str0,"%d",n);
+		strcpy(str1,"_U.dat");
+		strcat(str0,str1);
+		//ofstream f_U(str0);
+		char str02[20],str2[15];
+		sprintf(str02,"%d",n);
+		strcpy(str2,"_eigenvalue.dat");
+		strcat(str02,str2);
+		ofstream f_eig_val(str02);
+		char str03[20],str3[15];
+		sprintf(str03,"%d",n);
+		strcpy(str3,"_d_up.dat");
+		strcat(str03,str3);
+		//ofstream f_d_up(str03);
+		char str04[20],str4[15];
+		sprintf(str04,"%d",n);
+		strcpy(str4,"_d_down.dat");
+		strcat(str04,str4);
+		//ofstream f_d_down(str04);
 		{int i=0;
 	    for (int k=0;k<num_eigen_kept[n-1];k++){
 	        for (int j=0;j<dim_dot;j++){
@@ -238,31 +240,54 @@ void iterative_dia(void)
 				i++;
 	        }
 	    }}
-	    for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Total electron.
+	    for (int i=1;i<num_basis[n];i++){//sorting of quantum number: up, down.
+			//cout << "basis  " << basis_ordered[n][i].quant_num_totalnum << "  " << basis_ordered[n][i].quant_num_upnum << "  " << basis_ordered[n][i].quant_num_downnum << endl;
 	    	for (int ii=1;ii<=num_basis[n]-i;ii++){
-	    		if (basis_ordered[n][ii-1].quant_num_totalnum > basis_ordered[n][ii].quant_num_totalnum){
+	    		if (quant_tmp*basis_ordered[n][ii-1].quant_num_upnum+(basis_ordered[n][ii-1].quant_num_downnum) > quant_tmp*basis_ordered[n][ii].quant_num_upnum+(basis_ordered[n][ii].quant_num_downnum)){
 	    			BASIS temp = basis_ordered[n][ii-1];//.quant_num_totalnum;
 	    			basis_ordered[n][ii-1]=basis_ordered[n][ii];
 					basis_ordered[n][ii]=temp;
 	    		}
 	    	}
 	    }
+		/*
+		 *for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Q, S_z.
+		 *    //cout << "basis  " << basis_ordered[n][i].quant_num_totalnum << "  " << basis_ordered[n][i].quant_num_upnum << "  " << basis_ordered[n][i].quant_num_downnum << endl;
+		 *    for (int ii=1;ii<=num_basis[n]-i;ii++){
+		 *        if (quant_tmp*basis_ordered[n][ii-1].quant_num_totalnum+(basis_ordered[n][ii-1].quant_num_upnum-basis_ordered[n][ii-1].quant_num_downnum) > quant_tmp*basis_ordered[n][ii].quant_num_totalnum+(basis_ordered[n][ii].quant_num_upnum-basis_ordered[n][ii].quant_num_downnum)){
+		 *            BASIS temp = basis_ordered[n][ii-1];//.quant_num_totalnum;
+		 *            basis_ordered[n][ii-1]=basis_ordered[n][ii];
+		 *            basis_ordered[n][ii]=temp;
+		 *        }
+		 *    }
+		 *}
+		 */
+		/*
+		 *for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Q.
+		 *    for (int ii=1;ii<=num_basis[n]-i;ii++){
+		 *        if (basis_ordered[n][ii-1].quant_num_totalnum > basis_ordered[n][ii].quant_num_totalnum){
+		 *            BASIS temp = basis_ordered[n][ii-1];//.quant_num_totalnum;
+		 *            basis_ordered[n][ii-1]=basis_ordered[n][ii];
+		 *            basis_ordered[n][ii]=temp;
+		 *        }
+		 *    }
+		 *}
+		 */
 	    num_block=0;
 	    for (int i=1;i<=num_basis[n];i++){
 			//cout << basis_ordered[n][i-1].quant_num_totalnum << "  N  " << i-1 << endl;
 			basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-	    	if (basis_ordered[n][i-1].quant_num_totalnum != basis_ordered[n][i].quant_num_totalnum){
+	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
 	    		num_block=num_block+1;
 	    	}
 	    }
-		//cout << num_block << "  num_block" << endl;
 	    num_basis_block=new int [num_block];
 	    for (int i=0;i<num_block;i++){
 	    	num_basis_block[i]=0;
 	    }
 	    {int ii=0;
 	    for (int i=1;i<=num_basis[n];i++){
-	    	if (basis_ordered[n][i-1].quant_num_totalnum != basis_ordered[n][i].quant_num_totalnum){
+	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
 	    		num_basis_block[ii]=i;//-num_basis_block[ii-2];
 	    	    ii++;
 	    	}
@@ -272,7 +297,7 @@ void iterative_dia(void)
 		}//1,4,6,4,1.
 		/*
 		 *for (int i=1;i<=num_block;i++){
-		 *cout << num_basis_block[i-1] << "  xxx" << endl;
+		 *    cout << num_basis_block[i-1] << "  xxx" << endl;
 		 *}
 		 */
 	    block=new BASIS * [num_block];
@@ -313,11 +338,9 @@ void iterative_dia(void)
 	        			sum_down=sum_down+c_down_dot[block[b][i].j-1][block[b][j].j-1]*c_dag_down_imp[block[b][i].k-1][block[b][j].k-1]*pow(-1,eigen[n-1][block[b][j].k-1].quant_num_totalnum);
 	        			sum_down=sum_down+c_dag_down_dot[block[b][i].j-1][block[b][j].j-1]*c_down_imp[block[b][i].k-1][block[b][j].k-1]*pow(-1,eigen[n-1][block[b][i].k-1].quant_num_totalnum);
 	        			H_bij[b][i][j]=(sqrt(Lambda)*eigen[n-1][block[b][i].k-1].eig_val_relat + pow(Lambda,-1.0/2.0)*(pe_up[n-1]*quant_num_upnum_dot[block[b][i].j-1] + pe_down[n-1]*quant_num_downnum_dot[block[b][i].j-1]))*func_delta(block[b][i].k,block[b][j].k)*func_delta(block[b][i].j,block[b][j].j) + pow(Lambda,-1.0/2.0)*(coupling_imp_dot_up*sum_up+coupling_imp_dot_down*sum_down); //  H_bij=<block[b][i]|H|block[b][j]>. Attention! eigen[n+1][block[b][i].k-1].eigen_value?截断后重新连续排序!
-						/*
-						 *if (fabs(H_bij[b][i][j]) <= 1e-12){
-						 *    H_bij[b][i][j]=0;
-						 *}
-						 */
+						if (fabs(H_bij[b][i][j]) < 1e-30){
+							H_bij[b][i][j]=0;
+						}
 						//cout << setw(8) << H_bij[b][i][j] << " | " << block[b][i].k << "  " << block[b][i].j << "  " << block[b][i].n << " | " << block[b][j].k << "  " << block[b][j].j << "  " << block[b][j].n << "  | " << block[b][0].quant_num_totalnum << endl;
 	        		}
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val_relat << endl;
@@ -339,7 +362,7 @@ void iterative_dia(void)
 			        //eigen_ordered[n+1][kk].quant_num_totalnum=block[b][0].quant_num_totalnum;
 					int k=0;
 					//for (int j=i*num_basis_block[b];j<(i+1)*num_basis_block[b];j++){
-					for (int j = 0; j < num_basis_block[b]; j++){
+					for (int j=0;j<num_basis_block[b];j++){
 						vect[n][kk][sum+k]=vect_temp[i+j*num_basis_block[b]];
 						//vect[n][kk][sum+k]=vect_temp[j+i*num_basis_block[b]];
 						//vect[n][kk][sum+k]=vect_temp[j];
@@ -454,26 +477,19 @@ void iterative_dia(void)
 #pragma omp parallel for 
 		        for (int i=0;i<num_basis_block[b];i++){
 					//cout << "| " << block[b][i].k << " , " << block[b][i].j << " ; " << n-1 << " > " << block[b][i].quant_num_totalnum << "  " << eigen[n-1][block[b][i].k-1].quant_num_totalnum << "  " << quant_num_totalnum_dot[block[b][i].j-1] << "  " << eigen[n-1][block[b][i].k-1].eig_val_relat << endl;
-		            for (int j=0;j<num_basis_block[b];j++){//half matrix
+		            for (int j=0;j<num_basis_block[b];j++){
 						double sum_up2=0;double sum_down2=0;double sum_up=0;double sum_down=0;
 						sum_up=pow(-1,eigen[n-1][block[b][j].k-1].quant_num_totalnum)*c_dag_up_dot_eigen[block[b][i].k-1][block[b][j].k-1]*c_up_dot[block[b][i].j-1][block[b][j].j-1] + pow(-1,eigen[n-1][block[b][i].k-1].quant_num_totalnum)*c_dag_up_dot[block[b][i].j-1][block[b][j].j-1]*c_up_dot_eigen[block[b][i].k-1][block[b][j].k-1];
 						sum_down=pow(-1,eigen[n-1][block[b][j].k-1].quant_num_totalnum)*c_dag_down_dot_eigen[block[b][i].k-1][block[b][j].k-1]*c_down_dot[block[b][i].j-1][block[b][j].j-1] + pow(-1,eigen[n-1][block[b][i].k-1].quant_num_totalnum)*c_dag_down_dot[block[b][i].j-1][block[b][j].j-1]*c_down_dot_eigen[block[b][i].k-1][block[b][j].k-1];
 						//H_bij[b][i][j]=(sqrt(Lambda)*eigen[n-1][block[b][i].k-1].eig_val_relat )*func_delta(block[b][i].k,block[b][j].k)*func_delta(block[b][i].j,block[b][j].j) + pow(Lambda,(n-2)/2.0)*(ptn_up[n-2]*sum_up+ptn_down[n-2]*sum_down);   //  H_bij=<block[b][i]|H|block[b][j]>. Attention! eigen[n+1][block[b][i].k-1].eigen_value?截断后重新连续排序!
 						H_bij[b][i][j]=(sqrt(Lambda)*eigen[n-1][block[b][i].k-1].eig_val_relat + pow(Lambda,(n-2)/2.0)*(pe_up[n-1]*quant_num_upnum_dot[block[b][i].j-1] +pe_down[n-1]*quant_num_downnum_dot[block[b][i].j-1]))*func_delta(block[b][i].k,block[b][j].k)*func_delta(block[b][i].j,block[b][j].j) + pow(Lambda,(n-2)/2.0)*(ptn_up[n-2]*sum_up+ptn_down[n-2]*sum_down);   //  H_bij=<block[b][i]|H|block[b][j]>. Attention! eigen[n+1][block[b][i].k-1].eigen_value?截断后重新连续排序!
-						if (fabs(H_bij[b][i][j]) <= 1e-12){
+						if (fabs(H_bij[b][i][j]) < 1e-30){
 							H_bij[b][i][j]=0;
 						}
 						//cout << setw(12) << setprecision(9) << H_bij[b][i][j] << " | " << setw(4) << block[b][i].k << setw(4) << block[b][i].j << setw(4) << block[b][i].n << " | " << setw(4) << block[b][j].k << setw(4) << block[b][j].j << setw(4) << block[b][j].n << " | " << setw(4) << block[b][i].quant_num_totalnum << setw(4) << block[b][i].quant_num_totalnum << " | c_N_" << block[b][i].k-1 << "_" << block[b][j].k-1 << setw(15) << right << c_dag_up_dot_eigen[block[b][i].k-1][block[b][j].k-1] << setw(3) << i+1 << setw(3) << j+1 << left << endl;
 		    		}
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val << endl;
 		    	}
-				/*
-				 *for (int i=0;i<num_basis_block[b];i++){
-				 *    for (int j=0;j<i;j++){//the other half
-				 *        H_bij[b][i][j]=H_bij[b][j][i];
-				 *    }
-				 *}
-				 */
 		        int lda=num_basis_block[b];
 	            double * vect_temp=new double [num_basis_block[b]*num_basis_block[b]];
 	            double * value=new double [num_basis_block[b]];
@@ -492,8 +508,7 @@ void iterative_dia(void)
 			        //eigen_ordered[n+1][kk].quant_num_totalnum=block[b][0].quant_num_totalnum;
 					//cout << "eigval  " << setw(3) << i << setw(9) << eigen[n][kk].eig_val << endl;
 					int k=0;
-					//for (int j=i*num_basis_block[b];j<(i+1)*num_basis_block[b];j++){//rowise
-					for (int j = 0; j < num_basis_block[b]; j++){//colunmewise
+					for (int j=0;j<num_basis_block[b];j++){//colunmewise
 						vect[n][kk][sum+k]=vect_temp[i+j*num_basis_block[b]];
 						//vect[n][kk][sum+k]=vect_temp[j];
 						k++;
@@ -548,7 +563,11 @@ void iterative_dia(void)
 			sum2=sum2+num_basis_block[b];
 			for (int i=0;i<num_basis_block[b];i++){
 			    eigen[n][i].quant_num_totalnum=block[b][0].quant_num_totalnum;
-				//cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  " << setprecision(12) << eigen[n][i].eig_val << endl;
+			    eigen[n][i].quant_num_upnum=block[b][0].quant_num_upnum;
+			    eigen[n][i].quant_num_downnum=block[b][0].quant_num_downnum;
+				//cout << "basi  " << block[b][0].quant_num_totalnum << "  " << block[b][0].quant_num_upnum << "  " << block[b][0].quant_num_downnum << endl;
+				//cout << "basi  " << eigen[n][i].quant_num_totalnum << "  " << eigen[n][i].quant_num_upnum << "  " << eigen[n][i].quant_num_downnum << endl;
+				//cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  " << eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum  << "  " << setprecision(12) << eigen[n][i].eig_val << endl;
 			}
 		}
 		for(int b=1;b<num_block;b++){//initionialization of quantum number.
@@ -556,7 +575,11 @@ void iterative_dia(void)
 			sum1=sum1+num_basis_block[b-1];
 			for (int i=sum1;i<sum2;i++){
 			    eigen[n][i].quant_num_totalnum=block[b][0].quant_num_totalnum;
-				//cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  "<< setprecision(12)  << eigen[n][i].eig_val << endl;
+			    eigen[n][i].quant_num_upnum=block[b][0].quant_num_upnum;
+			    eigen[n][i].quant_num_downnum=block[b][0].quant_num_downnum;
+				//cout << "basis  " << block[b][0].quant_num_totalnum << "  " << block[b][0].quant_num_upnum << "  " << block[b][0].quant_num_downnum << endl;
+				//cout << "basis  " << eigen[n][i].quant_num_totalnum << "  " << eigen[n][i].quant_num_upnum << "  " << eigen[n][i].quant_num_downnum << endl;
+				//cout << " before sort " << i+1 << "   " << eigen[n][i].quant_num_totalnum << "  " << eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum  << "  " << setprecision(12) << eigen[n][i].eig_val << endl;
 			}
 		}}
 	    for (int k=1;k<=num_basis[n]-1;k++){//sort of eigen_value.
@@ -574,23 +597,40 @@ void iterative_dia(void)
 		for (int i=0;i<num_basis[n];i++){
 		    eigen[n][i].eig_val_relat=eigen[n][i].eig_val-eigen[n][0].eig_val;
 			//cout << "in eigen  " << eigen[n][i].k-1 << endl;
-			//cout << n << "   after  " << eigen[n][i].quant_num_totalnum <<" | "<< setw(3) << eigen[n][i].sort << "  " << setw(3) << basis_ordered[n][eigen[n][i].sort-1].k << "  " << setw(3) << basis_ordered[n][eigen[n][i].sort-1].j  << "  " << setw(3) << eigen[n][i].k << "  "<< eigen[n][i].eig_val << endl;
+			//cout << n << "  " << basis_ordered[n][i].quant_num_totalnum <<" | "<<  basis_ordered[n][i].k <<"  "<< basis_ordered[n][i].j << " | " << eigen[n][i].sort << endl;
 		}
 		//local operators.
+		/*
+		 *for (int j=0;j<dim_dot;j++){
+		 *    for (int k=0;k<num_eigen_kept[n-1];k++){
+		 *    //cout << k << "  " << eigen[n-1][k].eig_val << " a " << endl;
+		 *        for (int kk=0;kk<num_eigen_kept[n-1];kk++){
+		 *            c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_up_eigen[n-1][k][kk];
+		 *            c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_down_eigen[n-1][k][kk];
+		 *            c_dag_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_up_eigen[n-1][k][kk];
+		 *            c_dag_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_down_eigen[n-1][k][kk];
+		 *            //cout << "x  " << n << "  " << j << "  " << k << "  " << kk << endl;
+		 *            cout << setw(4) << basis_kj[n][k][j].sort << setw(4) << basis_kj[n][kk][j].sort << " | " << setw(10) << c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << "  old " << endl;
+		 *        }
+		 *    }
+		 *}
+		 */
 #pragma omp parallel for 
-		for (int j=0;j<dim_dot;j++){
-			for (int k=0;k<num_eigen_kept[n-1];k++){
-			//cout << k << "  " << eigen[n-1][k].eig_val << " a " << endl;
-				for (int kk=0;kk<num_eigen_kept[n-1];kk++){
-					c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_up_eigen[n-1][k][kk];
-					c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_down_eigen[n-1][k][kk];
-					c_dag_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_up_eigen[n-1][k][kk];
-					c_dag_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_down_eigen[n-1][k][kk];
-					//cout << "x  " << n << "  " << j << "  " << k << "  " << kk << endl;
-					//cout << basis_kj[n][k][j].sort << " | " << basis_kj[n][kk][j].sort << " | " << c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << "  " << c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << endl;
-				}
+		for (int i=0;i<num_basis[n];i++){
+			for (int j=0;j<num_basis[n];j++){
+				c_up_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_up_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+				c_down_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_down_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+				c_dag_up_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_dag_up_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+				c_dag_down_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_dag_down_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
 			}
 		}
+		/*
+		 *for (int i=0;i<num_basis[n];i++){
+		 *    for (int j=0;j<num_basis[n];j++){
+		 *        cout << setw(4) << i << "  " << setw(4) << j << " | " << setw(10) << c_up_basis[n][i][j] << "  new " << endl;
+		 *    }
+		 *}
+		 */
 		temp1=new double * [num_basis[n]];
 		temp2=new double * [num_basis[n]];
 		temp3=new double * [num_basis[n]];
@@ -611,10 +651,10 @@ void iterative_dia(void)
 		for (int i=0;i<num_basis[n];i++){//temp1 = A^{dag}*c
 			for (int j=0;j<num_basis[n];j++){
 				for (int k=0;k<num_basis[n];k++){
-					temp1[i][j]=temp1[i][j]+eigen[n][i].eigen_vect[k]*c_dag_up_basis[n][k][j];
-					temp2[i][j]=temp2[i][j]+eigen[n][i].eigen_vect[k]*c_dag_down_basis[n][k][j];
-					temp3[i][j]=temp3[i][j]+eigen[n][i].eigen_vect[k]*c_up_basis[n][k][j];
-					temp4[i][j]=temp4[i][j]+eigen[n][i].eigen_vect[k]*c_down_basis[n][k][j];
+					temp1[i][j]=temp1[i][j]+eigen[n][i].eigen_vect[k]*c_up_basis[n][k][j];
+					temp2[i][j]=temp2[i][j]+eigen[n][i].eigen_vect[k]*c_down_basis[n][k][j];
+					temp3[i][j]=temp3[i][j]+eigen[n][i].eigen_vect[k]*c_dag_up_basis[n][k][j];
+					temp4[i][j]=temp4[i][j]+eigen[n][i].eigen_vect[k]*c_dag_down_basis[n][k][j];
 				}
 			}
 		}
@@ -622,24 +662,25 @@ void iterative_dia(void)
 		for (int i=0;i<num_basis[n];i++){//c_eigen = temp1*A
 			for (int j=0;j<num_basis[n];j++){
 				for (int k=0;k<num_basis[n];k++){
-					c_dag_up_eigen[n][i][j]=c_dag_up_eigen[n][i][j]+temp1[i][k]*eigen[n][j].eigen_vect[k];
-					c_dag_down_eigen[n][i][j]=c_dag_down_eigen[n][i][j]+temp2[i][k]*eigen[n][j].eigen_vect[k];
-					c_up_eigen[n][i][j]=c_up_eigen[n][i][j]+temp3[i][k]*eigen[n][j].eigen_vect[k];
-					c_down_eigen[n][i][j]=c_down_eigen[n][i][j]+temp4[i][k]*eigen[n][j].eigen_vect[k];
+					c_up_eigen[n][i][j]=c_up_eigen[n][i][j]+temp1[i][k]*eigen[n][j].eigen_vect[k];
+					c_down_eigen[n][i][j]=c_down_eigen[n][i][j]+temp2[i][k]*eigen[n][j].eigen_vect[k];
+					c_dag_up_eigen[n][i][j]=c_dag_up_eigen[n][i][j]+temp3[i][k]*eigen[n][j].eigen_vect[k];
+					c_dag_down_eigen[n][i][j]=c_dag_down_eigen[n][i][j]+temp4[i][k]*eigen[n][j].eigen_vect[k];
 				}
 			}
 		}
 		//ofstream cup("cup",ios::binary);
-		/*
-		 *for (int i=0;i<num_basis[n];i++){
-		 *    f_eig_val << "Dot  " << n << "  total_electron_number_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
-		 *    for (int j=0;j<num_basis[n];j++){
-		 *        f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
-		 *        f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
-		 *        f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
-		 *    }
-		 *}
-		 */
+		for (int i=0;i<num_basis[n];i++){
+			f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			//f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << "  Sz_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum  << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			/*
+			 *for (int j=0;j<num_basis[n];j++){
+			 *    f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
+			 *    f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
+			 *    f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
+			 *}
+			 */
+		}
 		cout << "    ";cout << "Time leaved:    ";date_time();
 		//delete_iter_dia(n);
 	}

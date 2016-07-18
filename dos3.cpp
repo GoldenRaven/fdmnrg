@@ -79,7 +79,8 @@ void density_of_state(void)
 	    DOS1_DOWN=dos1_down(freqency);
 	    DOS2_DOWN=dos2_down(freqency);
 	    DOS3_DOWN=dos3_down(freqency);
-		cout << "  unsmeared ";
+		cout << "           ";
+		//cout << "  unsmeared ";
 		cout << setw(14) << setprecision(5) << freqency;
 		cout << setw(14) << setprecision(5) << DOS1_UP;
 		cout << setw(14) << setprecision(5) << DOS2_UP;
@@ -428,7 +429,7 @@ double dos3_up(double freqency)
 				omegan=(eigen[n][i].eig_val-eigen[n][j].eig_val)*pow(Lambda,-1.0*(n-1-1)/2.0);
 				//omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen[n][i].eig_val-eigen[n][j].eig_val);
 				//if (n < 6 ){
-					////cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << " A_nij=  " << c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val)) <<  "  P= " << P_lorentz(freqency,-1.0*omegan) << endl;
+					////cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << " A_nij=  " << c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat)) <<  "  P= " << P_lorentz(freqency,-1.0*omegan) << endl;
 					//cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << "  f=  " << freqency << "  P= " << (*pf)(freqency,-1.0*omegan) << endl;
 				//}
 				for (int k=0;k<num_kept;k++){
@@ -454,7 +455,7 @@ double dos3_down(double freqency)
 		for (int i=0;i<num_kept;i++){
 			for (int j=num_kept;j<num_basis[n];j++){
 				double omegan=0;
-				omegan=eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0)-eigen[n][j].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0);
+				omegan=(eigen[n][i].eig_val-eigen[n][j].eig_val)*pow(Lambda,-1.0*(n-1-1)/2.0);
 				for (int k=0;k<num_kept;k++){
 					sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][k]*rho_red_temp[n][k][i]*P_K(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][k]*rho_red_temp[n][k][i]*P_K(freqency,omegan);
 				}
