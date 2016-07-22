@@ -70,9 +70,9 @@ void density_of_state(void)
     test_sum_rule=false;
 	ifstream f_freqency("freqency");
 	if (smear) {
+	    ofstream f_dos_smeared("freq_dos_smeared.dat");
 	    while (!f_freqency.eof()){//???????????
 		    f_freqency >> freqency;
-	        ofstream f_dos_smeared("freq_dos_smeared.dat");
 			//if (fabs(freqency) < omega0){
 	        DOS1_UP=dos1_up(freqency);
 	        DOS2_UP=dos2_up(freqency);
@@ -97,30 +97,30 @@ void density_of_state(void)
 		    f_dos_smeared << endl;
 		}
 	}else{
-	    while (!f_freqency.eof()){//???????????
-		f_freqency >> freqency;
 	    ofstream f_dos_unsmeared("freq_dos_unsmeared.dat");
-	    DOS1_UP=dos1_up(freqency);
-	    DOS2_UP=dos2_up(freqency);
-	    DOS3_UP=dos3_up(freqency);
-	    DOS1_DOWN=dos1_down(freqency);
-	    DOS2_DOWN=dos2_down(freqency);
-	    DOS3_DOWN=dos3_down(freqency);
-		cout << "           ";
-		//cout << "  unsmeared ";
-		cout << setw(14) << setprecision(5) << freqency;
-		cout << setw(14) << setprecision(5) << DOS1_UP;
-		cout << setw(14) << setprecision(5) << DOS2_UP;
-		cout << setw(14) << setprecision(5) << DOS3_UP;
-		cout << setw(14) << setprecision(5) << DOS1_DOWN;
-		cout << setw(14) << setprecision(5) << DOS2_DOWN;
-		cout << setw(14) << setprecision(5) << DOS3_DOWN;
-		cout << endl;
-		f_dos_unsmeared << left;
-		f_dos_unsmeared << setw(20) << setprecision(10) << freqency;
-		f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
-		f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-		f_dos_unsmeared << endl;
+	    while (!f_freqency.eof()){//???????????
+		    f_freqency >> freqency;
+	        DOS1_UP=dos1_up(freqency);
+	        DOS2_UP=dos2_up(freqency);
+	        DOS3_UP=dos3_up(freqency);
+	        DOS1_DOWN=dos1_down(freqency);
+	        DOS2_DOWN=dos2_down(freqency);
+	        DOS3_DOWN=dos3_down(freqency);
+		    cout << "           ";
+		    //cout << "  unsmeared ";
+		    cout << setw(14) << setprecision(5) << freqency;
+		    cout << setw(14) << setprecision(5) << DOS1_UP;
+		    cout << setw(14) << setprecision(5) << DOS2_UP;
+		    cout << setw(14) << setprecision(5) << DOS3_UP;
+		    cout << setw(14) << setprecision(5) << DOS1_DOWN;
+		    cout << setw(14) << setprecision(5) << DOS2_DOWN;
+		    cout << setw(14) << setprecision(5) << DOS3_DOWN;
+		    cout << endl;
+		    f_dos_unsmeared << left;
+		    f_dos_unsmeared << setw(20) << setprecision(10) << freqency;
+		    f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+		    f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+		    f_dos_unsmeared << endl;
 		}
 		//exit(0);
 	}
@@ -482,8 +482,8 @@ double P_K(double freqency, double omegan)//centered at omegan! not -1.0*omegan.
 	if (test_sum_rule){
 		ans=1.0;
 	}else{
-		ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));
-		//ans=P_L(freqency,omegan)*(*pf)(freqency)+P_G(freqency,omegan)*(1-(*pf)(freqency));
+		//ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));
+		ans=P_L(freqency,omegan)*P_h(freqency)+P_G(freqency,omegan)*(1-P_h(freqency));
 	}
 	return ans;
 }
