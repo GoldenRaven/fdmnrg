@@ -18,6 +18,13 @@ void genoutput(void)
 	cout << "  " << " alpha     = " << left << setw(15) << alpha      << " :Width in log-Gaussian" <<  endl;
 	cout << "  " << " omega0    = " << left << setw(15) << omega0     << " :Width in Gaussian" <<  endl;
 	cout << "  " << " smear     = " << left << setw(15) << smear << " :smear or unsmear" <<  endl;
+	if (Q){
+		cout << "   Quantum number Charge(Q) is used in sorting." << endl;
+	}else if(Q_Sz){
+		cout << "   Quantum number Charge(Q) and total spin(Sz) is used in sorting." << endl;
+	}else if(N_up_N_down){
+			cout << "   Quantum number up number(N_up) and down number(N_down) is used in sorting." << endl;
+		}
 	cout << "  #############################################################################" << endl;
 	//char ch;
 	//ifstream setup("../../setup.cpp");

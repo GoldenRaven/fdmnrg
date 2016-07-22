@@ -24,8 +24,8 @@ void density_of_state(void)
 	double P_lorentz(double,double);
 
 	cout << "density_of_state: "; date_time();
-    rho_red_temp=new double ** [N_max+2];
-    for (int n=0;n<N_max+2;n++){
+    rho_red_temp=new double ** [N_max-1];
+    for (int n=0;n<N_max-1;n++){
     	rho_red_temp[n]=new double * [num_kept];
         for (int i=0;i<num_kept;i++){
 			rho_red_temp[n][i]=new double [num_kept];
@@ -34,14 +34,10 @@ void density_of_state(void)
 			}
         }
     }
-	for (int n1=n0;n1<N_max+1;n1++){
+	for (int n1=n0;n1<N_max-1;n1++){
 		rho_red(n1);
 	}
 	cout << "Time finished all reduced density matrice:    ";date_time();cout << endl;
-    double freqency;
-	ifstream f_freqency("freqency");
-	ofstream f_dos_unsmeared("freq_dos_unsmeared.dat");
-	ofstream f_dos_smeared("freq_dos_smeared.dat");
 	cout << scientific << left << "            ";
 	cout << setw(14) << "freqency"<< setw(14) << "dos1_up"<< setw(14) << "dos2_up";
 	cout << setw(14) << "dos3_up";
@@ -50,6 +46,7 @@ void density_of_state(void)
 	cout << endl;
 	double DOS1_UP,DOS2_UP,DOS3_UP,DOS1_DOWN,DOS2_DOWN,DOS3_DOWN;
 	//test sum rule
+    double freqency;
 	freqency=1.0;
 	DOS1_UP=dos1_up(freqency);
 	DOS2_UP=dos2_up(freqency);
@@ -71,8 +68,38 @@ void density_of_state(void)
 	cout << setw(20) << setprecision(15) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
 	cout << endl;
     test_sum_rule=false;
-	while (!f_freqency.eof()){//???????????
+	ifstream f_freqency("freqency");
+	if (smear) {
+	    while (!f_freqency.eof()){//???????????
+		    f_freqency >> freqency;
+	        ofstream f_dos_smeared("freq_dos_smeared.dat");
+			//if (fabs(freqency) < omega0){
+	        DOS1_UP=dos1_up(freqency);
+	        DOS2_UP=dos2_up(freqency);
+	        DOS3_UP=dos3_up(freqency);
+	        DOS1_DOWN=dos1_down(freqency);
+	        DOS2_DOWN=dos2_down(freqency);
+	        DOS3_DOWN=dos3_down(freqency);
+		    cout << "  smeared   ";
+		    cout << setw(14) << setprecision(5) << freqency;
+		    cout << setw(14) << setprecision(5) << DOS1_UP;
+		    cout << setw(14) << setprecision(5) << DOS2_UP;
+		    cout << setw(14) << setprecision(5) << DOS3_UP;
+		    cout << setw(14) << setprecision(5) << DOS1_DOWN;
+		    cout << setw(14) << setprecision(5) << DOS2_DOWN;
+		    cout << setw(14) << setprecision(5) << DOS3_DOWN;
+		    cout << endl;
+			//}
+		    f_dos_smeared << left;
+		    f_dos_smeared << setw(20) << setprecision(10) << freqency;
+		    f_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+		    f_dos_smeared << setw(11) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+		    f_dos_smeared << endl;
+		}
+	}else{
+	    while (!f_freqency.eof()){//???????????
 		f_freqency >> freqency;
+	    ofstream f_dos_unsmeared("freq_dos_unsmeared.dat");
 	    DOS1_UP=dos1_up(freqency);
 	    DOS2_UP=dos2_up(freqency);
 	    DOS3_UP=dos3_up(freqency);
@@ -89,41 +116,20 @@ void density_of_state(void)
 		cout << setw(14) << setprecision(5) << DOS2_DOWN;
 		cout << setw(14) << setprecision(5) << DOS3_DOWN;
 		cout << endl;
-		if (fabs(freqency) < omega0){
-	        DOS1_UP=dos1_up(freqency);
-	        DOS2_UP=dos2_up(freqency);
-	        DOS3_UP=dos3_up(freqency);
-	        DOS1_DOWN=dos1_down(freqency);
-	        DOS2_DOWN=dos2_down(freqency);
-	        DOS3_DOWN=dos3_down(freqency);
-		    cout << "  smeared   ";
-		    cout << setw(14) << setprecision(5) << freqency;
-		    cout << setw(14) << setprecision(5) << DOS1_UP;
-		    cout << setw(14) << setprecision(5) << DOS2_UP;
-		    cout << setw(14) << setprecision(5) << DOS3_UP;
-		    cout << setw(14) << setprecision(5) << DOS1_DOWN;
-		    cout << setw(14) << setprecision(5) << DOS2_DOWN;
-		    cout << setw(14) << setprecision(5) << DOS3_DOWN;
-		    cout << endl;
-		}
 		f_dos_unsmeared << left;
 		f_dos_unsmeared << setw(20) << setprecision(10) << freqency;
 		f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
 		f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
 		f_dos_unsmeared << endl;
-		f_dos_smeared << left;
-		f_dos_smeared << setw(20) << setprecision(10) << freqency;
-		f_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
-		f_dos_smeared << setw(11) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-		f_dos_smeared << endl;
+		}
 		//exit(0);
 	}
 	cout << "Time leaved:    ";date_time();cout << endl;
 }
 
-void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
+void rho_red(int n1)// n1 ~ [n0,N_max-2]. n ~ {0,1,...,N_max-1}
 {
-	double **** eigen_sigma=new double *** [N_max+2];
+	double **** eigen_sigma=new double *** [N_max];
 	for (int n=0;n<1;n++){//eigen_sigma[0][sigma][k][j] shouldn't be used!
 		eigen_sigma[n]=new double ** [1];
 		for (int sigma=0;sigma<1;sigma++){
@@ -136,7 +142,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 			}
 		}
 	}
-	for (int n=1;n<N_max+2;n++){
+	for (int n=1;n<N_max;n++){
 		eigen_sigma[n]=new double ** [dim_dot];
 		for (int sigma=0;sigma<dim_dot;sigma++){
 			eigen_sigma[n][sigma]=new double * [num_eigen_kept[n-1]];
@@ -149,7 +155,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 		}
 	}
 #pragma omp parallel for 
-	for (int n=1;n<N_max+2;n++){//initialization of eigen_sigma[n][sigma][j][k].
+	for (int n=1;n<N_max;n++){//initialization of eigen_sigma[n][sigma][j][k].
 		for (int sigma=0;sigma<dim_dot;sigma++){
 			for (int k=0;k<num_eigen_kept[n-1];k++){
 				for (int j=0;j<num_basis[n];j++){
@@ -180,8 +186,8 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 		}
 	}
 	int k_start,k_finish;
-	for (int n2=N_max+1;n2>n1;n2--){//N_max>=n2>n1>=n0
-		if (n2==N_max+1){
+	for (int n2=N_max-1;n2>n1;n2--){//N_max>=n2>n1>=n0
+		if (n2==N_max-1){
 	    	k_start=0;
 	    	k_finish=num_basis[n2];
 		}else{
@@ -265,7 +271,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 #pragma omp parallel for 
 	    for (int i=0;i<num_kept;i++){
 	    	for (int j=0;j<num_kept;j++){
-	            ans[i][j]=ans[i][j]+sum_temp[i][j]*pow(dim_dot,N_max+1-n2);
+	            ans[i][j]=ans[i][j]+sum_temp[i][j]*pow(dim_dot,N_max-1-n2);
 	    	}
 	    }
 	}
@@ -284,7 +290,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 		}
 		delete [] eigen_sigma[n];
 	}
-	for (int n=1;n<N_max+2;n++){
+	for (int n=1;n<N_max;n++){
 		for (int sigma=0;sigma<dim_dot;sigma++){
 			for (int k=0;k<num_eigen_kept[n-1];k++){
 				delete [] eigen_sigma[n][sigma][k];
@@ -315,7 +321,7 @@ double dos1_up(double freqency)
 {
 	double sum=0;
 	double P_K(double,double);
-	for (int n=n0;n<N_max+1;n++){
+	for (int n=n0;n<N_max-1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=num_kept;i<num_basis[n];i++){
@@ -325,9 +331,9 @@ double dos1_up(double freqency)
 				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
 			}
 		}
-		sum=sum+pow(4,N_max+1-n)*sum_n;
+		sum=sum+pow(4,N_max-1-n)*sum_n;
 	}
-	for (int n=N_max+1;n<N_max+2;n++){
+	for (int n=N_max-1;n<N_max;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=0;i<num_basis[n];i++){
@@ -337,7 +343,7 @@ double dos1_up(double freqency)
 				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
 			}
 		}
-		sum=sum+pow(4,N_max+1-n)*sum_n;
+		sum=sum+pow(4,N_max-1-n)*sum_n;
 	}
 	return sum/Z;
 }
@@ -347,7 +353,7 @@ double dos1_down(double freqency)
 	double P_K(double,double);
     double P_h_unsmeared(double freqency);
     double P_h_smeared(double freqency);
-	for (int n=n0;n<N_max+1;n++){
+	for (int n=n0;n<N_max-1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=num_kept;i<num_basis[n];i++){
@@ -357,9 +363,9 @@ double dos1_down(double freqency)
 				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
 			}
 		}
-		sum=sum+pow(4,N_max+1-n)*sum_n;
+		sum=sum+pow(4,N_max-1-n)*sum_n;
 	}
-	for (int n=N_max+1;n<N_max+2;n++){
+	for (int n=N_max-1;n<N_max;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=0;i<num_basis[n];i++){
@@ -369,7 +375,7 @@ double dos1_down(double freqency)
 				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
 			}
 		}
-		sum=sum+pow(4,N_max+1-n)*sum_n;
+		sum=sum+pow(4,N_max-1-n)*sum_n;
 	}
 	return sum/Z;
 }
@@ -379,7 +385,7 @@ double dos2_up(double freqency)
 	double P_K(double,double);
     double P_h_unsmeared(double freqency);
     double P_h_smeared(double freqency);
-	for (int n=n0;n<N_max+1;n++){
+	for (int n=n0;n<N_max-1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=num_kept;i<num_basis[n];i++){
@@ -389,7 +395,7 @@ double dos2_up(double freqency)
 				sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
 			}
 		}
-		sum=sum+sum_n*pow(4,N_max+1-n);
+		sum=sum+sum_n*pow(4,N_max-1-n);
 	}
 	return sum/Z;
 }
@@ -399,7 +405,7 @@ double dos2_down(double freqency)
 	double P_K(double,double);
     double P_h_unsmeared(double freqency);
     double P_h_smeared(double freqency);
-	for (int n=n0;n<N_max+1;n++){
+	for (int n=n0;n<N_max-1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=num_kept;i<num_basis[n];i++){
@@ -409,7 +415,7 @@ double dos2_down(double freqency)
 				sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
 				}
 		}
-		sum=sum+sum_n*pow(4,N_max+1-n);
+		sum=sum+sum_n*pow(4,N_max-1-n);
 	}
 	return sum/Z;
 }
@@ -420,7 +426,7 @@ double dos3_up(double freqency)
     double P_h_unsmeared(double freqency);
     double P_h_smeared(double freqency);
 	//ofstream f_up("up.dat");
-	for (int n=n0;n<N_max+1;n++){
+	for (int n=n0;n<N_max-1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=0;i<num_kept;i++){
@@ -449,7 +455,7 @@ double dos3_down(double freqency)
     double P_h_unsmeared(double freqency);
     double P_h_smeared(double freqency);
 	//ofstream f_down("down.dat");
-	for (int n=n0;n<N_max+1;n++){
+	for (int n=n0;n<N_max-1;n++){
 		double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
 		for (int i=0;i<num_kept;i++){
@@ -486,13 +492,13 @@ double P_L(double freqency,double omegan)
 	double theta(double);
 	double Pi=3.14159265357L,gamma=alpha/4.0;
 	double ans;
-	//ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
-	ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
+	//ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
+	ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));
 }
 double P_G(double freqency,double omegan)
 {
 	double Pi=3.14159265357L,ans;
-	ans=1.0/(omega0*sqrt(Pi))*exp(-pow((freqency-omegan)/omega0,2));
+	ans=1.0/(omega0*sqrt(Pi))*exp(-1.0*pow((freqency-omegan)/omega0,2.0));
 	return ans;
 }
 double theta(double freqency)
@@ -500,6 +506,8 @@ double theta(double freqency)
 	double ans;
 	if (freqency > 0 ){
 		ans=1.0;
+	}else if (freqency==0){
+		ans=1.0/2.0;
 	//}else if (freqency > 0 && freqency < 1e-20){
 		//ans=1.0/2.0;
 	}else {
@@ -514,7 +522,7 @@ double P_h(double omegan)
 	    if (fabs(omegan) >= omega0 ){
 	    	ans=1.0;
 	    }else{
-	        ans=exp(-pow(log(fabs(omegan/omega0))/alpha,2));
+	        ans=exp(-1.0*pow(log10(fabs(omegan/omega0))/alpha,2.0));
 	    }
 	}else{
 		ans=1.0;
