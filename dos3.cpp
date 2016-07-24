@@ -6,6 +6,7 @@
 #include<omp.h>
 #include"setup.h"
 using namespace std;
+double Pi=3.141592653589793238;
 bool test_sum_rule=true;
 double *** rho_red_temp;
 //double (*pf)(double,double);
@@ -482,22 +483,23 @@ double P_K(double freqency, double omegan)//centered at omegan! not -1.0*omegan.
 	if (test_sum_rule){
 		ans=1.0;
 	}else{
-		//ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));
-		ans=P_L(freqency,omegan)*P_h(freqency)+P_G(freqency,omegan)*(1-P_h(freqency));
+		ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));// P_h(omegan)
+		//ans=P_L(freqency,omegan)*P_h(freqency)+P_G(freqency,omegan)*(1-P_h(freqency));// P_h(freqency)
 	}
 	return ans;
 }
 double P_L(double freqency,double omegan)
 {
 	double theta(double);
-	double Pi=3.14159265357L,gamma=alpha/4.0;
+	double gamma=alpha/4.0;
 	double ans;
-	//ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));
-	ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));
+	//ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));//Log-Gaussian
+	ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));//eq. 1b final
+	//ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(freqency))*exp(-1.0*pow(log10(fabs(freqency/omegan))/alpha-gamma,2.0));//eq. 1b middle
 }
 double P_G(double freqency,double omegan)
 {
-	double Pi=3.14159265357L,ans;
+	double ans;
 	ans=1.0/(omega0*sqrt(Pi))*exp(-1.0*pow((freqency-omegan)/omega0,2.0));
 	return ans;
 }
