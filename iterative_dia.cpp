@@ -430,16 +430,25 @@ void iterative_dia(void)
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val_relat << endl;
 	        	}
 		        int lda=num_basis_block[b];
-	            double * vect_temp=new double [num_basis_block[b]*num_basis_block[b]];
+				//double * vect_temp=new double [num_basis_block[b]*num_basis_block[b]];
+				MKL_Complex16 * vect_temp=new MKL_Complex16 [num_basis_block[b]*num_basis_block[b]];
 	            double * value=new double [num_basis_block[b]];
 		        {int k=0;
 		        for (int i=0;i<num_basis_block[b];i++){
 		        	for (int j=0;j<num_basis_block[b];j++){
-		        		vect_temp[k]=H_bij[b][i][j];
+		        		vect_temp[k].real = H_bij[b][i][j];
+		        		vect_temp[k].imag = 0;
 		        		k++;
 		        	}
 		        }}
-		        LAPACKE_dsyevd(LAPACK_ROW_MAJOR,'V','U',num_basis_block[b],vect_temp,lda,value);
+				double abstol=1e-10;
+				int * isuppz=new int [2*num_basis_block[b]];
+				double vl,vu;
+				int il,iu;
+				int * m;
+				m=&num_basis_block[b];
+		        int info=LAPACKE_zheevr(LAPACK_ROW_MAJOR,'V','A','U',num_basis_block[b],vect_temp,num_basis_block[b],vl,vu,il,iu,abstol,m,value,vect_temp,num_basis_block[b],isuppz);
+				//LAPACKE_dsyevd(LAPACK_ROW_MAJOR,'V','U',num_basis_block[b],vect_temp,lda,value);
 		        for (int i=0;i<num_basis_block[b];i++){
 		            eigen[n][kk].eig_val=value[i];
 					//eigen_ordered[n+1][kk].eigen_value=value[i];
@@ -447,7 +456,10 @@ void iterative_dia(void)
 					int k=0;
 					//for (int j=i*num_basis_block[b];j<(i+1)*num_basis_block[b];j++){
 					for (int j=0;j<num_basis_block[b];j++){
-						vect[n][kk][sum+k]=vect_temp[i+j*num_basis_block[b]];
+						vect[n][kk][sum+k]=vect_temp[i+j*num_basis_block[b]].real;
+						if (fabs(vect_temp[i+j*num_basis_block[b]].imag) > 1e-30){
+							cout << vect_temp[i+j*num_basis_block[b]].imag << endl;
+						}
 						//vect[n][kk][sum+k]=vect_temp[j+i*num_basis_block[b]];
 						//vect[n][kk][sum+k]=vect_temp[j];
 						k++;
@@ -575,23 +587,35 @@ void iterative_dia(void)
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val << endl;
 		    	}
 		        int lda=num_basis_block[b];
-	            double * vect_temp=new double [num_basis_block[b]*num_basis_block[b]];
+				//double * vect_temp=new double [num_basis_block[b]*num_basis_block[b]];
+				MKL_Complex16 * vect_temp=new MKL_Complex16 [num_basis_block[b]*num_basis_block[b]];
 	            double * value=new double [num_basis_block[b]];
 		        {int k=0;
 		        for (int i=0;i<num_basis_block[b];i++){
 		        	for (int j=0;j<num_basis_block[b];j++){
-		        		vect_temp[k]=H_bij[b][i][j];
+		        		vect_temp[k].real = H_bij[b][i][j];
+		        		vect_temp[k].imag = 0;
 		        		k++;
 		        	}
 		        }}
-		        LAPACKE_dsyevd(LAPACK_ROW_MAJOR,'V','U',num_basis_block[b],vect_temp,lda,value);
+				double abstol=1e-10;
+				int * isuppz=new int [2*num_basis_block[b]];
+				double vl,vu;
+				int il,iu;
+				int * m;
+				m=&num_basis_block[b];
+		        int info=LAPACKE_zheevr(LAPACK_ROW_MAJOR,'V','A','U',num_basis_block[b],vect_temp,num_basis_block[b],vl,vu,il,iu,abstol,m,value,vect_temp,num_basis_block[b],isuppz);
+				//LAPACKE_dsyevd(LAPACK_ROW_MAJOR,'V','U',num_basis_block[b],vect_temp,lda,value);
 		        for (int i=0;i<num_basis_block[b];i++){
 		            eigen[n][kk].eig_val=value[i];
 					//cout << "eigenvalue: " << setw(3) << i << setw(9) << value[i] << endl;
 					//cout << "eigval  " << setw(3) << i << setw(9) << eigen[n][kk].eig_val << endl;
 					int k=0;
 					for (int j=0;j<num_basis_block[b];j++){//row-wise
-						vect[n][kk][sum+k]=vect_temp[i+j*num_basis_block[b]];
+						vect[n][kk][sum+k]=vect_temp[i+j*num_basis_block[b]].real;
+						if (fabs(vect_temp[i+j*num_basis_block[b]].imag) > 1e-30){
+							cout << vect_temp[i+j*num_basis_block[b]].imag << endl;
+						}
 						//vect[n][kk][sum+k]=vect_temp[j];
 						k++;
 		        	}
