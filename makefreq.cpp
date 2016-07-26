@@ -67,7 +67,9 @@ void logarithm(void)
 		f_freq << -1.0*pow(lambda,i) << endl;
 	}
 	f_freq << 0 << endl;
-	for (int i=N/2;i>=0;i--){
-		f_freq << pow(lambda,i) << endl;
-	}
+	/*
+	 *for (int i=N/2;i>=0;i--){
+	 *    f_freq << pow(lambda,i) << endl;
+	 *}
+	 */
 }
