@@ -272,25 +272,58 @@ void iterative_dia(void)
 		 *}
 		 */
 	    num_block=0;
-	    for (int i=1;i<=num_basis[n];i++){
+	    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: N_up, N_down.
 			basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
+	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_upnum+(basis_ordered[n][i].quant_num_upnum)){
 	    		num_block=num_block+1;
 	    	}
 	    }
-	//quant_num=quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum);
+		/*
+		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q, Sz.
+		 *    basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
+		 *    if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
+		 *        num_block=num_block+1;
+		 *    }
+		 *}
+		 */
+		/*
+		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q
+		 *    basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
+		 *    if (basis_ordered[n][i-1].quant_num_totalnum != quant_tmp*basis_ordered[n][i].quant_num_totalnum){
+		 *        num_block=num_block+1;
+		 *    }
+		 *}
+		 */
 		//cout << num_block << endl;
 	    num_basis_block=new int [num_block];
 	    for (int i=0;i<num_block;i++){
 	    	num_basis_block[i]=0;
 	    }
 	    {int ii=0;
-	    for (int i=1;i<=num_basis[n];i++){
-	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
+	    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: N_up, N_down.
+	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_upnum) != quant_tmp*basis_ordered[n][i].quant_num_downnum+(basis_ordered[n][i].quant_num_upnum)){
 	    		num_basis_block[ii]=i;//-num_basis_block[ii-2];
 	    	    ii++;
 	    	}
 	    }}
+		/*
+		 *{int ii=0;
+		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q, Sz.
+		 *    if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
+		 *        num_basis_block[ii]=i;//-num_basis_block[ii-2];
+		 *        ii++;
+		 *    }
+		 *}}
+		 */
+		/*
+		 *{int ii=0;
+		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q.
+		 *    if (basis_ordered[n][i-1].quant_num_totalnum != basis_ordered[n][i].quant_num_totalnum)){
+		 *        num_basis_block[ii]=i;//-num_basis_block[ii-2];
+		 *        ii++;
+		 *    }
+		 *}}
+		 */
 		for (int i=num_block-1;i>0;i--){
 		    num_basis_block[i]=num_basis_block[i]-num_basis_block[i-1];
 		}//1,4,6,4,1.
