@@ -28,6 +28,7 @@ extern double *** c_dag_up_eigen;
 extern double *** c_dag_down_eigen;
 extern double *** c_up_eigen;
 extern double *** c_down_eigen;
+extern bool Q,Q_Sz,N_up_N_down;
 extern bool smear_both;
 
 struct EIGEN_STATE{

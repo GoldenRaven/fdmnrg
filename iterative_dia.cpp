@@ -238,92 +238,96 @@ void iterative_dia(void)
 				i++;
 	        }
 	    }}
-	    for (int i=1;i<num_basis[n];i++){//sorting of quantum number: up, down.
-			//cout << "basis  " << basis_ordered[n][i].quant_num_totalnum << "  " << basis_ordered[n][i].quant_num_upnum << "  " << basis_ordered[n][i].quant_num_downnum << endl;
-	    	for (int ii=1;ii<=num_basis[n]-i;ii++){
-	    		if (quant_tmp*basis_ordered[n][ii-1].quant_num_upnum+(basis_ordered[n][ii-1].quant_num_downnum) > quant_tmp*basis_ordered[n][ii].quant_num_upnum+(basis_ordered[n][ii].quant_num_downnum)){
-	    			BASIS temp = basis_ordered[n][ii-1];//.quant_num_totalnum;
-	    			basis_ordered[n][ii-1]=basis_ordered[n][ii];
-					basis_ordered[n][ii]=temp;
-	    		}
-	    	}
-	    }
-		/*
-		 *for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Q, S_z.
-		 *    //cout << "basis  " << basis_ordered[n][i].quant_num_totalnum << "  " << basis_ordered[n][i].quant_num_upnum << "  " << basis_ordered[n][i].quant_num_downnum << endl;
-		 *    for (int ii=1;ii<=num_basis[n]-i;ii++){
-		 *        if (quant_tmp*basis_ordered[n][ii-1].quant_num_totalnum+(basis_ordered[n][ii-1].quant_num_upnum-basis_ordered[n][ii-1].quant_num_downnum) > quant_tmp*basis_ordered[n][ii].quant_num_totalnum+(basis_ordered[n][ii].quant_num_upnum-basis_ordered[n][ii].quant_num_downnum)){
-		 *            BASIS temp = basis_ordered[n][ii-1];//.quant_num_totalnum;
-		 *            basis_ordered[n][ii-1]=basis_ordered[n][ii];
-		 *            basis_ordered[n][ii]=temp;
-		 *        }
-		 *    }
-		 *}
-		 */
-		/*
-		 *for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Q.
-		 *    for (int ii=1;ii<=num_basis[n]-i;ii++){
-		 *        if (basis_ordered[n][ii-1].quant_num_totalnum > basis_ordered[n][ii].quant_num_totalnum){
-		 *            BASIS temp = basis_ordered[n][ii-1];//.quant_num_totalnum;
-		 *            basis_ordered[n][ii-1]=basis_ordered[n][ii];
-		 *            basis_ordered[n][ii]=temp;
-		 *        }
-		 *    }
-		 *}
-		 */
-	    num_block=0;
-	    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: N_up, N_down.
-			basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_upnum+(basis_ordered[n][i].quant_num_upnum)){
-	    		num_block=num_block+1;
-	    	}
-	    }
-		/*
-		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q, Sz.
-		 *    basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-		 *    if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
-		 *        num_block=num_block+1;
-		 *    }
-		 *}
-		 */
-		/*
-		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q
-		 *    basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-		 *    if (basis_ordered[n][i-1].quant_num_totalnum != quant_tmp*basis_ordered[n][i].quant_num_totalnum){
-		 *        num_block=num_block+1;
-		 *    }
-		 *}
-		 */
-		//cout << num_block << endl;
-	    num_basis_block=new int [num_block];
-	    for (int i=0;i<num_block;i++){
-	    	num_basis_block[i]=0;
-	    }
-	    {int ii=0;
-	    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: N_up, N_down.
-	    	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_upnum) != quant_tmp*basis_ordered[n][i].quant_num_downnum+(basis_ordered[n][i].quant_num_upnum)){
-	    		num_basis_block[ii]=i;//-num_basis_block[ii-2];
-	    	    ii++;
-	    	}
-	    }}
-		/*
-		 *{int ii=0;
-		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q, Sz.
-		 *    if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
-		 *        num_basis_block[ii]=i;//-num_basis_block[ii-2];
-		 *        ii++;
-		 *    }
-		 *}}
-		 */
-		/*
-		 *{int ii=0;
-		 *for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q.
-		 *    if (basis_ordered[n][i-1].quant_num_totalnum != basis_ordered[n][i].quant_num_totalnum)){
-		 *        num_basis_block[ii]=i;//-num_basis_block[ii-2];
-		 *        ii++;
-		 *    }
-		 *}}
-		 */
+		if (Q && !Q_Sz && !N_up_N_down){
+		    for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Q.
+		    	for (int ii=1;ii<=num_basis[n]-i;ii++){
+		    		if (basis_ordered[n][ii-1].quant_num_totalnum > basis_ordered[n][ii].quant_num_totalnum){
+		    			BASIS temp = basis_ordered[n][ii-1];
+		    			basis_ordered[n][ii-1]=basis_ordered[n][ii];
+		    			basis_ordered[n][ii]=temp;
+		    		}
+		    	}
+		    }
+	        num_block=0;
+		    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q
+		    	basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
+		    	if (basis_ordered[n][i-1].quant_num_totalnum != quant_tmp*basis_ordered[n][i].quant_num_totalnum){
+		    		num_block=num_block+1;
+		    	}
+		    }
+		    //cout << num_block << endl;
+	        num_basis_block=new int [num_block];
+	        for (int i=0;i<num_block;i++){
+	        	num_basis_block[i]=0;
+	        }
+		    {int ii=0;
+		    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q.
+		    	if (basis_ordered[n][i-1].quant_num_totalnum != basis_ordered[n][i].quant_num_totalnum){
+		    		num_basis_block[ii]=i;//-num_basis_block[ii-2];
+		    		ii++;
+		    	}
+		    }}
+		}else if(Q_Sz && !Q && !N_up_N_down){
+		    for (int i=1;i<num_basis[n];i++){//sorting of quantum number: Q, S_z.
+		    	//cout << "basis  " << basis_ordered[n][i].quant_num_totalnum << "  " << basis_ordered[n][i].quant_num_upnum << "  " << basis_ordered[n][i].quant_num_downnum << endl;
+		    	for (int ii=1;ii<=num_basis[n]-i;ii++){
+		    		if (quant_tmp*basis_ordered[n][ii-1].quant_num_totalnum+(basis_ordered[n][ii-1].quant_num_upnum-basis_ordered[n][ii-1].quant_num_downnum) > quant_tmp*basis_ordered[n][ii].quant_num_totalnum+(basis_ordered[n][ii].quant_num_upnum-basis_ordered[n][ii].quant_num_downnum)){
+		    			BASIS temp = basis_ordered[n][ii-1];
+		    			basis_ordered[n][ii-1]=basis_ordered[n][ii];
+		    			basis_ordered[n][ii]=temp;
+		    		}
+		    	}
+		    }
+	        num_block=0;
+		    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q, Sz.
+		    	basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
+		    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
+		    		num_block=num_block+1;
+		    	}
+		    }
+		    //cout << num_block << endl;
+	        num_basis_block=new int [num_block];
+	        for (int i=0;i<num_block;i++){
+	        	num_basis_block[i]=0;
+	        }
+		    {int ii=0;
+		    for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: Q, Sz.
+		    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){
+		    		num_basis_block[ii]=i;//-num_basis_block[ii-2];
+		    		ii++;
+		    	}
+		    }}
+		}else if(N_up_N_down && (!Q) && (!Q_Sz)){
+	        for (int i=1;i<num_basis[n];i++){//sorting of quantum number: up, down.
+		    	//cout << "basis  " << basis_ordered[n][i].quant_num_totalnum << "  " << basis_ordered[n][i].quant_num_upnum << "  " << basis_ordered[n][i].quant_num_downnum << endl;
+	        	for (int ii=1;ii<=num_basis[n]-i;ii++){
+	        		if (quant_tmp*basis_ordered[n][ii-1].quant_num_upnum+(basis_ordered[n][ii-1].quant_num_downnum) > quant_tmp*basis_ordered[n][ii].quant_num_upnum+(basis_ordered[n][ii].quant_num_downnum)){
+	        			BASIS temp = basis_ordered[n][ii-1];
+	        			basis_ordered[n][ii-1]=basis_ordered[n][ii];
+		    			basis_ordered[n][ii]=temp;
+	        		}
+	        	}
+	        }
+	        num_block=0;
+	        for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: N_up, N_down.
+		    	basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
+	        	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_upnum+(basis_ordered[n][i].quant_num_downnum)){
+	        		num_block=num_block+1;
+	        	}
+	        }
+		    //cout << num_block << endl;
+	        num_basis_block=new int [num_block];
+	        for (int i=0;i<num_block;i++){
+	        	num_basis_block[i]=0;
+	        }
+	        {int ii=0;
+	        for (int i=1;i<=num_basis[n];i++){//sorting of quantum number: N_up, N_down.
+	        	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_upnum+(basis_ordered[n][i].quant_num_downnum)){
+	        		num_basis_block[ii]=i;//-num_basis_block[ii-2];
+	        	    ii++;
+	        	}
+	        }}
+		}
 		for (int i=num_block-1;i>0;i--){
 		    num_basis_block[i]=num_basis_block[i]-num_basis_block[i-1];
 		}//1,4,6,4,1.
@@ -522,7 +526,6 @@ void iterative_dia(void)
 		    		}
 					//cout << " eigen_value: " << eigen[n-1][block[b][i].k-1].eig_val << endl;
 		    	}
-		        int lda=num_basis_block[b];
 				//double * vect_temp=new double [num_basis_block[b]*num_basis_block[b]];
 				MKL_Complex16 * vect_temp=new MKL_Complex16 [num_basis_block[b]*num_basis_block[b]];
 	            double * value=new double [num_basis_block[b]];
@@ -541,7 +544,7 @@ void iterative_dia(void)
 				int * m;
 				m=&num_basis_block[b];
 		        int info=LAPACKE_zheevr(LAPACK_ROW_MAJOR,'V','A','U',num_basis_block[b],vect_temp,num_basis_block[b],vl,vu,il,iu,abstol,m,value,vect_temp,num_basis_block[b],isuppz);
-				//LAPACKE_dsyevd(LAPACK_ROW_MAJOR,'V','U',num_basis_block[b],vect_temp,lda,value);
+				//LAPACKE_dsyevd(LAPACK_ROW_MAJOR,'V','U',num_basis_block[b],vect_temp,num_basis_block[b],value);
 		        for (int i=0;i<num_basis_block[b];i++){
 		            eigen[n][kk].eig_val=value[i];
 	                //cout << "        ";cout << "eigenvalue: " << setw(9) << value[i] << endl;
@@ -566,7 +569,6 @@ void iterative_dia(void)
 			    delete [] vect_temp;
 				delete [] value;
 		    }
-			//exit(0);
 			for (int i=0;i<num_eigen_kept[n-1];i++){
 				delete [] temp1[i];
 				delete [] temp2[i];
@@ -644,21 +646,6 @@ void iterative_dia(void)
 			//cout << n << "  " << basis_ordered[n][i].quant_num_totalnum <<" | "<<  basis_ordered[n][i].k <<"  "<< basis_ordered[n][i].j << " | " << eigen[n][i].sort << endl;
 		}
 		//local operators.
-		/*
-		 *for (int j=0;j<dim_dot;j++){
-		 *    for (int k=0;k<num_eigen_kept[n-1];k++){
-		 *    //cout << k << "  " << eigen[n-1][k].eig_val << " a " << endl;
-		 *        for (int kk=0;kk<num_eigen_kept[n-1];kk++){
-		 *            c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_up_eigen[n-1][k][kk];
-		 *            c_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_down_eigen[n-1][k][kk];
-		 *            c_dag_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_up_eigen[n-1][k][kk];
-		 *            c_dag_down_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort]=c_dag_down_eigen[n-1][k][kk];
-		 *            //cout << "x  " << n << "  " << j << "  " << k << "  " << kk << endl;
-		 *            cout << setw(4) << basis_kj[n][k][j].sort << setw(4) << basis_kj[n][kk][j].sort << " | " << setw(10) << c_up_basis[n][basis_kj[n][k][j].sort][basis_kj[n][kk][j].sort] << "  old " << endl;
-		 *        }
-		 *    }
-		 *}
-		 */
 #pragma omp parallel for 
 		for (int i=0;i<num_basis[n];i++){
 			for (int j=0;j<num_basis[n];j++){
@@ -691,10 +678,12 @@ void iterative_dia(void)
 				temp4[i][j]=0;
 			}
 		}
+		//cout << eigen[n][7].eigen_vect[0] << "  " << c_up_basis[n][0][0] << endl;
 #pragma omp parallel for 
 		for (int i=0;i<num_basis[n];i++){//temp1 = A^{dag}*c
 			for (int j=0;j<num_basis[n];j++){
 				for (int k=0;k<num_basis[n];k++){
+		//cout << eigen[n][i].eigen_vect[k] << "  " << c_up_basis[n][k][j] << endl;
 					temp1[i][j]=temp1[i][j]+eigen[n][i].eigen_vect[k]*c_up_basis[n][k][j];
 					temp2[i][j]=temp2[i][j]+eigen[n][i].eigen_vect[k]*c_down_basis[n][k][j];
 					temp3[i][j]=temp3[i][j]+eigen[n][i].eigen_vect[k]*c_dag_up_basis[n][k][j];
@@ -725,6 +714,7 @@ void iterative_dia(void)
 			 *}
 			 */
 		}
+		//if (n==4) exit(0);
 		cout << "    ";cout << "Time leaved:    ";date_time();
 		delete_iter_dia(n);
 	}

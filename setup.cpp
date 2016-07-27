@@ -13,4 +13,7 @@ double Lambda=2.0;
 double alpha=0.02;
 double temperature=2.0e-6;
 double omega0=0.005*temperature;
+bool Q=false;
+bool Q_Sz=false;
+bool N_up_N_down=true;
 bool smear_both=false;
