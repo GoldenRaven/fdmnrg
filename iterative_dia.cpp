@@ -57,6 +57,7 @@ void iterative_dia(void)
 	double pe_down[N_max+1];
 	double ptn_up[N_max+1];
 	double ptn_down[N_max+1];
+	double * E_GS=new double [N_max+2];
 	//
 	genoutput();
 	cout << "iterative_dia(): " << endl;
@@ -187,6 +188,7 @@ void iterative_dia(void)
 	EIGEN_STATE eig_temp1={2,2,0,1,1,0,(Ed)/Lambda,0,vect[0][1]};eigen[0][1]=eig_temp1;//|up>=|2,0>
 	EIGEN_STATE eig_temp2={3,3,0,1,0,1,(Ed)/Lambda,0,vect[0][2]};eigen[0][2]=eig_temp2;//|down>=|3,0>
 	EIGEN_STATE eig_temp3={4,4,0,2,1,1,(2*Ed+U)/Lambda,(Ed+U)/Lambda,vect[0][3]};eigen[0][3]=eig_temp3;//|up down>=|4,0>
+	E_GS[0]=Ed/Lambda;
 	for (int i=0;i<num_basis[0];i++){
         for (int j=0;j<num_basis[0];j++){
             c_up_basis[0][i][j]=c_up_imp[i][j];
@@ -703,9 +705,10 @@ void iterative_dia(void)
 			}
 		}
 		//ofstream cup("cup",ios::binary);
+		E_GS[n]=sqrt(Lambda)*E_GS[n-1]+eigen[n][0].eig_val;
 		for (int i=0;i<num_basis[n];i++){
 			if (N_up_N_down){
-			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val << setw(25) << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << setw(25) << exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0)) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val+E_GS[n] << setw(25) << (eigen[n][i].eig_val+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << setw(25) << exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0)) << "   " << eigen[n][i].k << endl;
 			}else if(Q_Sz){
 			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << "  Sz_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum  << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}else if(Q){
