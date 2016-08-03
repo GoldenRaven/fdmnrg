@@ -17,16 +17,20 @@ void func_wn(void)
 	}
 	for (int n=n0;n<N_max+1;n++){//partition function: \sum_{n_0}^{N_max} Zn
 		for (int s=num_kept;s<num_basis[n];s++){
-			Zn[n]=Zn[n]+exp(-1.0*pow(Lambda,-(n-1-1)/2.0)*Beta*eigen[n][s].eig_val);
+			Zn[n]=Zn[n]+exp(-1.0*pow(Lambda,-(n-1-1)/2.0)*Beta*(eigen[n][s].eig_val_relat));
+			//Zn[n]=Zn[n]+exp(-1.0*Beta*(eigen[n][s].eig_val_relat));
+			//Zn[n]=Zn[n]+exp(-1.0*pow(Lambda,-(n-1-1)/2.0)*Beta*(eigen[n][s].eig_val_relat+E_GS[n]));
 		    //cout << "Beta*eigen[n][s].eig_val= " << Beta*eigen[n][s].eig_val << endl;
 		}
-		//cout << "Zn= " << Zn[n] << endl;
+		cout << "Z" << n << " = " << Zn[n] << endl;
 		Z=Z+Zn[n]*pow(dim_dot,N_max-(n-1));
 	}
 	for (int s=0;s<num_basis[N_max+1];s++){//Z_{N_max+1}
-		Zn[N_max+1]=Zn[N_max+1]+exp(-1.0*pow(Lambda,-(N_max+1-1-1)/2.0)*Beta*eigen[N_max+1][s].eig_val);
+		Zn[N_max+1]=Zn[N_max+1]+exp(-1.0*pow(Lambda,-(N_max+1-1-1)/2.0)*Beta*(eigen[N_max+1][s].eig_val_relat));
+		//Zn[N_max+1]=Zn[N_max+1]+exp(-1.0*pow(Lambda,-(N_max+1-1-1)/2.0)*Beta*(eigen[N_max+1][s].eig_val_relat+E_GS[N_max+1]));
 	    //cout << "sum in N_max+1= " << sum << endl;
 	}
+	cout << "Z" << N_max+1 << " = " << Zn[N_max+1] << endl;
 	Z=Z+Zn[N_max+1];
 	cout << "  " << "partition Z= " << Z << endl;
 	double sum=0;
