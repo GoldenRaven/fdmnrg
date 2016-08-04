@@ -711,11 +711,11 @@ void iterative_dia(void)
 		f_E_GS << "Dot  " << n << setw(25) << E_GS[n] << endl;
 		for (int i=0;i<num_basis[n];i++){
 			if (N_up_N_down){
-			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val_relat+E_GS[n] << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << setw(25) << exp(-1.0*Beta*(eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0)) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val_relat+E_GS[n] << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}else if(Q_Sz){
-			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << "  Sz_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum  << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << "  Sz_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum  << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val_relat+E_GS[n] << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}else if(Q){
-			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val_relat+E_GS[n] << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}
 			/*
 			 *for (int j=0;j<num_basis[n];j++){
