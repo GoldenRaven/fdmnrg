@@ -60,7 +60,7 @@ double exp_Z(int n,int l)
 		    sumn=sumn+pow(4,N_max+1-n1)*exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*(E_GS[n1]-E_GS[n]))*suml1;
 		}
 	}
-	ans=exp(-1.0*Beta*eigen[n][l].eig_val_relat)/sumn;
+	ans=exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][l].eig_val_relat)/sumn;
 	return ans;
 }
 
