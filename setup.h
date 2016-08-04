@@ -16,7 +16,6 @@ extern double Beta_bar;
 extern double temperature;
 extern double alpha;//width in log-Gaussian
 extern double omega0;//width in Gaussian
-extern double Z;
 extern int * num_basis;//[N_max+2].
 extern int * num_eigen_kept;//[N_max+2]
 extern double * E_GS;
