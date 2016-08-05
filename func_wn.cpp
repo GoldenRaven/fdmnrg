@@ -11,12 +11,14 @@ void func_wn(void)
 	double exp_Z(int n,int l);
 	double * wn = new double [N_max+2];
 	double sum=0;
+	ofstream fwn("wn.dat");
 	for (int n=n0;n<N_max+1;n++){
 	    double suml=0;
 		for (int l=num_kept;l<num_basis[n];l++){
 		    suml=suml+exp_Z(n,l);
 		}
 		wn[n]=pow(4,N_max+1-n)*suml;
+		fwn << setw(5) << n << setw(25) << scientific << setprecision(15) << wn[n] << endl;
 		sum=sum+wn[n];
         cout << "  sum of wn= " << setprecision(16) << scientific << sum << endl;
 	}
@@ -26,10 +28,12 @@ void func_wn(void)
 		    suml=suml+exp_Z(n,l);
 		}
 		wn[n]=pow(4,N_max+1-n)*suml;
+		fwn << setw(5) << n << setw(25) << scientific << setprecision(15) << wn[n] << endl;
 		sum=sum+wn[n];
         cout << "  sum of wn= " << setprecision(16) << scientific << sum << endl;
 	}
     delete [] wn;
+    cout << "  ";cout << "Time leaved:    ";date_time();
 }
 
 double exp_Z(int n,int l)
@@ -37,7 +41,8 @@ double exp_Z(int n,int l)
 	double ans;
 	double sumn=0;
 	for (int n1=n0;n1<N_max+1;n1++){
-		if (-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*(E_GS[n1]-E_GS[n]) > 500){
+		if (-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) > 500){
+			cout << n << "  " << n1 << "  " << -1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) << endl;
 			ans=0;
 			return ans;
 		}else{
@@ -49,7 +54,8 @@ double exp_Z(int n,int l)
 		}
 	}
 	for (int n1=N_max+1;n1<N_max+2;n1++){
-		if (-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*(E_GS[n1]-E_GS[n]) > 500){
+		if (-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) > 500){
+			cout << n << "  " << n1 << "  " << -1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) << endl;
 			ans=0;
 			return ans;
 		}else{
