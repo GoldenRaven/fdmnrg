@@ -57,6 +57,7 @@ void iterative_dia(void)
 	double pe_down[N_max+1];
 	double ptn_up[N_max+1];
 	double ptn_down[N_max+1];
+	E_GS=new double [N_max+2];
 	//
 	genoutput();
 	cout << "iterative_dia(): " << endl;
@@ -191,6 +192,7 @@ void iterative_dia(void)
 	eigen[0][1]=eig_temp1;//| down   > = |2,0>
 	eigen[0][2]=eig_temp2;//| 0      > = |3,0>
 	eigen[0][3]=eig_temp3;//| updown > = |4,0>
+	E_GS[0]=Ed/Lambda;
 	for (int i=0;i<num_basis[0];i++){
         for (int j=0;j<num_basis[0];j++){
             c_up_basis[0][i][j]=c_up_imp[i][j];
@@ -245,6 +247,7 @@ void iterative_dia(void)
 	delete [] temp2;
 	delete [] temp3;
 	delete [] temp4;
+	ofstream f_E_GS("E_GS.dat");
 	for (int n=1;n<N_max;n++){
 		char str0[20],str1[15];
 		sprintf(str0,"%d",n);
@@ -776,11 +779,11 @@ void iterative_dia(void)
 		//ofstream cup("cup",ios::binary);
 		for (int i=0;i<num_basis[n];i++){
 			if (Q){
-			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}else if(Q_Sz){
-			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << "  Sz_" << left << setw(5) << scientific << (eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum)/2.0  << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << "  Sz_" << left << setw(5) << scientific << (eigen[n][i].quant_num_upnum-eigen[n][i].quant_num_downnum)/2.0  << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}else if(N_up_N_down){
-			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
+			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}
 			/*
 			 *for (int j=0;j<num_basis[n];j++){
