@@ -5,17 +5,29 @@
 #include<omp.h>
 #include"setup.h"
 using namespace std;
+double ** exp_z;
 void func_wn(void)
 {
     cout << "func_wn():" << endl;
 	double exp_Z(int n,int l);
+	exp_z=new double * [N_max+2];
+	for (int n=0;n<n0;n++){
+		exp_z[n]=new double [1];
+	}
+	for (int n=n0;n<N_max+1;n++){
+		exp_z[n]=new double [(dim_dot-1)*num_kept];
+	}
+	for (int n=N_max+1;n<N_max+2;n++){
+		exp_z[n]=new double [num_basis[n]];
+	}
 	double * wn = new double [N_max+2];
 	double sum=0;
 	ofstream fwn("wn.dat");
 	for (int n=n0;n<N_max+1;n++){
 	    double suml=0;
 		for (int l=num_kept;l<num_basis[n];l++){
-		    suml=suml+exp_Z(n,l);
+			exp_z[n][l-num_kept]=exp_Z(n,l);//!!!
+		    suml=suml+exp_z[n][l-num_kept];//!!!
 		}
 		wn[n]=pow(4,N_max+1-n)*suml;
 		fwn << setw(5) << n << setw(25) << scientific << setprecision(15) << wn[n] << endl;
@@ -25,7 +37,8 @@ void func_wn(void)
 	for (int n=N_max+1;n<N_max+2;n++){
 	    double suml=0;
 		for (int l=0;l<num_basis[n];l++){
-		    suml=suml+exp_Z(n,l);
+			exp_z[n][l]=exp_Z(n,l);
+		    suml=suml+exp_z[n][l];
 		}
 		wn[n]=pow(4,N_max+1-n)*suml;
 		fwn << setw(5) << n << setw(25) << scientific << setprecision(15) << wn[n] << endl;
