@@ -42,7 +42,7 @@ double exp_Z(int n,int l)
 	double sumn=0;
 	for (int n1=n0;n1<N_max+1;n1++){
 		if (-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) > 500){
-			cout << n << "  " << n1 << "  " << -1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) << endl;
+			cout << n << "  " << n1 << "  " << scientific << -1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) << endl;
 			ans=0;
 			return ans;
 		}else{
@@ -50,7 +50,7 @@ double exp_Z(int n,int l)
 		    for (int l1=num_kept;l1<num_basis[n1];l1++){
 		    	suml1=suml1+exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*eigen[n1][l1].eig_val_relat);
 		    }
-		    sumn=sumn+pow(4,N_max+1-n1)*exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*(E_GS[n1]-E_GS[n]))*suml1;
+		    sumn=sumn+pow(4,N_max+1-n1)*exp(-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)))*suml1;
 		}
 	}
 	for (int n1=N_max+1;n1<N_max+2;n1++){
@@ -63,7 +63,7 @@ double exp_Z(int n,int l)
 		    for (int l1=0;l1<num_basis[n1];l1++){
 		    	suml1=suml1+exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*eigen[n1][l1].eig_val_relat);
 		    }
-		    sumn=sumn+pow(4,N_max+1-n1)*exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*(E_GS[n1]-E_GS[n]))*suml1;
+		    sumn=sumn+pow(4,N_max+1-n1)*exp(-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)))*suml1;
 		}
 	}
 	ans=exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][l].eig_val_relat)/sumn;
