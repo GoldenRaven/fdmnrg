@@ -708,7 +708,7 @@ void iterative_dia(void)
 		}
 		//ofstream cup("cup",ios::binary);
 		E_GS[n]=sqrt(Lambda)*E_GS[n-1]+eigen[n][0].eig_val;
-		f_E_GS << "Dot  " << n << setw(25) << E_GS[n] << endl;
+		f_E_GS << "Dot  " << n << scientific << setw(25) << setprecision(25) << E_GS[n] << setw(25) <<  E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
 		for (int i=0;i<num_basis[n];i++){
 			if (N_up_N_down){
 			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << eigen[n][i].eig_val_relat+E_GS[n] << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
