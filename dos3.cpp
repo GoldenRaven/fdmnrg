@@ -35,9 +35,11 @@ void density_of_state(void)
 			}
         }
     }
+	cout << "1xxxxxx" << endl;
 	for (int n1=n0;n1<N_max+1;n1++){
 		rho_red(n1);
 	}
+	//exit(0);
 	cout << "Time finished all reduced density matrice:    ";date_time();cout << endl;
     double freqency;
 	ifstream f_freqency("freqency");
@@ -102,7 +104,6 @@ void density_of_state(void)
 		f_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
 		f_dos_smeared << setw(11) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
 		f_dos_smeared << endl;
-		//exit(0);
 	}
 	cout << "Time leaved:    ";date_time();cout << endl;
 }
@@ -189,6 +190,7 @@ void rho_red(int n1)// n1 ~ [n0,N_max]. n ~ {0,1,...,N_max+1}
 	    		sum_temp[i][j]=0;//initialization of sum_temp
 	    	}
 	    }
+	cout << "2xxxxxx" << endl;
 	    for (int sigma=0;sigma<dim_dot;sigma++){//n=n2
 #pragma omp parallel for 
 	        for (int i=0;i<num_kept;i++){
