@@ -9,5 +9,5 @@ void date_time(void)
     strftime(tmp, sizeof(tmp), "%Y/%m/%d %X ",localtime(&t) );
 	clock_t start;
 	start=clock();
-	cout << tmp << endl;
+	cout << tmp;
 }

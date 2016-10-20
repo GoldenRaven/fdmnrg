@@ -7,6 +7,7 @@
 #include<omp.h>
 #include<string.h>
 #include"setup.h"
+using namespace std;
 int num_block;
 int num_kept;
 int N_max;
@@ -45,6 +46,7 @@ int func_delta(int a, int b){
 
 void iterative_dia(void)
 {
+	cout << "  ";cout << "Iteriterative_dia():    ";date_time();cout << endl;
     using namespace std;
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
@@ -78,10 +80,10 @@ void iterative_dia(void)
 			//cout << scientific << setw(5) << i << setw(30) << setprecision(20) << ptn_up[i] << setw(30) << setprecision(20) << ptn_down[i] << setw(30) << setprecision(20) << pe_up[i] << setw(30) << setprecision(20) << pe_down[i] << endl;
 		}
 	}
-	for (int i=0;i<N_max+1;i++){
-		pe_up[i]=0;
-		pe_down[i]=0;
-	}
+	//for (int i=0;i<N_max+1;i++){
+		//pe_up[i]=0;
+		//pe_down[i]=0;
+	//}
 	num_basis=new int [N_max+1];
     num_eigen_kept=new int [N_max+1];
 	cout << "   " << " n  " << "  num_basis[n]  " << "  num_eigen_kept[n]  " << "  n0 " << endl;
@@ -106,8 +108,8 @@ void iterative_dia(void)
 	        num_eigen_kept[n]=num_eigen_kept[9];//n=0,1,...    9 means big enough.
 		}
 	}
-	for (int n=0;n<N_max+1;n++){
-	//for (int n=0;n<6;n++){
+	//for (int n=0;n<N_max+1;n++){
+	for (int n=0;n<8;n++){
 		cout << "    " << setw(3) << n << "     " << setw(7) << num_basis[n] << "             " << setw(7) << num_eigen_kept[n] << "       " << setw(3) << n0 << endl;
 	}
 	cout << "  step starting to discard state: " << n0 << endl;
@@ -330,7 +332,7 @@ void iterative_dia(void)
 	        for (int i=1;i<=num_basis[n];i++){
 		    	//cout << basis_ordered[n][i-1].quant_num_totalnum << "  N  " << i-1 << endl;
 		    	basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-		    	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_upnum+(basis_ordered[n][i].quant_num_downnum)){// Q, Sz
+		    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){// Q, Sz
 	        		num_block=num_block+1;
 	        	}
 	        }
@@ -359,7 +361,7 @@ void iterative_dia(void)
 	        for (int i=1;i<=num_basis[n];i++){
 		    	//cout << basis_ordered[n][i-1].quant_num_totalnum << "  N  " << i-1 << endl;
 		    	basis_kj[n][basis_ordered[n][i-1].k-1][basis_ordered[n][i-1].j-1].sort=i-1;
-		    	if (quant_tmp*basis_ordered[n][i-1].quant_num_totalnum+(basis_ordered[n][i-1].quant_num_upnum-basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_totalnum+(basis_ordered[n][i].quant_num_upnum-basis_ordered[n][i].quant_num_downnum)){// N_up, N_down
+		    	if (quant_tmp*basis_ordered[n][i-1].quant_num_upnum+(basis_ordered[n][i-1].quant_num_downnum) != quant_tmp*basis_ordered[n][i].quant_num_upnum+(basis_ordered[n][i].quant_num_downnum)){// N_up, N_down
 	        		num_block=num_block+1;
 	        	}
 	        }
@@ -474,7 +476,7 @@ void iterative_dia(void)
 					//cout << "    ";cout << "    ";cout << "eigenvalue: " << setw(9) << value[i] << endl;
 		        }
 				sum=sum+num_basis_block[b];
-	            cout << "    ";cout << "Basis number in block "<< setw(4) << left << b << " : " << setw(4) << num_basis_block[b] << ";    Total electon number: " << setw(4) << block[b][0].quant_num_totalnum << "; min_eigenvalue: " << setw(9) << value[0] << "; max_eigenvalue: " << setw(9) << value[num_basis_block[b]-1] << endl;
+	            cout << "    ";cout << "Basis number in block "<< setw(4) << left << b << " : " << setw(4) << num_basis_block[b] << ";    Total electon number: " << setw(4) << block[b][0].quant_num_totalnum << scientific << "; min_eigenvalue: " << setw(15) << setprecision(10) << value[0] << "; max_eigenvalue: " << setw(15) << value[num_basis_block[b]-1] << endl;
 		        delete [] vect_temp;
 				delete [] value;
 			}
@@ -627,7 +629,7 @@ void iterative_dia(void)
 		            kk++;
 		        }
 				sum=sum+num_basis_block[b];
-	            cout << "    ";cout << "Basis number in block "<< setw(4) << left << b << " : " << setw(4) << num_basis_block[b] << ";    Total electon number: " << setw(4) << block[b][0].quant_num_totalnum << "; min_eigenvalue: " << setw(9) << value[0] << "; max_eigenvalue: " << setw(9) << value[num_basis_block[b]-1] << endl;
+	            cout << "    ";cout << "Basis number in block "<< setw(4) << left << b << " : " << setw(4) << num_basis_block[b] << ";    Total electon number: " << setw(4) << block[b][0].quant_num_totalnum << scientific << "; min_eigenvalue: " << setw(15) << setprecision(10) << value[0] << "; max_eigenvalue: " << setw(15) << value[num_basis_block[b]-1] << endl;
 			    delete [] vect_temp;
 				delete [] value;
 		    }
@@ -779,7 +781,7 @@ void iterative_dia(void)
 		}
 		//ofstream cup("cup",ios::binary);
 		E_GS[n]=sqrt(Lambda)*E_GS[n-1]+eigen[n][0].eig_val;
-		f_E_GS << "Dot  " << n << scientific << setw(25) << setprecision(25) << E_GS[n] << setw(25) <<  E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
+		f_E_GS << "Dot  " << n << scientific << setw(25) << setprecision(15) << E_GS[n] << setw(25) <<  E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
 		for (int i=0;i<num_basis[n];i++){
 			if (Q){
 			    f_eig_val << "Dot  " << n << "  Q_" << left << setw(5) << scientific << eigen[n][i].quant_num_totalnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << setw(25) << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
@@ -796,11 +798,11 @@ void iterative_dia(void)
 			 *}
 			 */
 		}
-		cout << "    ";cout << "Time leaved:    ";date_time();
+		cout << "    ";cout << "Time leaved:    ";date_time();cout << endl;
 		delete_iter_dia(n);
 		//if (n==6) exit(0);
 	}
-	cout << "  ";cout << "Time leaved:    ";date_time();
+	cout << "  ";cout << "Time leaved:    ";date_time();cout << endl;
 }
 
 void delete_iter_dia(int n)

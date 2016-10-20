@@ -30,6 +30,7 @@ extern double *** c_dag_down_eigen;
 extern double *** c_up_eigen;
 extern double *** c_down_eigen;
 extern bool smear;
+extern bool unsmear;
 extern bool Q;
 extern bool Q_Sz;
 extern bool N_up_N_down;
