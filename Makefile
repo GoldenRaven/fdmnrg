@@ -20,7 +20,7 @@ main.o: main.cpp
 setup.o: setup.cpp setup.h
 	$(cc)  $(CPPFLAGS) -c setup.cpp
 
-genoutput.o: genoutput.cpp
+genoutput.o: genoutput.cpp setup.h
 	$(cc)  $(CPPFLAGS) -c genoutput.cpp
 
 date_time.o: date_time.cpp

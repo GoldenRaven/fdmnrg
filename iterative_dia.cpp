@@ -9,7 +9,6 @@
 #include"setup.h"
 using namespace std;
 int num_block;
-int num_kept;
 int N_max;
 double Beta;
 int * num_basis_block;
@@ -52,8 +51,8 @@ void iterative_dia(void)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	//N_max = 7;//!!!!!!!!!!!!!!!!!!!!
 	N_max = N+20;//!!!!!!!!!!!!!!!!!!!!
-	ifstream f_num_kept("num_kept");
-	f_num_kept >> num_kept;
+	ifstream f_Ed("Ed");
+	f_Ed >> Ed;
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
 	double pe_up[N_max+1];
