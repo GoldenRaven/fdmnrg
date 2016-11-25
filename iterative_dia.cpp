@@ -203,6 +203,7 @@ void iterative_dia(void)
             c_dag_down_basis[0][i][j]=c_dag_down_imp[i][j];
         }
     }                                                      
+	//c_eigen = U_dag * c_basis *U
 	temp1=new double * [dim_dot];
 	temp2=new double * [dim_dot];
 	temp3=new double * [dim_dot];
@@ -724,7 +725,7 @@ void iterative_dia(void)
 		 *    }
 		 *}
 		 */
-#pragma omp parallel for 
+//#pragma omp parallel for 
 		for (int i=0;i<num_basis[n];i++){
 			for (int j=0;j<num_basis[n];j++){
 				c_up_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*c_up_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
