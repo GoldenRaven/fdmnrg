@@ -536,13 +536,13 @@ void iterative_dia(void)
 	        {int k=0;
 	        for (int i=0;i<num_basis[n-1];i++){
 	        	for (int j=0;j<num_basis[n-1];j++){
-	        		matrix_c[k]=c_up_dot_basis[i][j];
+	        		matrix_c[k]=c_up_dot_basis[j][i];
 	        		k++;
 	        	}
 	        }}
-	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_eigen_kept[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_basis[n-1]);
-	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_basis[n-1],matrix_U,num_eigen_kept[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
-	        for (int i=0;i<num_eigen_kept[n-1];){
+	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_basis[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_eigen_kept[n-1]);
+	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_eigen_kept[n-1],matrix_U,num_basis[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
+	        for (int i=0;i<num_eigen_kept[n-1];i++){
 	        	for (int j=0;j<num_eigen_kept[n-1];j++){
 	        		c_up_dot_eigen[j][i]=matrix_ccc[num_eigen_kept[n-1]*i+j];
 	        	}
@@ -550,13 +550,13 @@ void iterative_dia(void)
 	        {int k=0;
 	        for (int i=0;i<num_basis[n-1];i++){
 	        	for (int j=0;j<num_basis[n-1];j++){
-	        		matrix_c[k]=c_down_dot_basis[i][j];
+	        		matrix_c[k]=c_down_dot_basis[j][i];
 	        		k++;
 	        	}
 	        }}
-	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_eigen_kept[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_basis[n-1]);
-	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_basis[n-1],matrix_U,num_eigen_kept[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
-	        for (int i=0;i<num_eigen_kept[n-1];){
+	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_basis[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_eigen_kept[n-1]);
+	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_eigen_kept[n-1],matrix_U,num_basis[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
+	        for (int i=0;i<num_eigen_kept[n-1];i++){
 	        	for (int j=0;j<num_eigen_kept[n-1];j++){
 	        		c_down_dot_eigen[j][i]=matrix_ccc[num_eigen_kept[n-1]*i+j];
 	        	}
@@ -564,13 +564,13 @@ void iterative_dia(void)
 	        {int k=0;
 	        for (int i=0;i<num_basis[n-1];i++){
 	        	for (int j=0;j<num_basis[n-1];j++){
-	        		matrix_c[k]=c_dag_up_dot_basis[i][j];
+	        		matrix_c[k]=c_dag_up_dot_basis[j][i];
 	        		k++;
 	        	}
 	        }}
-	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_eigen_kept[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_basis[n-1]);
-	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_basis[n-1],matrix_U,num_eigen_kept[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
-	        for (int i=0;i<num_eigen_kept[n-1];){
+	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_basis[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_eigen_kept[n-1]);
+	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_eigen_kept[n-1],matrix_U,num_basis[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
+	        for (int i=0;i<num_eigen_kept[n-1];i++){
 	        	for (int j=0;j<num_eigen_kept[n-1];j++){
 	        		c_dag_up_dot_eigen[j][i]=matrix_ccc[num_eigen_kept[n-1]*i+j];
 	        	}
@@ -578,13 +578,13 @@ void iterative_dia(void)
 	        {int k=0;
 	        for (int i=0;i<num_basis[n-1];i++){
 	        	for (int j=0;j<num_basis[n-1];j++){
-	        		matrix_c[k]=c_dag_down_dot_basis[i][j];
+	        		matrix_c[k]=c_dag_down_dot_basis[j][i];
 	        		k++;
 	        	}
 	        }}
-	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_eigen_kept[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_basis[n-1]);
-	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_basis[n-1],matrix_U,num_eigen_kept[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
-	        for (int i=0;i<num_eigen_kept[n-1];){
+	        cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_eigen_kept[n-1],num_basis[n-1],num_basis[n-1],1,matrix_U,num_basis[n-1],matrix_c,num_basis[n-1],0,matrix_cc,num_eigen_kept[n-1]);
+	        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n-1],num_eigen_kept[n-1],num_basis[n-1],1,matrix_cc,num_eigen_kept[n-1],matrix_U,num_basis[n-1],0,matrix_ccc,num_eigen_kept[n-1]);
+	        for (int i=0;i<num_eigen_kept[n-1];i++){
 	        	for (int j=0;j<num_eigen_kept[n-1];j++){
 	        		c_dag_down_dot_eigen[j][i]=matrix_ccc[num_eigen_kept[n-1]*i+j];
 	        	}
