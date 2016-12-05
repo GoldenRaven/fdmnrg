@@ -12,7 +12,7 @@ double U=0.1;// in unit of D
 double Ed;//in unite of D
 double Lambda=2.0;
 double alpha=0.69;
-double temperature=1.0e-1;//k_B*T/D
+double temperature=1.0e-9;//k_B*T/D
 double omega0=0.5*temperature;
 bool smear=false;
 bool unsmear=true;
