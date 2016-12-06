@@ -524,7 +524,7 @@ void iterative_dia(void)
 			}
 	        double * matrix_U=new double [num_basis[n-1]*num_eigen_kept[n-1]];
 	        double * matrix_c=new double [num_basis[n-1]*num_basis[n-1]];
-	        double * matrix_cc=new double [num_basis[n-1]*num_basis[n-1]];
+	        double * matrix_cc=new double [num_eigen_kept[n-1]*num_basis[n-1]];
 	        double * matrix_ccc=new double [num_eigen_kept[n-1]*num_eigen_kept[n-1]];
 	        {int k=0;
 	        for (int i=0;i<num_eigen_kept[n-1];i++){
