@@ -17,8 +17,8 @@ int main()
 	start=clock();
 	//impurity();
 	iterative_dia();
-	//func_wn();
-	//density_of_state();
+	func_wn();
+	density_of_state();
 	//deallocate();
 	finish=clock();
 	std::cout << "CPU time used:    " << (double)(finish - start)/CLOCKS_PER_SEC << " seconds" << std::endl;
