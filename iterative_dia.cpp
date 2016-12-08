@@ -679,6 +679,7 @@ void iterative_dia(void)
 		    eigen[n][i].eig_val_relat=eigen[n][i].eig_val-eigen[n][0].eig_val;
 		}
 		//local operators.
+		/*
 #pragma omp parallel for 
 		for (int i=0;i<num_basis[n];i++){
 			for (int j=0;j<num_basis[n];j++){
@@ -726,6 +727,17 @@ void iterative_dia(void)
 				}
 			}
 		}
+	    for (int i=0;i<num_basis[n];i++){
+	    	delete [] temp1[i];
+	    	delete [] temp2[i];
+	    	delete [] temp3[i];
+	    	delete [] temp4[i];
+	    }
+	    delete [] temp1;
+	    delete [] temp2;
+	    delete [] temp3;
+	    delete [] temp4;
+		*/
 		E_GS[n]=sqrt(Lambda)*E_GS[n-1]+eigen[n][0].eig_val;
 		f_E_GS << "Dot  " << n << scientific << setw(25) << setprecision(15) << E_GS[n] << setw(25) <<  E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
 		for (int i=0;i<num_basis[n];i++){
@@ -736,13 +748,6 @@ void iterative_dia(void)
 			}else if(N_up_N_down){
 			    f_eig_val << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][i].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][i].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][i].eig_val_relat << (eigen[n][i].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0) << "   " << eigen[n][i].k << endl;
 			}
-			/*
-			 *for (int j=0;j<num_basis[n];j++){
-			 *    f_U << i << "    " << j << "    " << eigen[n][j].eigen_vect[i] << endl;
-			 *    f_d_up << i << "    " << j << "    " << c_up_eigen[n][i][j] << endl;
-			 *    f_d_down << i << "    " << j << "    " << c_down_eigen[n][i][j] << endl;
-			 *}
-			 */
 		}
 		cout << "    ";cout << "Time leaved:    ";date_time();cout << endl;
 		delete_iter_dia(n);
@@ -764,14 +769,4 @@ void delete_iter_dia(int n)
 	}
 	delete [] H_bij;
 	delete [] num_basis_block;
-	for (int i=0;i<num_basis[n];i++){
-		delete [] temp1[i];
-		delete [] temp2[i];
-		delete [] temp3[i];
-		delete [] temp4[i];
-	}
-	delete [] temp1;
-	delete [] temp2;
-	delete [] temp3;
-	delete [] temp4;
 }
