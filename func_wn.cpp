@@ -68,7 +68,6 @@ double exp_Z(int n,int l)
 	}
 	for (int n1=N_max-1;n1<N_max;n1++){
 		if (-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) > 500){
-			//cout << n << "  " << n1 << "  " << -1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) << endl;
 			ans=0;
 			return ans;
 		}else{
