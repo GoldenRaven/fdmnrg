@@ -6,7 +6,7 @@ using namespace std;
 void date_time(void);
 void genoutput(void)
 {
-	cout << "  #############################################################################" << endl;
+	cout << "  ##########################################################################################################################" << endl;
 	cout << "  " << " U           = " << left << setw(15) << U          << " :Cloumb U"                             << endl;
 	cout << "  " << " Ed          = " << left << setw(15) << Ed         << " :Level"                                << endl;
 	cout << "  " << " num_kept    = " << left << setw(15) << num_kept   << " :Number of kept states"                << endl;
@@ -27,7 +27,7 @@ void genoutput(void)
 	}else if(N_up_N_down){
 			cout << "   Quantum number up number(N_up) and down number(N_down) is used in sorting." << endl;
 		}
-	cout << "  #############################################################################" << endl;
+	cout << "  ##########################################################################################################################" << endl;
 	//char ch;
 	//ifstream setup("../../setup.cpp");
 	//while(setup.get(ch))

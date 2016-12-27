@@ -63,15 +63,21 @@ void iterative_dia(void)
 	genoutput();
 	cout << "iterative_dia(): " << endl;
 	ifstream fin_chain("chain.dat");
+	cout << "chain parameter:" << endl;
+	cout << setw(13) << "  #site" << setw(29) << "   tn_up" << setw(29) << "  tn_down" << setw(29) << "    en_up" << setw(29) << "      en_down" << endl;
 	for (int i=-1;i<N_max+1;i++){//from second line: coupling, t0, t1,...
 		double temp;
 		fin_chain >> scientific;
 		if (i==-1){
 		    fin_chain >> temp >> coupling_imp_dot_up >> coupling_imp_dot_down;
+			cout << "  " << scientific << setw(5) << i << setw(30) << setprecision(20) << coupling_imp_dot_up << setw(30) << setprecision(20) << coupling_imp_dot_down << endl;
 		}else{
-		    fin_chain >> setprecision(20) >> temp >> setprecision(20) >> ptn_up[i] >> setprecision(20) >> ptn_down[i] >> setprecision(20) >> pe_up[i] >> pe_down[i] >> setprecision(20) >> temp;
+			//fin_chain >> setprecision(20) >> temp >> setprecision(20) >> ptn_up[i] >> setprecision(20) >> ptn_down[i] >> setprecision(20) >> pe_up[i] >> pe_down[i] >> setprecision(20) >> temp;
+			fin_chain >> setprecision(20) >> temp >> setprecision(20) >> ptn_up[i] >> setprecision(20) >> ptn_down[i] >> setprecision(20) >> pe_up[i] >> pe_down[i];
+			cout << "  " << scientific << setw(5) << i << setw(30) << setprecision(20) << ptn_up[i] << setw(30) << setprecision(20) << ptn_down[i] << setw(30) << setprecision(20) << pe_up[i] << setw(30) << setprecision(20) << pe_down[i] << endl;
 		}
 	}
+	cout << "iterative_dia(): " << endl;
 	num_basis=new int [N_max+1];
     num_eigen_kept=new int [N_max+1];
 	cout << "   " << " n  " << "  num_basis[n]  " << "  num_eigen_kept[n]  " << "  n0 " << endl;
