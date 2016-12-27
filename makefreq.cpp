@@ -8,9 +8,9 @@ void userdefined(double a,double b,double c,double d, int N1, int N2, int N3, do
 int main(void)
 {
 	//uniform();
-	//logarithm(-1,1,100,0.7);
+	logarithm(-1,1,500,0.92);
 	//userdefined(-0.5*0.02,0.5*0.02,60,0.7);
-	userdefined(-1,-0.5,0.5,1,10,380,10,0.9);
+	//userdefined(-1,-0.5,0.5,1,10,380,10,0.9);
 	return 0;
 }
 

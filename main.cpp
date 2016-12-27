@@ -12,7 +12,7 @@ void deallocate(void);
 int main()
 {
 	using namespace std;
-	cout << " Job started on: "; date_time();
+	cout << "Job started on: "; date_time();
 	clock_t start,finish;
 	start=clock();
 	//impurity();
