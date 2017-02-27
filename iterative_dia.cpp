@@ -46,13 +46,28 @@ int func_delta(int a, int b){
 void iterative_dia(void)
 {
 	cout << "  ";cout << "Iteriterative_dia():    ";date_time();cout << endl;
-    using namespace std;
+
+	ifstream f_input("input");
+	f_input >> U           ;
+	f_input >> Ed          ;
+	f_input >> temperature ;
+	f_input >> Lambda      ;
+	f_input >> alpha       ;
+	f_input >> num_kept    ;
+	f_input >> smear       ;
+	f_input >> unsmear     ;
+	f_input >> dim_imp     ;
+	f_input >> dim_dot     ;
+	f_input >> Beta_bar    ;
+	f_input >> Q           ;
+	f_input >> Q_Sz        ;
+	f_input >> N_up_N_down ;
+
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	//N_max = 7;//!!!!!!!!!!!!!!!!!!!!
 	N_max = N+20;//!!!!!!!!!!!!!!!!!!!!
-	ifstream f_Ed("Ed");
-	f_Ed >> Ed;
+
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
 	double pe_up[N_max+1];
@@ -60,11 +75,7 @@ void iterative_dia(void)
 	double ptn_up[N_max+1];
 	double ptn_down[N_max+1];
 	E_GS=new double [N_max+2];
-	//
 	genoutput();
-	//for (int i=0;i<N_max+1;i++){//testint chain parameter all 1.0!
-	//	pe_up[i]= pe_down[i]=ptn_up[i]=ptn_down[i]=1.0;
-	//}
 	ifstream fin_chain("chain.dat");
 	//for (int i=-1;i<3;i++){//from second line: coupling, t0, t1,...
 	cout << "chain parameter:" << endl;
