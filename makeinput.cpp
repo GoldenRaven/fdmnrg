@@ -38,6 +38,7 @@ int main()
 	f_input << num_kept    << endl;
 	f_input << smear       << endl;
 	f_input << unsmear     << endl;
+	f_input << omega0      << endl;
 	f_input << dim_imp     << endl;
 	f_input << dim_dot     << endl;
 	f_input << Beta_bar    << endl;

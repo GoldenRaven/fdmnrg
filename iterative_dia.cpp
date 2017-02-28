@@ -56,6 +56,7 @@ void iterative_dia(void)
 	f_input >> num_kept    ;
 	f_input >> smear       ;
 	f_input >> unsmear     ;
+	f_input >> omega0      ;
 	f_input >> dim_imp     ;
 	f_input >> dim_dot     ;
 	f_input >> Beta_bar    ;
