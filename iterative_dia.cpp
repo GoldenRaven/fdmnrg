@@ -67,7 +67,7 @@ void iterative_dia(void)
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	//N_max = 7;//!!!!!!!!!!!!!!!!!!!!
-	N_max = N+20;//!!!!!!!!!!!!!!!!!!!!
+	N_max = N;//!!!!!!!!!!!!!!!!!!!!
 
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
