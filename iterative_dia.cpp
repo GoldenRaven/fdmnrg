@@ -47,23 +47,6 @@ void iterative_dia(void)
 {
 	cout << "  ";cout << "Iteriterative_dia():    ";date_time();cout << endl;
 
-	ifstream f_input("input");
-	f_input >> U           ;
-	f_input >> Ed          ;
-	f_input >> temperature ;
-	f_input >> Lambda      ;
-	f_input >> alpha       ;
-	f_input >> num_kept    ;
-	f_input >> smear       ;
-	f_input >> unsmear     ;
-	f_input >> omega0      ;
-	f_input >> dim_imp     ;
-	f_input >> dim_dot     ;
-	f_input >> Beta_bar    ;
-	f_input >> Q           ;
-	f_input >> Q_Sz        ;
-	f_input >> N_up_N_down ;
-
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	//N_max = 7;//!!!!!!!!!!!!!!!!!!!!

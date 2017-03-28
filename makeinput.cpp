@@ -2,14 +2,16 @@
 using namespace std;
 int main()
 {
-   	double U=0.5;// in unit of D
-	double Ed=-0.25;//in unite of D
-	double temperature=1.0e-7;//k_B*T/D
-	double Lambda=1.8;
-	double alpha=0.588;
+	bool findpeak;
+	double x_error;
+   	double U;// in unit of D
+	double Ed;//in unite of D
+	double temperature;//k_B*T/D
+	double Lambda;
+	double alpha;
 	int dim_imp=4;
 	int dim_dot=4;
-	int num_kept=512;
+	int num_kept;
 	double Beta_bar=0.6;//unit same as Beta!
 	bool smear=false;
 	bool unsmear=true;
@@ -18,18 +20,26 @@ int main()
 	bool Q_Sz=false;
 	bool N_up_N_down=true;
 
+	ifstream f_findpeak("findpeak");
+	ifstream f_x_error("x_error");
 	ifstream f_U("U");
 	ifstream f_Ed("Ed");
 	ifstream f_temperature("temperature");
 	ifstream f_Lambda("Lambda");
 	ifstream f_alpha("alpha");
+	ifstream f_num_kept("num_kept");
+	f_findpeak >> findpeak;
+	f_x_error >> x_error;
 	f_U >> U;
 	f_Ed >> Ed;
 	f_temperature >> temperature;
 	f_Lambda >> Lambda;
 	f_alpha >> alpha;
+	f_num_kept >> num_kept;
 
 	ofstream f_input("input");
+	f_input << findpeak    << endl;
+	f_input << x_error     << endl;
 	f_input << U           << endl;
 	f_input << Ed          << endl;
 	f_input << temperature << endl;

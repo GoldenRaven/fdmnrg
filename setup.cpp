@@ -1,5 +1,9 @@
 #include"setup.h"
 
+bool findpeak;
+double x_error;
+double x_min;
+double x_max;
 int dim_imp;
 int dim_dot;
 int num_kept;

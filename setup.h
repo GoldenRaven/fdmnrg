@@ -1,6 +1,10 @@
 #ifndef SETUP_H_
 #define SETUP_H_
 
+extern bool findpeak;//=4;
+extern double x_min;
+extern double x_max;
+extern double x_error;
 extern int dim_imp;//=4;
 extern int dim_dot;//=4;
 extern int num_kept;//=16;
