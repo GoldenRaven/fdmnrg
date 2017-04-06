@@ -22,7 +22,7 @@ icpc makeinput.cpp -o makeinput.x
 icpc makefreq.cpp -o makefreq.x
 ./makefreq.x
 
-cp ~/chain_Lambda${Lambda}_r1_k${k}_Vg${Vg}_h${h}.dat chain.dat
+cp ~/data_chain/chain_Lambda${Lambda}_r1_k${k}_Vg${Vg}_h${h}.dat chain.dat
 #cp ~/chain_Lambda${Lambda}_r1_k${k}_Vg${Vg}_h${h}_Nz${Nz}.dat chain.dat
 job_name=10Tk
 qsub -N ${job_name} test.submit
