@@ -781,10 +781,12 @@ void iterative_dia(void)
 		 *    }
 		 *}
 		 */
+		cout << " -1xxxxxxxxxxxxxxxxxxx" << endl;
 	    double * matrix_U=new double [num_basis[n]*num_basis[n]];
 	    double * matrix_c=new double [num_basis[n]*num_basis[n]];
 	    double * matrix_cc=new double [num_basis[n]*num_basis[n]];
 	    double * matrix_ccc=new double [num_basis[n]*num_basis[n]];
+		cout << " 0xxxxxxxxxxxxxxxxxxx" << endl;
 	    {int k=0;//colume-wise
 	    for (int i=0;i<num_basis[n];i++){
 	    	for (int j=0;j<num_basis[n];j++){
@@ -792,6 +794,7 @@ void iterative_dia(void)
 	    		k++;
 	    	}
 	    }}
+		cout << " 1xxxxxxxxxxxxxxxxxxx" << endl;
 	    {int k=0;
 	    for (int i=0;i<num_basis[n];i++){
 	    	for (int j=0;j<num_basis[n];j++){
@@ -806,6 +809,7 @@ void iterative_dia(void)
 	    		c_up_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
 	    	}
 	    }
+		cout << " 2xxxxxxxxxxxxxxxxxxx" << endl;
 	    {int k=0;
 	    for (int i=0;i<num_basis[n];i++){
 	    	for (int j=0;j<num_basis[n];j++){
@@ -820,6 +824,7 @@ void iterative_dia(void)
 	    		c_down_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
 	    	}
 	    }
+		cout << " 3xxxxxxxxxxxxxxxxxxx" << endl;
 	    {int k=0;
 	    for (int i=0;i<num_basis[n];i++){
 	    	for (int j=0;j<num_basis[n];j++){
@@ -834,6 +839,7 @@ void iterative_dia(void)
 	    		c_dag_up_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
 	    	}
 	    }
+		cout << " 4xxxxxxxxxxxxxxxxxxx" << endl;
 	    {int k=0;
 	    for (int i=0;i<num_basis[n];i++){
 	    	for (int j=0;j<num_basis[n];j++){
@@ -841,6 +847,7 @@ void iterative_dia(void)
 	    		k++;
 	    	}
 	    }}
+		cout << " 5xxxxxxxxxxxxxxxxxxx" << endl;
 	    cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_U,num_basis[n],matrix_c,num_basis[n],0,matrix_cc,num_basis[n]);
 	    cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_cc,num_basis[n],matrix_U,num_basis[n],0,matrix_ccc,num_basis[n]);
 	    for (int i=0;i<num_basis[n];i++){
@@ -848,10 +855,15 @@ void iterative_dia(void)
 	    		c_dag_down_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
 	    	}
 	    }
+		cout << " 6xxxxxxxxxxxxxxxxxxx" << endl;
 	    delete [] matrix_U;
+		cout << " 7xxxxxxxxxxxxxxxxxxx" << endl;
 	    delete [] matrix_c;
+		cout << " 7xxxxxxxxxxxxxxxxxxx" << endl;
 	    delete [] matrix_cc;
+		cout << " 7xxxxxxxxxxxxxxxxxxx" << endl;
 	    delete [] matrix_ccc;
+		cout << " 7xxxxxxxxxxxxxxxxxxx" << endl;
 		//ofstream cup("cup",ios::binary);
 		E_GS[n]=sqrt(Lambda)*E_GS[n-1]+eigen[n][0].eig_val;
 		f_E_GS << "Dot  " << n << scientific << setw(25) << setprecision(15) << E_GS[n] << setw(25) <<  E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
@@ -893,13 +905,5 @@ void delete_iter_dia(int n)
 	delete [] H_bij;
 	delete [] num_basis_block;
 	for (int i=0;i<num_basis[n];i++){
-		delete [] temp1[i];
-		delete [] temp2[i];
-		delete [] temp3[i];
-		delete [] temp4[i];
 	}
-	delete [] temp1;
-	delete [] temp2;
-	delete [] temp3;
-	delete [] temp4;
 }
