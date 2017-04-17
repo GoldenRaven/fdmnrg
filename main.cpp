@@ -3,12 +3,14 @@
 //2016/03/09完成对角化.
 #include<iostream>
 #include<cstdlib>
+#include"setup.h"
 //void impurity(void);
 void iterative_dia(void);
 void func_wn(void);
 void date_time(void);
 void density_of_state(void);
 void deallocate(void);
+void occu_imp(void);
 int main()
 {
 	using namespace std;
@@ -18,7 +20,10 @@ int main()
 	//impurity();
 	iterative_dia();
 	func_wn();
-	density_of_state();
+	if (occupation){
+		occu_imp();
+	}
+	//density_of_state();
 	//deallocate();
 	finish=clock();
 	std::cout << "CPU time used:    " << (double)(finish - start)/CLOCKS_PER_SEC << " seconds" << std::endl;

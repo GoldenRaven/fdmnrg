@@ -9,7 +9,7 @@ using namespace std;
 double ** exp_z;
 void func_wn(void)
 {
-	cout << "func_wn():  " << endl;date_time();cout << endl;
+	cout << "func_wn():  ";date_time();cout << endl;
 	double exp_Z(int n,int l);
 	exp_z=new double * [N_max];
 	for (int n=0;n<n0;n++){
@@ -47,7 +47,7 @@ void func_wn(void)
         cout << "  " << setw(5) << n << "  sum of wn= " << setprecision(16) << scientific << sum << endl;
 	}
 	delete [] wn;
-	cout << "  ";cout << "Time leaved:    ";date_time();cout << endl;
+	cout << "Time leaved:    ";date_time();cout << endl;
 }
 
 double exp_Z(int n,int l)

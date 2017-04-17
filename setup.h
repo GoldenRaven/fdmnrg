@@ -29,11 +29,14 @@ extern double *** c_dag_up_eigen;
 extern double *** c_dag_down_eigen;
 extern double *** c_up_eigen;
 extern double *** c_down_eigen;
+extern double *** occu_imp_up_eigen;
+extern double *** occu_imp_down_eigen;
 extern bool smear;
 extern bool unsmear;
 extern bool Q;
 extern bool Q_Sz;
 extern bool N_up_N_down;
+extern bool occupation;
 
 struct EIGEN_STATE{
 	int sort,k,n,quant_num_totalnum,quant_num_upnum,quant_num_downnum;//dim_imp;

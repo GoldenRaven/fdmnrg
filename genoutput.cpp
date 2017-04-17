@@ -15,11 +15,12 @@ void genoutput(void)
 	cout << "  " << " Beta_bar    = " << left << setw(15) << Beta_bar   << " :Beta_bar"                             << endl;
 	cout << "  " << " N_T         = " << left << setw(15) << N          << " :Dot corresponds to temperature"       << endl;
 	cout << "  " << " N_max       = " << left << setw(15) << N_max      << " :Total number of dots"                 << endl;
-	cout << "  " << " Lambda      = " << left << setw(15) << Lambda     << " :Logarithmic descritization parameter" <<  endl;
-	cout << "  " << " alpha       = " << left << setw(15) << alpha      << " :Width in log-Gaussian"                <<  endl;
-	cout << "  " << " omega0      = " << left << setw(15) << omega0     << " :Width in Gaussian"                    <<  endl;
-	cout << "  " << " smear       = " << left << setw(15) << smear      << " :smear or unsmear"                     <<  endl;
-	cout << "  " << " unsmear     = " << left << setw(15) << unsmear    << " :smear or unsmear"                     <<  endl;
+	cout << "  " << " Lambda      = " << left << setw(15) << Lambda     << " :Logarithmic descritization parameter" << endl;
+	cout << "  " << " alpha       = " << left << setw(15) << alpha      << " :Width in log-Gaussian"                << endl;
+	cout << "  " << " omega0      = " << left << setw(15) << omega0     << " :Width in Gaussian"                    << endl;
+	cout << "  " << " smear       = " << left << setw(15) << smear      << " :smear or unsmear"                     << endl;
+	cout << "  " << " unsmear     = " << left << setw(15) << unsmear    << " :smear or unsmear"                     << endl;
+	cout << "  " << " occupation  = " << left << setw(15) << occupation << " :calulate impurity occupation or not"  << endl;
 	if (Q){
 		cout << "   Quantum number Charge(Q) is used in sorting." << endl;
 	}else if(Q_Sz){

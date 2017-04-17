@@ -9,6 +9,7 @@ echo -0.15 > Ed
 echo 1e-8  > temperature
 echo 1.8   > Lambda
 echo 0.588 > alpha
+echo 1     > occupation
 
 Lambda=1.8
 k=0.1

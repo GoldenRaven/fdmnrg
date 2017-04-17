@@ -4,7 +4,7 @@ name=fdmnrg.x
 #name=work_dir/fdmnrg.x 
 #objects=main.o setup.o genoutput.o iterative_dia.o dos.o date_time.o deallocate.o func_wn.o
 #objects=main.o setup.o genoutput.o iterative_dia.o dos2.o date_time.o deallocate.o func_wn.o
-objects=main.o setup.o genoutput.o iterative_dia.o dos3.o date_time.o deallocate.o func_wn.o
+objects=main.o setup.o genoutput.o iterative_dia.o dos3.o date_time.o deallocate.o func_wn.o occu_imp.o
 
 #CPPFLAGS=-O0 -g
 #CPPFLAGS=-O3
@@ -43,6 +43,9 @@ dos3.o: dos3.cpp setup.h
 
 deallocate.o: deallocate.cpp setup.h
 	$(cc)  $(CPPFLAGS)  -c deallocate.cpp
+
+occu_imp.o: occu_imp.cpp setup.h
+	$(cc)  $(CPPFLAGS)  -c occu_imp.cpp
 
 clean:
 	rm $(name) $(objects)

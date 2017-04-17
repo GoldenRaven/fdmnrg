@@ -28,6 +28,10 @@ double *** c_dag_up_eigen;
 double *** c_dag_down_eigen;
 double *** c_up_eigen;
 double *** c_down_eigen;
+double *** occu_imp_up_basis;
+double *** occu_imp_down_basis;
+double *** occu_imp_up_eigen;
+double *** occu_imp_down_eigen;
 int * num_basis;//no. of |k,j;n> 
 int * num_eigen_kept;// no. of |k;n>.
 EIGEN_STATE  ** eigen;
@@ -35,6 +39,7 @@ BASIS ** basis_ordered;
 NEW_BASIS *** basis_kj;
 void genoutput(void);
 void delete_iter_dia(int);
+void occu_imp_operator(int);
 int func_delta(int a, int b){
 	if (a==b){
 		return 1;
@@ -63,11 +68,12 @@ void iterative_dia(void)
 	f_input >> Q           ;
 	f_input >> Q_Sz        ;
 	f_input >> N_up_N_down ;
+	f_input >> occupation  ;
 
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
-	//N_max = 7;//!!!!!!!!!!!!!!!!!!!!
 	N_max = N;//!!!!!!!!!!!!!!!!!!!!
+	//N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
@@ -138,10 +144,14 @@ void iterative_dia(void)
 	double c_down_dot[4][4]={{0,0,1,0},{0,0,0,-1},{0,0,0,0},{0,0,0,0}};
 	double c_dag_up_dot[4][4]={{0,0,0,0},{1,0,0,0},{0,0,0,0},{0,0,1,0}};
 	double c_dag_down_dot[4][4]={{0,0,0,0},{0,0,0,0},{1,0,0,0},{0,-1,0,0}};
-	c_dag_up_basis=new double ** [N_max];c_up_basis=new double ** [N_max];
-	c_dag_down_basis=new double ** [N_max];c_down_basis=new double ** [N_max];
-	c_dag_up_eigen=new double ** [N_max];c_up_eigen=new double ** [N_max];
-	c_dag_down_eigen=new double ** [N_max];c_down_eigen=new double ** [N_max];
+	c_dag_up_basis=new double ** [N_max];
+	c_up_basis=new double ** [N_max];
+	c_dag_down_basis=new double ** [N_max];
+	c_down_basis=new double ** [N_max];
+	c_dag_up_eigen=new double ** [N_max];
+	c_up_eigen=new double ** [N_max];
+	c_dag_down_eigen=new double ** [N_max];
+	c_down_eigen=new double ** [N_max];
     basis_ordered=new BASIS * [N_max];
 	basis_kj=new NEW_BASIS ** [N_max];
     eigen=new EIGEN_STATE * [N_max];
@@ -265,6 +275,73 @@ void iterative_dia(void)
 	delete [] temp2;
 	delete [] temp3;
 	delete [] temp4;
+	if (occupation){
+		occu_imp_up_basis=new double ** [N_max];
+		occu_imp_down_basis=new double ** [N_max];
+		occu_imp_up_eigen=new double ** [N_max];
+		occu_imp_down_eigen=new double ** [N_max];
+		for (int n=0;n<N_max;n++){
+			occu_imp_up_basis[n]   = new double * [num_basis[n]];
+			occu_imp_down_basis[n] = new double * [num_basis[n]];
+			occu_imp_up_eigen[n]   = new double * [num_basis[n]];
+			occu_imp_down_eigen[n] = new double * [num_basis[n]];
+			for (int i=0;i<num_basis[n];i++){
+				occu_imp_up_basis[n][i]   = new double [num_basis[n]];
+				occu_imp_down_basis[n][i] = new double [num_basis[n]];
+				occu_imp_up_eigen[n][i]   = new double [num_basis[n]];
+				occu_imp_down_eigen[n][i] = new double [num_basis[n]];
+				for (int j=0;j<num_basis[n];j++){
+				    occu_imp_up_basis[n][i][j]   = 0;
+				    occu_imp_down_basis[n][i][j] = 0;
+				    occu_imp_up_eigen[n][i][j]   = 0;
+				    occu_imp_down_eigen[n][i][j] = 0;
+				}
+			}
+		}
+		for (int i=0;i<num_basis[0];i++){
+			occu_imp_up_basis[0][i][i]=quant_num_upnum_dot[i];
+			occu_imp_down_basis[0][i][i]=quant_num_downnum_dot[i];
+		}
+		double ** temp5;
+		double ** temp6;
+		temp5=new double * [dim_dot];
+		temp6=new double * [dim_dot];
+		for (int i=0;i<dim_dot;i++){
+			temp5[i]=new double [dim_dot];
+			temp6[i]=new double [dim_dot];
+			for (int j=0;j<dim_dot;j++){
+				temp5[i][j]=0;
+				temp6[i][j]=0;
+			}
+		}
+		for (int i=0;i<num_basis[0];i++){
+    	    for (int j=0;j<num_basis[0];j++){
+				for (int k=0;k<num_basis[0];k++){
+					temp5[i][j]=temp5[i][j]+eigen[0][i].eigen_vect[k]*occu_imp_up_basis[0][k][j];
+					temp6[i][j]=temp6[i][j]+eigen[0][i].eigen_vect[k]*occu_imp_down_basis[0][k][j];
+				}
+			}
+		}
+		for (int i=0;i<num_basis[0];i++){
+    	    for (int j=0;j<num_basis[0];j++){
+				for (int k=0;k<num_basis[0];k++){
+					occu_imp_up_eigen[0][i][j]=occu_imp_up_eigen[0][i][j]+temp5[i][k]*eigen[0][j].eigen_vect[k];
+					occu_imp_down_eigen[0][i][j]=occu_imp_down_eigen[0][i][j]+temp6[i][k]*eigen[0][j].eigen_vect[k];
+				}
+			}
+		}
+		//for (int i=0;i<num_basis[0];i++){
+            //for (int j=0;j<num_basis[0];j++){
+				//cout << i << "    " << j << "    " << occu_imp_up_eigen[0][i][j] << "    " << occu_imp_down_eigen[0][i][j] << endl;
+			//}
+		//}
+		for (int i=0;i<dim_dot;i++){
+			delete [] temp5[i];
+			delete [] temp6[i];
+		}
+		delete [] temp5;
+		delete [] temp6;
+	}
 	ofstream f_E_GS("E_GS.dat");
 	for (int n=1;n<N_max;n++){
 		char str0[20],str1[15];
@@ -852,6 +929,7 @@ void iterative_dia(void)
 	    delete [] matrix_c;
 	    delete [] matrix_cc;
 	    delete [] matrix_ccc;
+		if (occupation) occu_imp_operator(n);
 		//ofstream cup("cup",ios::binary);
 		E_GS[n]=sqrt(Lambda)*E_GS[n-1]+eigen[n][0].eig_val;
 		f_E_GS << "Dot  " << n << scientific << setw(25) << setprecision(15) << E_GS[n] << setw(25) <<  E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0) << endl;
@@ -875,7 +953,7 @@ void iterative_dia(void)
 		delete_iter_dia(n);
 		//if (n==6) exit(0);
 	}
-	cout << "  ";cout << "Time leaved:    ";date_time();cout << endl;
+	cout << "Time leaved:    ";date_time();cout << endl;
 }
 
 void delete_iter_dia(int n)
@@ -894,4 +972,56 @@ void delete_iter_dia(int n)
 	delete [] num_basis_block;
 	for (int i=0;i<num_basis[n];i++){
 	}
+}
+void occu_imp_operator(int n)
+{
+	for (int i=0;i<num_basis[n];i++){
+		for (int j=0;j<num_basis[n];j++){
+			occu_imp_up_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*occu_imp_up_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+			occu_imp_down_basis[n][i][j]=func_delta(basis_ordered[n][i].j,basis_ordered[n][j].j)*occu_imp_down_eigen[n-1][basis_ordered[n][i].k-1][basis_ordered[n][j].k-1];
+		}
+	}
+	double * matrix_U=new double [num_basis[n]*num_basis[n]];
+	double * matrix_c=new double [num_basis[n]*num_basis[n]];
+	double * matrix_cc=new double [num_basis[n]*num_basis[n]];
+	double * matrix_ccc=new double [num_basis[n]*num_basis[n]];
+	{int k=0;//colume-wise
+	for (int i=0;i<num_basis[n];i++){
+		for (int j=0;j<num_basis[n];j++){
+			matrix_U[k]=eigen[n][i].eigen_vect[j];
+			k++;
+		}
+	}}
+	{int k=0;
+	for (int i=0;i<num_basis[n];i++){
+		for (int j=0;j<num_basis[n];j++){
+			matrix_c[k]=occu_imp_up_basis[n][j][i];
+			k++;
+		}
+	}}
+	cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_U,num_basis[n],matrix_c,num_basis[n],0,matrix_cc,num_basis[n]);
+	cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_cc,num_basis[n],matrix_U,num_basis[n],0,matrix_ccc,num_basis[n]);
+	for (int i=0;i<num_basis[n];i++){
+		for (int j=0;j<num_basis[n];j++){
+			occu_imp_up_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
+		}
+	}
+	{int k=0;
+	for (int i=0;i<num_basis[n];i++){
+		for (int j=0;j<num_basis[n];j++){
+			matrix_c[k]=occu_imp_down_basis[n][j][i];
+			k++;
+		}
+	}}
+	cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_U,num_basis[n],matrix_c,num_basis[n],0,matrix_cc,num_basis[n]);
+	cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_cc,num_basis[n],matrix_U,num_basis[n],0,matrix_ccc,num_basis[n]);
+	for (int i=0;i<num_basis[n];i++){
+		for (int j=0;j<num_basis[n];j++){
+			occu_imp_down_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
+		}
+	}
+	delete [] matrix_U;
+	delete [] matrix_c;
+	delete [] matrix_cc;
+	delete [] matrix_ccc;
 }

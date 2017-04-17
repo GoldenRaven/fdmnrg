@@ -17,17 +17,20 @@ int main()
 	bool Q=false;
 	bool Q_Sz=false;
 	bool N_up_N_down=true;
+	bool occupation=true;
 
 	ifstream f_U("U");
 	ifstream f_Ed("Ed");
 	ifstream f_temperature("temperature");
 	ifstream f_Lambda("Lambda");
 	ifstream f_alpha("alpha");
+	ifstream f_occupation("occupation");
 	f_U >> U;
 	f_Ed >> Ed;
 	f_temperature >> temperature;
 	f_Lambda >> Lambda;
 	f_alpha >> alpha;
+	f_occupation >> occupation;
 
 	ofstream f_input("input");
 	f_input << U           << endl;
@@ -45,4 +48,5 @@ int main()
 	f_input << Q           << endl;
 	f_input << Q_Sz        << endl;
 	f_input << N_up_N_down << endl;
+	f_input << occupation  << endl;
 }
