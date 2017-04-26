@@ -1,5 +1,6 @@
 #ifndef SETUP_H_
 #define SETUP_H_
+#include"struct.h"
 
 extern int dim_imp;//=4;
 extern int dim_dot;//=4;
@@ -8,7 +9,8 @@ extern int N;
 extern int N_max;//=3;//200; No. of dots added.
 extern int n0;//number of step starting discarding states.num_basis_new[n0]>num_kept
 extern int quant_tmp;
-extern double Ed;//=-2.0;
+extern double Ed_up;//=-2.0;
+extern double Ed_down;//=-2.0;
 extern double U;//=1.0;
 extern double Lambda;//=5.0;
 extern double Beta;
@@ -37,18 +39,6 @@ extern bool Q;
 extern bool Q_Sz;
 extern bool N_up_N_down;
 extern bool occupation;
-
-struct EIGEN_STATE{
-	int sort,k,n,quant_num_totalnum,quant_num_upnum,quant_num_downnum;//dim_imp;
-	double eig_val,eig_val_relat;
-	double * eigen_vect;
-};
-struct BASIS{
-	int k,j,n,quant_num_totalnum,quant_num_upnum,quant_num_downnum;
-};
-struct NEW_BASIS{
-	int sort,k,j,n,quant_num_totalnum,quant_num_upnum,quant_num_downnum;
-};
 
 extern EIGEN_STATE ** eigen;
 extern BASIS ** basis_ordered;

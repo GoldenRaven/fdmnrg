@@ -3,7 +3,8 @@ using namespace std;
 int main()
 {
    	double U=0.5;// in unit of D
-	double Ed=-0.25;//in unite of D
+	double Ed_up=-0.25;//in unite of D
+	double Ed_down=-0.25;//in unite of D
 	double temperature=1.0e-7;//k_B*T/D
 	double Lambda=1.8;
 	double alpha=0.588;
@@ -20,33 +21,47 @@ int main()
 	bool occupation=true;
 
 	ifstream f_U("U");
-	ifstream f_Ed("Ed");
+	ifstream f_Ed_up("Ed_up");
+	ifstream f_Ed_down("Ed_down");
 	ifstream f_temperature("temperature");
 	ifstream f_Lambda("Lambda");
 	ifstream f_alpha("alpha");
 	ifstream f_occupation("occupation");
 	f_U >> U;
-	f_Ed >> Ed;
+	f_Ed_up >> Ed_up;
+	f_Ed_down >> Ed_down;
 	f_temperature >> temperature;
 	f_Lambda >> Lambda;
 	f_alpha >> alpha;
 	f_occupation >> occupation;
 
-	ofstream f_input("input");
-	f_input << U           << endl;
-	f_input << Ed          << endl;
-	f_input << temperature << endl;
-	f_input << Lambda      << endl;
-	f_input << alpha       << endl;
-	f_input << num_kept    << endl;
-	f_input << smear       << endl;
-	f_input << unsmear     << endl;
-	f_input << omega0      << endl;
-	f_input << dim_imp     << endl;
-	f_input << dim_dot     << endl;
-	f_input << Beta_bar    << endl;
-	f_input << Q           << endl;
-	f_input << Q_Sz        << endl;
-	f_input << N_up_N_down << endl;
-	f_input << occupation  << endl;
+	ofstream f_input_total("input_total");
+	f_input_total << U           << endl;
+	f_input_total << Ed_up       << endl;
+	f_input_total << Ed_down     << endl;
+	f_input_total << temperature << endl;
+	f_input_total << Lambda      << endl;
+	f_input_total << alpha       << endl;
+	f_input_total << num_kept    << endl;
+	f_input_total << smear       << endl;
+	f_input_total << unsmear     << endl;
+	f_input_total << omega0      << endl;
+	f_input_total << dim_imp     << endl;
+	f_input_total << dim_dot     << endl;
+	f_input_total << Beta_bar    << endl;
+	f_input_total << Q           << endl;
+	f_input_total << Q_Sz        << endl;
+	f_input_total << N_up_N_down << endl;
+	f_input_total << occupation  << endl;
+
+	ofstream f_input_band("input_band");
+	f_input_band << temperature << endl;
+	f_input_band << Lambda      << endl;
+	f_input_band << num_kept    << endl;
+	f_input_band << dim_imp     << endl;
+	f_input_band << dim_dot     << endl;
+	f_input_band << Beta_bar    << endl;
+	f_input_band << Q           << endl;
+	f_input_band << Q_Sz        << endl;
+	f_input_band << N_up_N_down << endl;
 }

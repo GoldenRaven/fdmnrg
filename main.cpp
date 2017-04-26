@@ -2,27 +2,37 @@
 //2016/03/03只剩对角化与文件读入tn与en.
 //2016/03/09完成对角化.
 #include<iostream>
+#include<iomanip>
 #include<cstdlib>
 #include"setup.h"
 //void impurity(void);
-void iterative_dia(void);
-void func_wn(void);
+void iterative_dia_band(void);
+void iterative_dia_total(void);
+void func_wn(int);
 void date_time(void);
 void density_of_state(void);
 void deallocate(void);
 void occu_imp(void);
+double entropy_kB(int);
+//void entroy(void);
 int main()
 {
 	using namespace std;
 	cout << "Job started on: "; date_time();
+	double S_band,S_total;
 	clock_t start,finish;
 	start=clock();
 	//impurity();
-	iterative_dia();
-	func_wn();
-	if (occupation){
-		occu_imp();
-	}
+	cout << "chain of band: " << endl;
+	iterative_dia_band();
+	func_wn(0);
+	S_band=entropy_kB(0);
+	iterative_dia_total();
+	func_wn(1);
+	S_total=entropy_kB(1);
+	cout << "entropy: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total << "    " <<  setw(30) << S_band << "    " << setw(30) << S_total-S_band << endl;
+	//cout << "entropy S*T: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total*temperature << "    " <<  setw(30) << S_band*temperature << "    " << setw(30) << (S_total-S_band)*temperature << endl;
+	occu_imp();
 	//density_of_state();
 	//deallocate();
 	finish=clock();
