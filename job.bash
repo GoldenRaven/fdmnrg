@@ -1,30 +1,50 @@
-#rm -f `find .|grep -v "\<job.bash\>"`
-cp /home/ligy/NRG/fdmnrg.x .
-cp /home/ligy/NRG/makeinput.cpp .
-#cp /home/ligy/NRG/makefreq.cpp .
-cp /home/ligy/NRG/test.submit .
+#rm -fr `find .|grep -v "\<job.bash\>"`
 
-echo 0.3   > U
-echo -0.15 > Ed
-echo 1e-8  > temperature
-echo 1.8   > Lambda
-echo 0.588 > alpha
-echo 1     > occupation
+Lambda=8
+Gamma=0.001
+Nz=4
+dir=`pwd`
+cp /home/ligy/NRG/entropy.bash .
 
-Lambda=1.8
-k=0.1
-Vg=0.3
-h=
-Nz=1
+for z in 0 0.25 0.5 0.75
+do
+	rm -fr $z
+	mkdir $z
+	cd $z
+	#for T in 5.15e-2 3e-2 1e-2 7e-3 5.15e-3 2e-3 9e-4 5.15e-4 2e-4 9e-5 5.15e-5 1e-5 8e-6 5.15e-6 1e-6 8e-7 5.15e-7 1e-7 8e-8 5.15e-8
+	for ((i=0;i<110;i++))
+	do
+		#T=echo "(0.8^$i)*1000"|bc -l
+		dir2=`pwd`
+		T=`echo "0.8 $i 1000"| awk '{ printf "%0.10f\n" ,$1^$2*$3}'`
+		rm -fr $T
+		mkdir $T
+		cd $T
+		echo 0.01    > U
+		echo -0.005  > Ed_up
+		echo -0.005  > Ed_down
+		echo $T      > temperature
+		echo $Lambda > Lambda
+		echo 0.69    > alpha
+		echo 1       > occupation
 
-icpc makeinput.cpp -o makeinput.x
-./makeinput.x
+		cp /home/ligy/NRG/fdmnrg.x .
+		cp /home/ligy/NRG/makeinput.cpp .
+		cp /home/ligy/NRG/makefreq.cpp .
+		cp /home/ligy/NRG/test.submit .
+		
+		icpc makeinput.cpp -o makeinput.x
+		./makeinput.x
+		
+		icpc makefreq.cpp -o makefreq.x
+		./makefreq.x
 
-icpc makefreq.cpp -o makefreq.x
-./makefreq.x
-
-cp ~/data_chain/chain_Lambda${Lambda}_r1_k${k}_Vg${Vg}_h${h}.dat chain.dat
-#cp ~/chain_Lambda${Lambda}_r1_k${k}_Vg${Vg}_h${h}_Nz${Nz}.dat chain.dat
-job_name=10Tk
-qsub -N ${job_name} test.submit
+		cp ~/data_chain/chain_Lambda${Lambda}_Gamma${Gamma}_z${z}.dat chain_band.dat
+		cp ~/data_chain/chain_Lambda${Lambda}_Gamma${Gamma}_z${z}.dat chain_total.dat
+		job_name=$z-$T
+		qsub -N ${job_name} test.submit
+		cd $dir2
+	done
+	cd $dir
+done
 exit 0
