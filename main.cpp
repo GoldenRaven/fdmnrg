@@ -31,7 +31,6 @@ int main()
 	func_wn(1);
 	S_total=entropy_kB(1);
 	cout << "entropy: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total << "    " <<  setw(30) << S_band << "    " << setw(30) << S_total-S_band << endl;
-	//cout << "entropy S*T: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total*temperature << "    " <<  setw(30) << S_band*temperature << "    " << setw(30) << (S_total-S_band)*temperature << endl;
 	occu_imp();
 	//density_of_state();
 	//deallocate();
