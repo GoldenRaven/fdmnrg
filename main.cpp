@@ -6,14 +6,13 @@
 #include<cstdlib>
 #include"setup.h"
 //void impurity(void);
-void iterative_dia_band(void);
-void iterative_dia_total(void);
-void func_wn(int);
+void iterative_dia(int);
+void func_wn();
 void date_time(void);
 void density_of_state(void);
 void deallocate(void);
 void occu_imp(void);
-double entropy_kB(int);
+double entropy_kB();
 //void entroy(void);
 int main()
 {
@@ -24,12 +23,12 @@ int main()
 	start=clock();
 	//impurity();
 	cout << "chain of band: " << endl;
-	iterative_dia_band();
-	func_wn(0);
-	S_band=entropy_kB(0);
-	iterative_dia_total();
-	func_wn(1);
-	S_total=entropy_kB(1);
+	iterative_dia(0);
+	func_wn();
+	S_band=entropy_kB();
+	iterative_dia(1);
+	func_wn();
+	S_total=entropy_kB();
 	cout << "entropy: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total << "    " <<  setw(30) << S_band << "    " << setw(30) << S_total-S_band << endl;
 	occu_imp();
 	//density_of_state();

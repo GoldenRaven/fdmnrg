@@ -41,21 +41,21 @@ void occu_imp(void)
 	f_occu.close();
 }
 
-double inner_energy(int diff)
+double inner_energy()
 {
 	cout << "inner_energy: " << endl;
 	sumn_E=0;
 	for (int n=n0;n<N_max-1;n++){
 		sum_E=0;
 		for (int l=num_kept;l<num_basis[n];l++){
-			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
+			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
 		}
 		sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
 	}
 	for (int n=N_max-1;n<N_max;n++){
 		sum_E=0;
 		for (int l=num_kept;l<num_basis[n];l++){
-			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
+			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
 		}
 		sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
 	}
@@ -64,7 +64,7 @@ double inner_energy(int diff)
 	return sumn_E;
 }
 
-double entropy_kB(int diff)
+double entropy_kB()
 {
 	//cout << "entropy: " << endl;
 	sumn_E=0;
@@ -73,8 +73,8 @@ double entropy_kB(int diff)
 		sum_E=0;
 		sum_Z=0;
 		for (int l=num_kept;l<num_basis[n];l++){
-			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
-			sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)));
+			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
+			sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-1)/2.0)));
 			//cout << n << "   " << l << "  " << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "    " << (eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0) << endl;
 			//cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
 			//cout << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][l].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][l].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][l].eig_val_relat << (eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0) << "   " << eigen[n][l].k << endl;
@@ -86,8 +86,8 @@ double entropy_kB(int diff)
 		sum_E=0;
 		sum_Z=0;
 		for (int l=num_kept;l<num_basis[n];l++){
-			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
-			sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)));
+			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
+			sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-1)/2.0)));
 			//cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
 		}
 		sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
@@ -96,7 +96,7 @@ double entropy_kB(int diff)
 	//cout << -1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << endl;
 	//cout << " xxxxxxxxx    " << sumn_Z << endl;
 	//cout << log(sumn_Z) << " xxxxxxxxx" << endl;
-	lnZ=-1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)+log(sumn_Z);
+	lnZ=-1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-1)/2.0)+log(sumn_Z);
 	//cout << setw(35) << "  entropy : " << scientific << setprecision(15) << setw(25) << Beta*sumn_E + lnZ << endl;
 	//cout << "Time leaved:    ";date_time();cout << endl;
 	return Beta*sumn_E + lnZ;
