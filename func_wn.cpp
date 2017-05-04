@@ -34,6 +34,8 @@ void func_wn()
 		    suml=suml+exp_z[n][l-num_kept];//!!!
 			//cout << "xxxxxxxxxxxx" << endl;
 		}
+		//cout << "suml=    " << suml << endl;
+		//exit(0);
 		wn[n]=pow(4,N_max-1-n)*suml;
 		fwn << setw(5) << n << setw(25) << scientific << setprecision(15) << wn[n] << endl;
 		sum=sum+wn[n];
@@ -58,38 +60,23 @@ void func_wn()
 double exp_Z(int n,int l)
 {
 	double ans;
-	double sumn=0;
+	double sum=0;
 	for (int n1=n0;n1<N_max-1;n1++){
-			//cout << n1 << " xxxxxxxxxxx  " << endl;
-			//cout << n1 << "   " << n << "     " << E_GS[n1]<< endl;
-		   //cout << num_basis[n1] << endl;
-		if (-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) > 500){
-			//cout << n1 << " xxxxxxxxxxx  " << endl;
-			ans=0;
-			return ans;
-		}else{
-	        double suml1=0;
-		    for (int l1=num_kept;l1<num_basis[n1];l1++){
-			//cout << n1 << " xxxxxxxxxxx  " << endl;
-		    	suml1=suml1+exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*eigen[n1][l1].eig_val_relat);
-		    }
-		    sumn=sumn+pow(4,N_max-1-n1)*exp(-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)))*suml1;
+		for (int l1=num_kept;l1<num_basis[n1];l1++){
+			double expo=0;
+			expo=-1.0*Beta*((E_GS[n1]+eigen[n1][l1].eig_val_relat)*pow(Lambda,-1.0*(n1-1-1)/2.0)-(E_GS[n]+eigen[n][l].eig_val_relat)*pow(Lambda,-1.0*(n-1-1)/2.0));
+			if (expo > 709) return 0;
+			sum=sum+pow(dim_dot,N_max-1-n1)*exp(expo);
 		}
-			//cout << n1 << " xxxxxxxxxxx  " << endl;
 	}
 	for (int n1=N_max-1;n1<N_max;n1++){
-		if (-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) > 500){
-			//cout << n << "  " << n1 << "  " << -1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)) << endl;
-			ans=0;
-			return ans;
-		}else{
-	        double suml1=0;
-		    for (int l1=0;l1<num_basis[n1];l1++){
-		    	suml1=suml1+exp(-1.0*Beta*pow(Lambda,-1.0*(n1-1-1)/2.0)*eigen[n1][l1].eig_val_relat);
-		    }
-		    sumn=sumn+pow(4,N_max-1-n1)*exp(-1.0*Beta*(E_GS[n1]*pow(Lambda,-1.0*(n1-1-1)/2.0)-E_GS[n]*pow(Lambda,-1.0*(n-1-1)/2.0)))*suml1;
+		for (int l1=num_kept;l1<num_basis[n1];l1++){
+			double expo=0;
+			expo=-1.0*Beta*((E_GS[n1]+eigen[n1][l1].eig_val_relat)*pow(Lambda,-1.0*(n1-1-1)/2.0)-(E_GS[n]+eigen[n][l].eig_val_relat)*pow(Lambda,-1.0*(n-1-1)/2.0));
+			if (expo > 709) return 0;
+			sum=sum+pow(dim_dot,N_max-1-n1)*exp(expo);
 		}
 	}
-	ans=exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][l].eig_val_relat)/sumn;
+	ans=1.0/sum;
 	return ans;
 }
