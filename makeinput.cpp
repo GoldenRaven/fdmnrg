@@ -25,6 +25,7 @@ int main()
 	ifstream f_Ed_down("Ed_down");
 	ifstream f_temperature("temperature");
 	ifstream f_Lambda("Lambda");
+	ifstream f_num_kept("num_kept");
 	ifstream f_alpha("alpha");
 	ifstream f_occupation("occupation");
 	f_U >> U;
@@ -33,6 +34,7 @@ int main()
 	f_temperature >> temperature;
 	f_Lambda >> Lambda;
 	f_alpha >> alpha;
+	f_num_kept >> num_kept;
 	f_occupation >> occupation;
 
 	ofstream f_input_total("input_total");

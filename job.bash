@@ -1,12 +1,18 @@
 #rm -fr `find .|grep -v "\<job.bash\>"`
 
-Lambda=8
+Lambda=10
 Gamma=0.001
+U=0.01
+Ed_up=-0.005
+Ed_down=-0.005
+num_kept=1024
+alpha=0.69
+occupation=1
 Nz=4
 dir=`pwd`
 cp /home/ligy/NRG/entropy.bash .
 
-for z in 0 0.25 0.5 0.75
+for z in 0.125 0.375 0.5 0.75
 do
 	rm -fr $z
 	mkdir $z
@@ -20,13 +26,14 @@ do
 		rm -fr $T
 		mkdir $T
 		cd $T
-		echo 0.01    > U
-		echo -0.005  > Ed_up
-		echo -0.005  > Ed_down
-		echo $T      > temperature
-		echo $Lambda > Lambda
-		echo 0.69    > alpha
-		echo 1       > occupation
+		echo $U          > U
+		echo $Ed_up      > Ed_up
+		echo $Ed_down    > Ed_down
+		echo $T          > temperature
+		echo $Lambda     > Lambda
+		echo $num_kept   > num_kept
+		echo $alpha      > alpha
+		echo $occupation > occupation
 
 		cp /home/ligy/NRG/fdmnrg.x .
 		cp /home/ligy/NRG/makeinput.cpp .
