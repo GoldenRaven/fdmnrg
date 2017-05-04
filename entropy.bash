@@ -21,7 +21,7 @@ echo "set ylabel 'S/ln2'" >> gnu.txt
 echo "set xlabel 'T/T_k'" >> gnu.txt
 echo "#set yrange [0:2.5]" >> gnu.txt
 echo "set logscale x" >> gnu.txt
-echo "plot '../PRB-86-75153/fig30.png.dat' w lp t 'PRB-86-75153'  ps 0.2 pt 7,'S' w p t 'mine' ps 0.2" >> gnu.txt
+echo "plot '~/Documents/fig30.png.dat' w lp t 'PRB-86-75153'  ps 0.2 pt 7,'S' w p t 'mine' ps 0.2" >> gnu.txt
 echo "set output" >> gnu.txt
 echo "q" >> gnu.txt
 #                 
