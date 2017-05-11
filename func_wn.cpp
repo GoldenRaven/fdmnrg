@@ -70,7 +70,7 @@ double exp_Z(int n,int l)
 		}
 	}
 	for (int n1=N_max-1;n1<N_max;n1++){
-		for (int l1=num_kept;l1<num_basis[n1];l1++){
+		for (int l1=0;l1<num_basis[n1];l1++){
 			double expo=0;
 			expo=-1.0*Beta*((E_GS[n1]+eigen[n1][l1].eig_val_relat)*pow(Lambda,-1.0*(n1-1-1)/2.0)-(E_GS[n]+eigen[n][l].eig_val_relat)*pow(Lambda,-1.0*(n-1-1)/2.0));
 			if (expo > 709) return 0;
