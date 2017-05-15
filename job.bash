@@ -22,7 +22,7 @@ do
 	do
 		#T=echo "(0.8^$i)*1000"|bc -l
 		dir2=`pwd`
-		T=`echo "0.8 $i 1000"| awk '{ printf "%0.10f\n" ,$1^$2*$3}'`
+		T=`echo "0.8 $i 1000"| awk '{ printf "%0.15f\n" ,$1^$2*$3}'`
 		rm -fr $T
 		mkdir $T
 		cd $T
