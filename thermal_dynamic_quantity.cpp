@@ -85,8 +85,8 @@ double entropy_kB()
 	for (int n=N_max-1;n<N_max;n++){
 		sum_E=0;
 		sum_Z=0;
-		for (int l=num_kept;l<num_basis[n];l++){
-			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
+		for (int l=0;l<num_basis[n];l++){
+			sum_E=sum_E+exp_z[n][l]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
 			sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-1)/2.0)));
 			//cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
 		}
