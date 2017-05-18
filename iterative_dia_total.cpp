@@ -932,8 +932,6 @@ void iterative_dia_total(void)
 		}
 		delete [] H_bij;
 		delete [] num_basis_block;
-		for (int i=0;i<num_basis[n];i++){
-		}
 		//if (n==6) exit(0);
 	}
 	cout << "Time leaved:    ";date_time();cout << endl;
