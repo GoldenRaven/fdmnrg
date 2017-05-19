@@ -28,6 +28,7 @@ int main()
 	func_wn();
 	E_band=inner_energy();
 	S_band=entropy_kB();
+	occu_imp();
 	//iterative_dia(1);
 	//func_wn();
 	//E_total=inner_energy();

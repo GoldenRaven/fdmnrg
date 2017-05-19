@@ -54,8 +54,8 @@ double inner_energy()
 	}
 	for (int n=N_max-1;n<N_max;n++){
 		sum_E=0;
-		for (int l=num_kept;l<num_basis[n];l++){
-			sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
+		for (int l=0;l<num_basis[n];l++){
+			sum_E=sum_E+exp_z[n][l]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-1)/2.0);
 		}
 		sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
 	}
