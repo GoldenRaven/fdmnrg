@@ -1,12 +1,12 @@
 #rm -fr `find .|grep -v "\<job.bash\>"`
 
-Lambda=8
-Gamma=0.001
+Lambda=10
+Gamma=0.002
 Nz=4
 dir=`pwd`
 cp /home/ligy/NRG/entropy.bash .
 
-for z in 0 0.25 0.5 0.75
+for z in 0.125 0.375 0.5 0.75
 do
 	rm -fr $z
 	mkdir $z
