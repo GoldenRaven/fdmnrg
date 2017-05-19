@@ -43,7 +43,7 @@ void occu_imp(void)
 
 double inner_energy(int diff)
 {
-	cout << "inner_energy: " << endl;
+	//cout << "inner_energy: " << endl;
 	sumn_E=0;
 	for (int n=n0;n<N_max-1;n++){
 		sum_E=0;
@@ -59,8 +59,8 @@ double inner_energy(int diff)
 		}
 		sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
 	}
-	cout << setw(35) << "  inner energy : " << scientific << setprecision(15) << setw(25) << sumn_E << endl;
-	cout << "Time leaved:    ";date_time();cout << endl;
+	//cout << setw(35) << "  inner energy : " << scientific << setprecision(15) << setw(25) << sumn_E << endl;
+	//cout << "Time leaved:    ";date_time();cout << endl;
 	return sumn_E;
 }
 
@@ -99,5 +99,7 @@ double entropy_kB(int diff)
 	lnZ=-1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)+log(sumn_Z);
 	//cout << setw(35) << "  entropy : " << scientific << setprecision(15) << setw(25) << Beta*sumn_E + lnZ << endl;
 	//cout << "Time leaved:    ";date_time();cout << endl;
+	cout << "inner energy in S: " << setprecision(15) << setw(25) << sumn_E << endl;
+	cout << "lnZ   in S:        " << setprecision(15) << setw(25) << lnZ << endl;
 	return Beta*sumn_E + lnZ;
 }
