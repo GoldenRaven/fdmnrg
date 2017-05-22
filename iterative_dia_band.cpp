@@ -48,15 +48,17 @@ void iterative_dia_band(void)
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
-	//N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
 
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
-	double pe_up[N_max+1];
-	double pe_down[N_max+1];
-	double ptn_up[N_max+1];
-	double ptn_down[N_max+1];
-	ifstream fin_chain("chain_band.dat");//Maybe different Lambda.
+	double * pe_up = new double [N_max+1];
+	double * pe_down = new double [N_max+1];
+	double * ptn_up = new double [N_max+1];
+	double * ptn_down = new double [N_max+1];
+	E_GS=new double [N_max];
+	num_basis=new int [N_max+1];
+    num_eigen_kept=new int [N_max+1];
+	ifstream fin_chain("chain_band.dat");
 	cout << "  chain parameter:" << endl;
 	cout << setw(13) << "  #site" << setw(29) << "   tn_up" << setw(29) << "  tn_down" << setw(29) << "    en_up" << setw(29) << "      en_down" << endl;
 	for (int i=-1;i<N_max+1;i++){//from second line: coupling, t0, t1,...
@@ -76,9 +78,6 @@ void iterative_dia_band(void)
 	Ed_down=pe_down[0];
 	U=0;
 	genoutput();
-	E_GS=new double [N_max];
-	num_basis=new int [N_max+1];
-    num_eigen_kept=new int [N_max+1];
 	cout << "   " << " n  " << "  num_basis[n]  " << "  num_eigen_kept[n]  " << "  n0 " << endl;
 	for (int n=0;n<N_max+1;n++){
 		if (n<10){
@@ -165,24 +164,26 @@ void iterative_dia_band(void)
     vect[0][2][0]=0;vect[0][2][1]=0;vect[0][2][2]=1;vect[0][2][3]=0;
     vect[0][3][0]=0;vect[0][3][1]=0;vect[0][3][2]=0;vect[0][3][3]=1;
 	double temp[4]={0,Ed_up,Ed_down,Ed_up+Ed_down+U};//sorting of eigenvalue
-	for (int i=0;i<num_basis[0]-1;i++){
-		for (int j=i;j<num_basis[0]-1;j++){
-			if (temp[i]>temp[j+1]){
-				double tempp=temp[j+1];
-				temp[j+1]=temp[j];
-				temp[j]=tempp;
-			}
+	for (int j=0;j<num_basis[0]-1;j++){
+		if (temp[j]<temp[j+1]){
+			double tempp=temp[j];
+			temp[j]=temp[j+1];
+			temp[j+1]=tempp;
 		}
 	}
-	EIGEN_STATE eig_temp0={1,1,0,1,1,0,(Ed_up)/sqrt(Lambda),(Ed_up-temp[0])/sqrt(Lambda),vect[0][1]};
-	EIGEN_STATE eig_temp1={2,2,0,1,0,1,(Ed_down)/sqrt(Lambda),(Ed_down-temp[0])/sqrt(Lambda),vect[0][2]};
-	EIGEN_STATE eig_temp2={3,3,0,0,0,0,0,(0-temp[0])/sqrt(Lambda),vect[0][0]};
-	EIGEN_STATE eig_temp3={4,4,0,2,1,1,(Ed_up+Ed_down+U)/sqrt(Lambda),(Ed_up+Ed_down+U-temp[0])/sqrt(Lambda),vect[0][3]};
-	eigen[0][0]=eig_temp0;//| up     > = |1,0>  
+	EIGEN_STATE eig_temp0={1,1,0,1,1,0,(Ed_up)/sqrt(Lambda),(Ed_up-temp[3])/sqrt(Lambda),vect[0][1]};
+	EIGEN_STATE eig_temp1={2,2,0,1,0,1,(Ed_down)/sqrt(Lambda),(Ed_down-temp[3])/sqrt(Lambda),vect[0][2]};
+	EIGEN_STATE eig_temp2={3,3,0,0,0,0,0,(0-temp[3])/sqrt(Lambda),vect[0][0]};
+	EIGEN_STATE eig_temp3={4,4,0,2,1,1,(Ed_up+Ed_down+U)/sqrt(Lambda),(Ed_up+Ed_down+U-temp[3])/sqrt(Lambda),vect[0][3]};
+	eigen[0][0]=eig_temp0;//| up     > = |1,0>
 	eigen[0][1]=eig_temp1;//| down   > = |2,0>
 	eigen[0][2]=eig_temp2;//| 0      > = |3,0>
 	eigen[0][3]=eig_temp3;//| updown > = |4,0>
-	E_GS[0]=temp[0]/sqrt(Lambda);
+	E_GS[0]=temp[3]/sqrt(Lambda);
+	for (int i=0;i<4;i++){
+		cout << eigen[0][i].eig_val*sqrt(Lambda) << endl;
+	}
+	//exit(0);
 	temp1=new double * [dim_dot];
 	temp2=new double * [dim_dot];
 	temp3=new double * [dim_dot];
@@ -229,7 +230,7 @@ void iterative_dia_band(void)
 	delete [] temp2;
 	delete [] temp3;
 	delete [] temp4;
-	ofstream f_E_GS("E_GS.dat");
+	ofstream f_E_GS("E_GS.dat",ios_base::out|ios_base::app);
 	for (int n=1;n<N_max;n++){
 		char str0[20],str1[15];
 		sprintf(str0,"%d",n);

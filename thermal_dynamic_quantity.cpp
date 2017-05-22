@@ -99,7 +99,7 @@ double entropy_kB(int diff)
 	lnZ=-1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)+log(sumn_Z);
 	//cout << setw(35) << "  entropy : " << scientific << setprecision(15) << setw(25) << Beta*sumn_E + lnZ << endl;
 	//cout << "Time leaved:    ";date_time();cout << endl;
-	cout << "inner energy in S: " << setprecision(15) << setw(25) << sumn_E << endl;
-	cout << "lnZ   in S:        " << setprecision(15) << setw(25) << lnZ << endl;
+	//cout << "inner energy in S: " << setprecision(15) << setw(25) << sumn_E << endl;
+	//cout << "lnZ   in S:        " << setprecision(15) << setw(25) << lnZ << endl;
 	return Beta*sumn_E + lnZ;
 }

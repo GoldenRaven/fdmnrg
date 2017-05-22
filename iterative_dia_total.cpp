@@ -57,10 +57,10 @@ void iterative_dia_total(void)
 
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
-	double pe_up[N_max+1];
-	double pe_down[N_max+1];
-	double ptn_up[N_max+1];
-	double ptn_down[N_max+1];
+	double * pe_up = new double [N_max+1];
+	double * pe_down = new double [N_max+1];
+	double * ptn_up = new double [N_max+1];
+	double * ptn_down = new double [N_max+1];
 	E_GS=new double [N_max];
 	genoutput();
 	ifstream fin_chain("chain_total.dat");
@@ -327,7 +327,7 @@ void iterative_dia_total(void)
 		delete [] temp5;
 		delete [] temp6;
 	}
-	ofstream f_E_GS("E_GS.dat");
+	ofstream f_E_GS("E_GS.dat",ios_base::out|ios_base::app);
 	for (int n=1;n<N_max;n++){
 		char str0[20],str1[15];
 		sprintf(str0,"%d",n);
