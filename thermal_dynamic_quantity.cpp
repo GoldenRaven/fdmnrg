@@ -24,9 +24,9 @@ void occu_imp(void)
 	for (int n=N_max-1;n<N_max;n++){
 		sum_up=0;
 		sum_down=0;
-		for (int l=num_kept;l<num_basis[n];l++){
-			sum_up=sum_up+exp_z[n][l-num_kept]*occu_imp_up_eigen[n][l][l];
-			sum_down=sum_down+exp_z[n][l-num_kept]*occu_imp_down_eigen[n][l][l];
+		for (int l=0;l<num_basis[n];l++){
+			sum_up=sum_up+exp_z[n][l]*occu_imp_up_eigen[n][l][l];
+			sum_down=sum_down+exp_z[n][l]*occu_imp_down_eigen[n][l][l];
 		}
 		sumn_up=sumn_up+pow(4,N_max-1-n)*sum_up;
 		sumn_down=sumn_down+pow(4,N_max-1-n)*sum_down;
