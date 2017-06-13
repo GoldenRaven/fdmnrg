@@ -35,3 +35,4 @@ bool Q;
 bool Q_Sz;
 bool N_up_N_down;
 bool occupation;
+bool dos;

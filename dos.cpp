@@ -149,8 +149,8 @@ void density_of_state(void)
 	cout << setw(20) << setprecision(15) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
 	cout << endl;
 	pf=P_K;
-	ifstream f_freqency("freqency");
 	if (smear) {
+		ifstream f_freqency("freqency");
 	    ofstream f_dos_smeared("freq_dos_smeared.dat");
 	    while (!f_freqency.eof()){//???????????
 		    f_freqency >> freqency;
@@ -178,10 +178,13 @@ void density_of_state(void)
 		    f_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
 		    f_dos_smeared << endl;
 		}
+		f_freqency.close();
+		f_dos_smeared.close();
 	}
 	if (unsmear){
 		bool smear_tmp=smear;
 		smear=false;
+		ifstream f_freqency("freqency");
 	    ofstream f_dos_unsmeared("freq_dos_unsmeared.dat");
 	    while (!f_freqency.eof()){//???????????
 		    f_freqency >> freqency;
@@ -210,6 +213,8 @@ void density_of_state(void)
 		}
 		smear=smear_tmp;
 		//exit(0);
+		f_freqency.close();
+		f_dos_unsmeared.close();
 	}
 	cout << "Time leaved:    ";date_time();cout << endl;
 }

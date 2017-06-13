@@ -2,23 +2,24 @@
 using namespace std;
 int main()
 {
-   	double U=0.5;// in unit of D
-	double Ed_up=-0.25;//in unite of D
-	double Ed_down=-0.25;//in unite of D
-	double temperature=1.0e-7;//k_B*T/D
-	double Lambda=1.8;
-	double alpha=0.588;
+   	double U;// in unit of D
+	double Ed_up;//in unite of D
+	double Ed_down;//in unite of D
+	double temperature;//k_B*T/D
+	double Lambda;
+	double alpha;
 	int dim_imp=4;
 	int dim_dot=4;
-	int num_kept=512;
+	int num_kept;
 	double Beta_bar=0.6;//unit same as Beta!
-	bool smear=false;
+	bool smear=true;
 	bool unsmear=true;
-	double omega0=temperature;
+	double omega0;
 	bool Q=false;
 	bool Q_Sz=false;
 	bool N_up_N_down=true;
-	bool occupation=true;
+	bool occupation;
+	bool dos;
 
 	ifstream f_U("U");
 	ifstream f_Ed_up("Ed_up");
@@ -28,14 +29,17 @@ int main()
 	ifstream f_num_kept("num_kept");
 	ifstream f_alpha("alpha");
 	ifstream f_occupation("occupation");
+	ifstream f_dos("dos");
 	f_U >> U;
 	f_Ed_up >> Ed_up;
 	f_Ed_down >> Ed_down;
 	f_temperature >> temperature;
+	f_temperature >> omega0;
 	f_Lambda >> Lambda;
 	f_alpha >> alpha;
 	f_num_kept >> num_kept;
 	f_occupation >> occupation;
+	f_dos >> dos;
 
 	ofstream f_input_total("input_total");
 	f_input_total << U           << endl;
@@ -55,6 +59,7 @@ int main()
 	f_input_total << Q_Sz        << endl;
 	f_input_total << N_up_N_down << endl;
 	f_input_total << occupation  << endl;
+	f_input_total << dos         << endl;
 
 	ofstream f_input_band("input_band");
 	f_input_band << temperature << endl;

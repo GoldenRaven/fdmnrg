@@ -4,7 +4,7 @@ name=fdmnrg.x
 #name=work_dir/fdmnrg.x 
 #objects=main.o setup.o genoutput.o iterative_dia.o dos.o date_time.o deallocate.o func_wn.o
 #objects=main.o setup.o genoutput.o iterative_dia.o dos2.o date_time.o deallocate.o func_wn.o
-objects=main.o setup.o genoutput.o iterative_dia_band.o iterative_dia_total.o dos3.o date_time.o deallocate.o func_wn.o thermal_dynamic_quantity.o
+objects=main.o setup.o genoutput.o iterative_dia_band.o iterative_dia_total.o dos.o date_time.o deallocate.o func_wn.o thermal_dynamic_quantity.o
 
 #CPPFLAGS=-O0 -g
 #CPPFLAGS=-O3
@@ -37,12 +37,6 @@ func_wn.o: func_wn.cpp setup.h struct.h
 
 dos.o: dos.cpp setup.h struct.h
 	$(cc)  $(CPPFLAGS) $(OPENMP_FLAGS) -c dos.cpp
-
-dos2.o: dos2.cpp setup.h struct.h
-	$(cc)  $(CPPFLAGS) $(OPENMP_FLAGS) -c dos2.cpp
-
-dos3.o: dos3.cpp setup.h struct.h
-	$(cc)  $(CPPFLAGS) $(OPENMP_FLAGS) -c dos3.cpp
 
 deallocate.o: deallocate.cpp setup.h struct.h
 	$(cc)  $(CPPFLAGS)  -c deallocate.cpp

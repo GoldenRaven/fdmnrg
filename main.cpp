@@ -37,7 +37,7 @@ int main()
 	//cout << "inner energy: " << setprecision(15) << setw(30) << temperature << setw(30) << E_total << "    " <<  setw(30) << E_band << "    " << setw(30) << E_total-E_band << endl;
 	cout << "entropy: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total << "    " <<  setw(30) << S_band << "    " << setw(30) << S_total-S_band << endl;
 	occu_imp();
-	//density_of_state();
+	if (dos) density_of_state();
 	//deallocate();
 	finish=clock();
 	std::cout << "CPU time used:    " << (double)(finish - start)/CLOCKS_PER_SEC << " seconds" << std::endl;

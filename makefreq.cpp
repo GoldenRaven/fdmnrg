@@ -10,7 +10,7 @@ int main(void)
 {
 	//uniform();
 	//userdefined2(1,300,0.92);
-	logarithm(-1,1,500,0.92);
+	logarithm(-1,1,560,0.92);
 	//userdefined1(-0.5*0.02,0.5*0.02,60,0.7);
 	//userdefined1(-1,-0.5,0.5,1,10,380,10,0.9);
 	return 0;

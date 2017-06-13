@@ -49,6 +49,7 @@ void iterative_dia_total(void)
 	f_input >> Q_Sz        ;
 	f_input >> N_up_N_down ;
 	f_input >> occupation  ;
+	f_input >> dos         ;
 
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max

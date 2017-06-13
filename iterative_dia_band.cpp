@@ -180,9 +180,6 @@ void iterative_dia_band(void)
 	eigen[0][2]=eig_temp2;//| 0      > = |3,0>
 	eigen[0][3]=eig_temp3;//| updown > = |4,0>
 	E_GS[0]=temp[3]/sqrt(Lambda);
-	for (int i=0;i<4;i++){
-		cout << eigen[0][i].eig_val*sqrt(Lambda) << endl;
-	}
 	//exit(0);
 	temp1=new double * [dim_dot];
 	temp2=new double * [dim_dot];
