@@ -20,6 +20,7 @@ int func_delta(int a, int b);
 
 void iterative_dia_total(void)
 {
+	int N_tmp;
 	int num_block;
 	int * num_basis_block;
 	BASIS ** block;
@@ -49,12 +50,12 @@ void iterative_dia_total(void)
 	f_input >> Q_Sz        ;
 	f_input >> N_up_N_down ;
 	f_input >> occupation  ;
-	f_input >> dos         ;
+	f_input >> N_tmp       ;
 
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
-	//N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
+	if (N_tmp!=0) N_max=N_tmp;
 
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
@@ -63,7 +64,6 @@ void iterative_dia_total(void)
 	double * ptn_up = new double [N_max+1];
 	double * ptn_down = new double [N_max+1];
 	E_GS=new double [N_max];
-	genoutput();
 	ifstream fin_chain("chain_total.dat");
 	cout << "chain parameter:" << endl;
 	cout << setw(13) << "  #site" << setw(29) << "   tn_up" << setw(29) << "  tn_down" << setw(29) << "    en_up" << setw(29) << "      en_down" << endl;
@@ -82,6 +82,7 @@ void iterative_dia_total(void)
 	cout << "iterative_dia_total(): " << endl;
 	num_basis=new int [N_max+1];
     num_eigen_kept=new int [N_max+1];
+	genoutput();
 	cout << "   " << " n  " << "  num_basis[n]  " << "  num_eigen_kept[n]  " << "  n0 " << endl;
 	for (int n=0;n<N_max+1;n++){
 		if (n<10){

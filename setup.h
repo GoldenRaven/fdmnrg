@@ -2,6 +2,7 @@
 #define SETUP_H_
 #include"struct.h"
 
+extern int job_id;
 extern int dim_imp;//=4;
 extern int dim_dot;//=4;
 extern int num_kept;//=16;
@@ -39,7 +40,6 @@ extern bool Q;
 extern bool Q_Sz;
 extern bool N_up_N_down;
 extern bool occupation;
-extern bool dos;
 
 extern EIGEN_STATE ** eigen;
 extern BASIS ** basis_ordered;

@@ -7,6 +7,7 @@ void date_time(void);
 void genoutput(void)
 {
 	cout << "  ##########################################################################################################################" << endl;
+	cout << "  " << " job_id      = " << left << setw(30) << job_id     << " :job_id, 1 for entroy, 2 for DOS"      << endl;
 	cout << "  " << " U           = " << left << setw(30) << U          << " :Cloumb U"                             << endl;
 	cout << "  " << " Ed_up       = " << left << setw(30) << Ed_up      << " :Level up"                             << endl;
 	cout << "  " << " Ed_down     = " << left << setw(30) << Ed_down    << " :Level down"                           << endl;
@@ -22,7 +23,6 @@ void genoutput(void)
 	cout << "  " << " smear       = " << left << setw(30) << smear      << " :smear or unsmear"                     << endl;
 	cout << "  " << " unsmear     = " << left << setw(30) << unsmear    << " :smear or unsmear"                     << endl;
 	cout << "  " << " occupation  = " << left << setw(30) << occupation << " :calulate impurity occupation or not"  << endl;
-	cout << "  " << " dos         = " << left << setw(30) << dos        << " :calulate density of states or not  "  << endl;
 	if (Q){
 		cout << "   Quantum number Charge(Q) is used in sorting." << endl;
 	}else if(Q_Sz){

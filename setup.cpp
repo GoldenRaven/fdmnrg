@@ -1,4 +1,5 @@
 #include"struct.h"
+int job_id;
 int dim_imp;
 int dim_dot;
 int num_kept;
@@ -35,4 +36,3 @@ bool Q;
 bool Q_Sz;
 bool N_up_N_down;
 bool occupation;
-bool dos;

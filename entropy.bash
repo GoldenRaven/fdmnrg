@@ -1,4 +1,4 @@
-cd /home/ligy/program/my-tool-box/sort/
+cd /home/ligy/my-tool-box/sort/
 make clean                             
 make                                   
 cd -                                   
@@ -8,10 +8,10 @@ do
 	echo $file
 	cd $file
 	pwd
-	cat `find .|grep out` |grep ent > ent
+	cat `find .|grep out` |grep ent |grep -vi job> ent
 	awk '{print $2,"      ",$5/0.69314718}' ent > s
-	wc -l s > raw_num
-	cp /home/ligy/program/my-tool-box/sort/sort.x .
+	cat s|wc -l > raw_num
+	cp /home/ligy/my-tool-box/sort/sort.x .
 	./sort.x
 	cp s $dir/s$file
 	cd $dir

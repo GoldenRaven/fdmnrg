@@ -22,6 +22,7 @@ int func_delta(int a, int b){
 
 void iterative_dia_band(void)
 {
+	int N_tmp;
 	int num_block;
 	int * num_basis_block;
 	BASIS ** block;
@@ -44,10 +45,12 @@ void iterative_dia_band(void)
 	f_input >> Q           ;
 	f_input >> Q_Sz        ;
 	f_input >> N_up_N_down ;
+	f_input >> N_tmp  ;
 
 	Beta=1.0/temperature;//1.0/(k_B*T/D)
 	N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max
 	N_max = N+15;//!!!!!!!!!!!!!!!!!!!!
+	if (N_tmp!=0) N_max=N_tmp;
 
     double coupling_imp_dot_up;
     double coupling_imp_dot_down;
