@@ -31,7 +31,7 @@ void occu_imp(void)
 	}
 	ofstream f_occu("occu.dat", ios_base::out | ios_base::app);
 	//up_occupation    down_occupation    up_occupation+down_occupation
-	f_occu << scientific << setprecision(15) << setw(25) << sumn_up << setw(25) << sumn_down << setw(25) << sumn_up+sumn_down << endl;
+	f_occu << scientific << setprecision(15) << setw(25) << temperature << setw(25) << sumn_up << setw(25) << sumn_down << setw(25) << sumn_up+sumn_down << endl;
 	cout << "  occupation_up:   " << scientific << setprecision(15) << setw(25) << sumn_up << endl;
 	cout << "  occupation_down: " << scientific << setprecision(15) << setw(25) << sumn_down << endl;
 	cout << "  occupation     : " << scientific << setprecision(15) << setw(25) << sumn_up+sumn_down << endl;
