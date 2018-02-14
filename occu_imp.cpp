@@ -35,6 +35,6 @@ void occu_imp(void)
     cout << "  occupation_up:   " << scientific << setprecision(15) << setw(25) << sumn_up << endl;
     cout << "  occupation_down: " << scientific << setprecision(15) << setw(25) << sumn_down << endl;
     cout << "  occupation     : " << scientific << setprecision(15) << setw(25) << sumn_up+sumn_down << endl;
-    cout << "Time leaved:    ";date_time();cout << endl;
+    cout << "  Time leaved:    ";date_time();cout << endl;
     f_occu.close();
 }
