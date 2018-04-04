@@ -8,7 +8,6 @@
 #include"setup.h"
 using namespace std;
 double Pi=3.141592653589793238;
-double *** rho_red_temp;
 double (*pf)(double,double);
 double P_K(double,double);
 double **** eigen_sigma;
@@ -17,19 +16,19 @@ double **** rho_red;
 void density_of_state(void)
 {
     cout << "density_of_state: "; date_time();cout << endl;
+    void   rho_red_operator(void);
     double dos1_up(double);
     double dos1_down(double);
     double dos2_up(double);
     double dos2_down(double);
     double dos3_up(double);
     double dos3_down(double);
-    void   rho_red_operator(int);
     double P_LG(double,double);
     double P_G(double,double);
     double P_lorentz(double,double);
     double P_sum_rule(double,double);
     eigen_sigma=new double *** [N_max+2];
-    for (int n=0;n<1;n++){//eigen_sigma[0][sigma][k][j] shouldn't be used!
+    for (int n=0;n<n0;n++){// n < n0 shouldn't be used!
         eigen_sigma[n]=new double ** [1];
         for (int sigma=0;sigma<1;sigma++){
             eigen_sigma[n][sigma]=new double * [1];
@@ -41,7 +40,7 @@ void density_of_state(void)
             }
         }
     }
-    for (int n=1;n<N_max+2;n++){
+    for (int n=n0;n<N_max+2;n++){
         eigen_sigma[n]=new double ** [dim_dot];
         for (int sigma=0;sigma<dim_dot;sigma++){
             eigen_sigma[n][sigma]=new double * [num_eigen_kept[n-1]];
@@ -72,29 +71,7 @@ void density_of_state(void)
         delete [] eigen[n];
     }
     delete [] eigen;
-    rho_red      = new double **  [N_max+1];//reduced density matrix.
-    rho_red_temp = new double *** [N_max+1];//summing term in each rho_red.
-    for (int n=0;n<N_max+1;n++){
-        rho_red[n]=new double * [num_kept];
-        for (int i=0;i<num_kept;i++){
-            rho_red[n][i]=new double [num_kept];
-            for (int j=0;j<num_kept;j++){
-                rho_red[n][i][j]=0;
-            }
-        }
-    }
-    for (int n=0;n<n0;n++){//n < n0 not used!
-        rho_red_temp[n] = new double ** [1];
-        for(int n2=0;n2<1;n2++){
-            rho_red_temp[n][n2] = new double * [1];
-            for (int i=0;i<1;i++){
-                rho_red_temp[n][n2][i] = new double [1];
-            }
-        }
-    }
-    for (int n1=N_max;n1>=n0;n1--){
-        rho_red_operator(n1);
-    }
+    rho_red_operator();
     for (int n=0;n<n0;n++){
         for(int n2=0;n2<1;n2++){
             for (int i=0;i<1;i++){
@@ -216,25 +193,129 @@ void density_of_state(void)
     cout << "Time leaved:    ";date_time();cout << endl;
 }
 
-void rho_red_operator(int n1)
+void rho_red_operator(void)
 {
-    rho_red_temp[n1] = new double ** [N_max+1-n1];
-    for (int n2=0;n2<N_max+1-n1;n2++){
-        rho_red_temp[n1][n2] = new double * [num_kept];
-        for (int i=0;i<num_kept;i++){
-            rho_red_temp[n1][n2][i] = new double [num_kept];
-            for (int j=0;j<num_kept;j++){
-                rho_red_temp[n1][n2][i][j] = 0;
+    double *** rho_red_temp;
+    rho_red      = new double **  [N_max+1];//reduced density matrix.
+    rho_red_temp = new double *** [N_max+1];//summing term in each rho_red.
+    for (int n=0;n<n0;n++){//n < n0 not used!
+        rho_red[n]=new double * [1];
+        rho_red_temp[n] = new double ** [1];
+        for (int i=0;i<1;i++){
+            rho_red[n][i]=new double [1];
+            rho_red_temp[n][i] = new double * [1];
+            for (int j=0;j<1;j++){
+                rho_red[n][i][j]=0;
+                rho_red_temp[n][i][j] = new double [1];
             }
         }
     }
-    double * matrix_U=new double [num_basis[n]*num_basis[n]];
+    for (int n=n0;n<N_max+1;n++){// n0 <= n1 <= N-1, N is the last point added. N = N_max+1.
+        rho_red[n]=new double * [num_kept];
+        for (int i=0;i<num_kept;i++){
+            rho_red[n][i]=new double [num_kept];
+            for (int j=0;j<num_kept;j++){
+                rho_red[n][i][j]=0;
+            }
+        }
+    }
+    for (int n1=N_max;n1>=n0;n1--){// n0 <= n1 <= N-1, N is the last point added. N = N_max+1.
+        rho_red_temp[n1] = new double ** [N_max+1-n1];
+        for (int n2=0;n2<N_max+1-n1;n2++){//rho_red[n1][n2]^{KK}
+            rho_red_temp[n1][n2] = new double * [num_kept];
+            for (int i=0;i<num_kept;i++){
+                rho_red_temp[n1][n2][i] = new double [num_kept];
+                for (int j=0;j<num_kept;j++){
+                    rho_red_temp[n1][n2][i][j] = 0;
+                }
+            }
+            if (n2 == 0){
+                if (n1 == N_max){
+                    double * matrix_A=new double * [num_eigen_kept[n1]*num_basis[n1+1]];// A^{KD} for n1+1 = N.
+                    double * matrix_AZ=new double * [num_eigen_kept[n1]*num_basis[n1+1]];// A^{KD}*exp_Z for n1+1 = N.
+                    for (int sigma=0;sigma<dim_dot;sigma++){
+                        {int k=0;
+                            for (int j=0;j<num_basis[n1+1];j++){//all states discarded. colume-wise.
+                                for (int i=0;i<num_eigen_kept[n1];i++){//initialization of A_{KD}^{N}.
+                                    matrix_A[k]=eigen[n1+1][j].eigen_vect[basis_kj[n1+1][i][sigma].sort];
+                                    matrix_AZ[k]=eigen[n1+1][j].eigen_vect[basis_kj[n1+1][i][sigma].sort]*exp_z[n1+1][];
+                                    k++;
+                                }
+                            }
+                        }
+
+
+
+
+                    }
+
+                }else{
+                    double ** matrix_U=new double * [num_eigen_kept[n1]];// A^{KD} for n1+1 < N.
+                    for (int i=0;i<num_eigen_kept[n1];i++){
+                        double matrix_U[i]=new double [num_basis[n1+1]-num_eigen_kept[n1+1]];
+                    }
+                    for (int sigma=0;sigma<dim_dot;sigma++){
+                        for (int i=0;i<num_eigen_kept[n1];i++){//initialization of A_{KD}^{N}.
+                            for (int j=0;j<num_basis[n1+1]-num_eigen_kept[n1+1];j++){//all states discarded.
+                                matrix_U[i][j]=eigen[n1+1][j].eigen_vect[basis_kj[n1+1][i][sigma].sort];
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+                for (int sigma=0;sigma<dim_dot;sigma++){
+                    for (int i=0;i<num_eigen_kept[n1-1];i++){
+                        for (int j=0;j<num_basis[n]-num_eigen_kept[n1-1];j++){
+                            matrix_U[i][j]=eigen[n][j].eigen_vect[basis_kj[n][k][sigma].sort];
+                        }
+                    }
+                }
+            }else{
+                double ** matrix_U=new double * [num_eigen_kept[n1-1]];// A^{KK} for n2 > 0.
+                for (int i=0;i<num_eigen_kept[n1-1];i++){
+                    double matrix_U[i]=new double [num_eigen_kept[n1-1]];
+                }
+            }
+        }
+    }
+    double * matrix_U=new double [num_kept[n1+1]*(num_kept[n1+1])];
     double * matrix_c=new double [num_basis[n]*num_basis[n]];
     double * matrix_cc=new double [num_basis[n]*num_basis[n]];
     double * matrix_ccc=new double [num_basis[n]*num_basis[n]];
-
     for (int n2=0;n2<N_max+1-n1;n2++){
         if (n2 == 0){
+            for (int sigma=0;sigma<dim_dot;sigma++){
+                {int k=0;//colume-wise
+                    for (int i=0;i<num_basis[n];i++){
+                        for (int j=0;j<num_basis[n];j++){
+                            matrix_U[k]=eigen[n][i].eigen_vect[j];
+                            k++;
+                        }
+                    }}
+                {int k=0;
+                    for (int i=0;i<num_basis[n];i++){
+                        for (int j=0;j<num_basis[n];j++){
+                            matrix_c[k]=occu_imp_up_basis[n][j][i];
+                            k++;
+                        }
+                    }}
+                cblas_dgemm(CblasColMajor,CblasTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_U,num_basis[n],matrix_c,num_basis[n],0,matrix_cc,num_basis[n]);
+                cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n],num_basis[n],num_basis[n],1,matrix_cc,num_basis[n],matrix_U,num_basis[n],0,matrix_ccc,num_basis[n]);
+                for (int i=0;i<num_basis[n];i++){
+                    for (int j=0;j<num_basis[n];j++){
+                        occu_imp_up_eigen[n][j][i]=matrix_ccc[num_basis[n]*i+j];
+                    }
+                }
+
+            }
+        }else{
             for (int sigma=0;sigma<dim_dot;sigma++){
                 {int k=0;//colume-wise
                     for (int i=0;i<num_basis[n];i++){
@@ -263,283 +344,283 @@ void rho_red_operator(int n1)
     }
 }
 
-double dos1_up(double freqency)
-{
-    double sum=0;
-    for (int n=n0;n<N_max+1;n++){
-        double sum_n=0;
+    double dos1_up(double freqency)
+    {
+        double sum=0;
+        for (int n=n0;n<N_max+1;n++){
+            double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
-        for (int i=num_kept;i<num_basis[n];i++){
-            for (int j=num_kept;j<num_basis[n];j++){
-                double omegan=0;
-                omegan=pow(Lambda,-1.0*(eigen[n][0].n-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
-                sum_n=sum_n+c_up_eigen[n][i][j]*c_up_eigen[n][i][j]*(exp_z[n][i-num_kept]+exp_z[n][j-num_kept])*(*pf)(freqency,-1.0*omegan);
-            }
-        }
-        sum=sum+pow(4,eigen[N_max+1][0].n-eigen[n][0].n)*sum_n;
-    }
-    for (int n=N_max+1;n<N_max+2;n++){
-        double sum_n=0;
-#pragma omp parallel for reduction(+:sum_n)
-        for (int i=0;i<num_basis[n];i++){
-            for (int j=0;j<num_basis[n];j++){
-                double omegan=0;
-                omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
-                sum_n=sum_n+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*(exp_z[n][i]+exp_z[n][j])*(*pf)(freqency,-1.0*omegan);
-                //sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
-            }
-        }
-        sum=sum+pow(4,N_max-1-n)*sum_n;
-    }
-    return sum;
-}
-double dos1_down(double freqency)
-{
-    double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
-    for (int n=n0;n<N_max-1;n++){
-        double sum_n=0;
-#pragma omp parallel for reduction(+:sum_n)
-        for (int i=num_kept;i<num_basis[n];i++){
-            for (int j=num_kept;j<num_basis[n];j++){
-                double omegan=0;
-                omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
-                sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*(exp_z[n][i-num_kept]+exp_z[n][j-num_kept])*(*pf)(freqency,-1.0*omegan);
-                //sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
-            }
-        }
-        sum=sum+pow(4,N_max-1-n)*sum_n;
-    }
-    for (int n=N_max-1;n<N_max;n++){
-        double sum_n=0;
-#pragma omp parallel for reduction(+:sum_n)
-        for (int i=0;i<num_basis[n];i++){
-            for (int j=0;j<num_basis[n];j++){
-                double omegan=0;
-                omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
-                sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*(exp_z[n][i]+exp_z[n][j])*(*pf)(freqency,-1.0*omegan);
-            }
-        }
-        sum=sum+pow(4,N_max-1-n)*sum_n;
-    }
-    return sum;
-}
-double dos2_up(double freqency)
-{
-    double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
-    for (int n=n0;n<N_max-1;n++){
-        double sum_n=0;
-#pragma omp parallel for reduction(+:sum_n)
-        for (int i=num_kept;i<num_basis[n];i++){
-            for (int j=0;j<num_kept;j++){
-                double omegan=0;
-                omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
-                sum_n=sum_n+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,-1.0*omegan)+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,omegan);
-                //sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
-            }
-        }
-        sum=sum+sum_n*pow(4,N_max-1-n);
-    }
-    return sum;
-}
-double dos2_down(double freqency)
-{
-    double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
-    for (int n=n0;n<N_max-1;n++){
-        double sum_n=0;
-#pragma omp parallel for reduction(+:sum_n)
-        for (int i=num_kept;i<num_basis[n];i++){
-            for (int j=0;j<num_kept;j++){
-                double omegan=0;
-                omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
-                sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,-1.0*omegan)+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,omegan);
-                //sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
-            }
-        }
-        sum=sum+sum_n*pow(4,N_max-1-n);
-    }
-    return sum;
-}
-double dos3_up(double freqency)
-{
-    double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
-    //ofstream f_up("up.dat");
-    for (int n=n0;n<N_max-1;n++){
-        double sum_n=0;
-        double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
-        double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod1_DK=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod2_KD=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
-        {int k=0;
-            for (int i=0;i<num_eigen_kept[n];i++){
-                for (int j=0;j<num_eigen_kept[n];j++){
-                    matrix_rho_KK[k]=rho_red_temp[n][j][i];
-                    k++;
+            for (int i=num_kept;i<num_basis[n];i++){
+                for (int j=num_kept;j<num_basis[n];j++){
+                    double omegan=0;
+                    omegan=pow(Lambda,-1.0*(eigen[n][0].n-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
+                    sum_n=sum_n+c_up_eigen[n][i][j]*c_up_eigen[n][i][j]*(exp_z[n][i-num_kept]+exp_z[n][j-num_kept])*(*pf)(freqency,-1.0*omegan);
                 }
-            }}
-        {int k=0;
-            for (int i=0;i<num_eigen_kept[n];i++){
-                for (int j=num_eigen_kept[n];j<num_basis[n];j++){
-                    matrix_B[k]=c_dag_up_eigen[n][j][i];
-                    k++;
+            }
+            sum=sum+pow(4,eigen[N_max+1][0].n-eigen[n][0].n)*sum_n;
+        }
+        for (int n=N_max+1;n<N_max+2;n++){
+            double sum_n=0;
+#pragma omp parallel for reduction(+:sum_n)
+            for (int i=0;i<num_basis[n];i++){
+                for (int j=0;j<num_basis[n];j++){
+                    double omegan=0;
+                    omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
+                    sum_n=sum_n+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*(exp_z[n][i]+exp_z[n][j])*(*pf)(freqency,-1.0*omegan);
+                    //sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
                 }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK,num_basis[n]-num_eigen_kept[n]);
-        {int k=0;
+            }
+            sum=sum+pow(4,N_max-1-n)*sum_n;
+        }
+        return sum;
+    }
+    double dos1_down(double freqency)
+    {
+        double sum=0;
+        double P_h_unsmeared(double freqency);
+        double P_h_smeared(double freqency);
+        for (int n=n0;n<N_max-1;n++){
+            double sum_n=0;
+#pragma omp parallel for reduction(+:sum_n)
+            for (int i=num_kept;i<num_basis[n];i++){
+                for (int j=num_kept;j<num_basis[n];j++){
+                    double omegan=0;
+                    omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
+                    sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*(exp_z[n][i-num_kept]+exp_z[n][j-num_kept])*(*pf)(freqency,-1.0*omegan);
+                    //sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val))*P_K(freqency,-1.0*omegan);
+                }
+            }
+            sum=sum+pow(4,N_max-1-n)*sum_n;
+        }
+        for (int n=N_max-1;n<N_max;n++){
+            double sum_n=0;
+#pragma omp parallel for reduction(+:sum_n)
+            for (int i=0;i<num_basis[n];i++){
+                for (int j=0;j<num_basis[n];j++){
+                    double omegan=0;
+                    omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen_value[n][i]-eigen_value[n][j]);
+                    sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*(exp_z[n][i]+exp_z[n][j])*(*pf)(freqency,-1.0*omegan);
+                }
+            }
+            sum=sum+pow(4,N_max-1-n)*sum_n;
+        }
+        return sum;
+    }
+    double dos2_up(double freqency)
+    {
+        double sum=0;
+        double P_h_unsmeared(double freqency);
+        double P_h_smeared(double freqency);
+        for (int n=n0;n<N_max-1;n++){
+            double sum_n=0;
+#pragma omp parallel for reduction(+:sum_n)
             for (int i=num_kept;i<num_basis[n];i++){
                 for (int j=0;j<num_kept;j++){
-                    matrix_B[k]=c_dag_up_eigen[n][j][i];
-                    k++;
+                    double omegan=0;
+                    omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
+                    sum_n=sum_n+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,-1.0*omegan)+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,omegan);
+                    //sum_n=sum_n+c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
                 }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B,num_kept,0,matrix_prod2_KD,num_kept);
-#pragma omp parallel for reduction(+:sum_n)
-        for (int i=0;i<num_kept;i++){
-            for (int j=num_kept;j<num_basis[n];j++){
-                double omegan=0;
-                omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
-                //omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen[n][i].eig_val-eigen[n][j].eig_val);
-                //if (n < 6 ){
-                ////cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << " A_nij=  " << c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat)) <<  "  P= " << P_lorentz(freqency,-1.0*omegan) << endl;
-                //cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << "  f=  " << freqency << "  P= " << (*pf)(freqency,-1.0*omegan) << endl;
-                //}
-                //sum_n=sum_n+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,-1.0*omegan)+rho_red_temp[n][i][k]*c_dag_up_eigen[n][k][j]*c_up_eigen[n][j][i]*(*pf)(freqency,omegan);
-                //cout << "n= "  << n << "  i= " << i << "  j= " << j << "  " << (j-num_kept)+(dim_dot-1)*num_kept*i << "   " << matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i] << "    " << i+num_kept*(j-num_kept) << "   " << matrix_prod2_KD[i+num_kept*(j-num_kept)] << endl;
-                sum_n=sum_n+c_up_eigen[n][i][j]*matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i]*(*pf)(freqency,-1.0*omegan)+matrix_prod2_KD[i+num_kept*(j-num_kept)]*c_up_eigen[n][j][i]*(*pf)(freqency,omegan);
-                //cout << "x" << endl;
-                //f_up << freqency << "  " << omegan << "  " << (*pf)(freqency,-1.0*omegan) << endl;
             }
+            sum=sum+sum_n*pow(4,N_max-1-n);
         }
-        sum=sum+sum_n;
-        delete [] matrix_rho_KK;
-        delete [] matrix_B;
-        delete [] matrix_prod1_DK;
-        delete [] matrix_prod2_KD;
+        return sum;
     }
-    return sum;
-}
-double dos3_down(double freqency)
-{
-    double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
-    //ofstream f_down("down.dat");
-    for (int n=n0;n<N_max-1;n++){
-        double sum_n=0;
-        double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
-        double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod1_DK=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod2_KD=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
-        {int k=0;
-            for (int i=0;i<num_eigen_kept[n];i++){
-                for (int j=0;j<num_eigen_kept[n];j++){
-                    matrix_rho_KK[k]=rho_red_temp[n][j][i];
-                    k++;
-                }
-            }}
-        {int k=0;
-            for (int i=0;i<num_eigen_kept[n];i++){
-                for (int j=num_eigen_kept[n];j<num_basis[n];j++){
-                    matrix_B[k]=c_dag_down_eigen[n][j][i];
-                    k++;
-                }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK,num_basis[n]-num_eigen_kept[n]);
-        {int k=0;
-            for (int i=num_eigen_kept[n];i<num_basis[n];i++){
-                for (int j=0;j<num_eigen_kept[n];j++){
-                    matrix_B[k]=c_dag_down_eigen[n][j][i];
-                    k++;
-                }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n],num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],1,matrix_rho_KK,num_eigen_kept[n],matrix_B,num_eigen_kept[n],0,matrix_prod2_KD,num_eigen_kept[n]);
+    double dos2_down(double freqency)
+    {
+        double sum=0;
+        double P_h_unsmeared(double freqency);
+        double P_h_smeared(double freqency);
+        for (int n=n0;n<N_max-1;n++){
+            double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
-        for (int i=0;i<num_kept;i++){
-            for (int j=num_kept;j<num_basis[n];j++){
-                double omegan=0;
-                omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
-                sum_n=sum_n+c_down_eigen[n][i][j]*matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i]*(*pf)(freqency,-1.0*omegan)+matrix_prod2_KD[i+num_kept*(j-num_kept)]*c_down_eigen[n][j][i]*(*pf)(freqency,omegan);
-                /*
-                 *for (int k=0;k<num_kept;k++){
-                 *    sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,-1.0*omegan)+  rho_red_temp[n][i][k]*c_dag_down_eigen[n][k][j]*c_down_eigen[n][j][i]*(*pf)(freqency,omegan);
-                 *}
-                 */
-                //f_down << freqency << "  " << omegan << "  " << (*pf)(freqency,-1.0*omegan) << endl;
+            for (int i=num_kept;i<num_basis[n];i++){
+                for (int j=0;j<num_kept;j++){
+                    double omegan=0;
+                    omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
+                    sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,-1.0*omegan)+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp_z[n][i-num_kept]*(*pf)(freqency,omegan);
+                    //sum_n=sum_n+c_dag_down_eigen[n][i][j]*c_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,-1.0*omegan)+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][i]*exp(-1.0*Beta*eigen[n][i].eig_val*pow(Lambda,-1.0*(n-1-1)/2.0))*P_K(freqency,omegan);
+                }
             }
+            sum=sum+sum_n*pow(4,N_max-1-n);
         }
-        sum=sum+sum_n;
-        delete [] matrix_rho_KK;
-        delete [] matrix_B;
-        delete [] matrix_prod1_DK;
-        delete [] matrix_prod2_KD;
+        return sum;
     }
-    return sum;
-}
+    double dos3_up(double freqency)
+    {
+        double sum=0;
+        double P_h_unsmeared(double freqency);
+        double P_h_smeared(double freqency);
+        //ofstream f_up("up.dat");
+        for (int n=n0;n<N_max-1;n++){
+            double sum_n=0;
+            double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
+            double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+            double * matrix_prod1_DK=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+            double * matrix_prod2_KD=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
+            {int k=0;
+                for (int i=0;i<num_eigen_kept[n];i++){
+                    for (int j=0;j<num_eigen_kept[n];j++){
+                        matrix_rho_KK[k]=rho_red_temp[n][j][i];
+                        k++;
+                    }
+                }}
+            {int k=0;
+                for (int i=0;i<num_eigen_kept[n];i++){
+                    for (int j=num_eigen_kept[n];j<num_basis[n];j++){
+                        matrix_B[k]=c_dag_up_eigen[n][j][i];
+                        k++;
+                    }
+                }}
+            cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK,num_basis[n]-num_eigen_kept[n]);
+            {int k=0;
+                for (int i=num_kept;i<num_basis[n];i++){
+                    for (int j=0;j<num_kept;j++){
+                        matrix_B[k]=c_dag_up_eigen[n][j][i];
+                        k++;
+                    }
+                }}
+            cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B,num_kept,0,matrix_prod2_KD,num_kept);
+#pragma omp parallel for reduction(+:sum_n)
+            for (int i=0;i<num_kept;i++){
+                for (int j=num_kept;j<num_basis[n];j++){
+                    double omegan=0;
+                    omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
+                    //omegan=pow(Lambda,-1.0*(n-1-1)/2.0)*(eigen[n][i].eig_val-eigen[n][j].eig_val);
+                    //if (n < 6 ){
+                    ////cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << " A_nij=  " << c_dag_up_eigen[n][i][j]*c_up_eigen[n][j][i]*(exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][i].eig_val_relat)+exp(-1.0*Beta*pow(Lambda,-1.0*(n-1-1)/2.0)*eigen[n][j].eig_val_relat)) <<  "  P= " << P_lorentz(freqency,-1.0*omegan) << endl;
+                    //cout << n << "  " << i << "  " << j <<  "  wn=  " << omegan << "  f=  " << freqency << "  P= " << (*pf)(freqency,-1.0*omegan) << endl;
+                    //}
+                    //sum_n=sum_n+c_up_eigen[n][i][j]*c_dag_up_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,-1.0*omegan)+rho_red_temp[n][i][k]*c_dag_up_eigen[n][k][j]*c_up_eigen[n][j][i]*(*pf)(freqency,omegan);
+                    //cout << "n= "  << n << "  i= " << i << "  j= " << j << "  " << (j-num_kept)+(dim_dot-1)*num_kept*i << "   " << matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i] << "    " << i+num_kept*(j-num_kept) << "   " << matrix_prod2_KD[i+num_kept*(j-num_kept)] << endl;
+                    sum_n=sum_n+c_up_eigen[n][i][j]*matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i]*(*pf)(freqency,-1.0*omegan)+matrix_prod2_KD[i+num_kept*(j-num_kept)]*c_up_eigen[n][j][i]*(*pf)(freqency,omegan);
+                    //cout << "x" << endl;
+                    //f_up << freqency << "  " << omegan << "  " << (*pf)(freqency,-1.0*omegan) << endl;
+                }
+            }
+            sum=sum+sum_n;
+            delete [] matrix_rho_KK;
+            delete [] matrix_B;
+            delete [] matrix_prod1_DK;
+            delete [] matrix_prod2_KD;
+        }
+        return sum;
+    }
+    double dos3_down(double freqency)
+    {
+        double sum=0;
+        double P_h_unsmeared(double freqency);
+        double P_h_smeared(double freqency);
+        //ofstream f_down("down.dat");
+        for (int n=n0;n<N_max-1;n++){
+            double sum_n=0;
+            double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
+            double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+            double * matrix_prod1_DK=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+            double * matrix_prod2_KD=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
+            {int k=0;
+                for (int i=0;i<num_eigen_kept[n];i++){
+                    for (int j=0;j<num_eigen_kept[n];j++){
+                        matrix_rho_KK[k]=rho_red_temp[n][j][i];
+                        k++;
+                    }
+                }}
+            {int k=0;
+                for (int i=0;i<num_eigen_kept[n];i++){
+                    for (int j=num_eigen_kept[n];j<num_basis[n];j++){
+                        matrix_B[k]=c_dag_down_eigen[n][j][i];
+                        k++;
+                    }
+                }}
+            cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK,num_basis[n]-num_eigen_kept[n]);
+            {int k=0;
+                for (int i=num_eigen_kept[n];i<num_basis[n];i++){
+                    for (int j=0;j<num_eigen_kept[n];j++){
+                        matrix_B[k]=c_dag_down_eigen[n][j][i];
+                        k++;
+                    }
+                }}
+            cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_eigen_kept[n],num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],1,matrix_rho_KK,num_eigen_kept[n],matrix_B,num_eigen_kept[n],0,matrix_prod2_KD,num_eigen_kept[n]);
+#pragma omp parallel for reduction(+:sum_n)
+            for (int i=0;i<num_kept;i++){
+                for (int j=num_kept;j<num_basis[n];j++){
+                    double omegan=0;
+                    omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
+                    sum_n=sum_n+c_down_eigen[n][i][j]*matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i]*(*pf)(freqency,-1.0*omegan)+matrix_prod2_KD[i+num_kept*(j-num_kept)]*c_down_eigen[n][j][i]*(*pf)(freqency,omegan);
+                    /*
+                     *for (int k=0;k<num_kept;k++){
+                     *    sum_n=sum_n+c_down_eigen[n][i][j]*c_dag_down_eigen[n][j][k]*rho_red_temp[n][k][i]*(*pf)(freqency,-1.0*omegan)+  rho_red_temp[n][i][k]*c_dag_down_eigen[n][k][j]*c_down_eigen[n][j][i]*(*pf)(freqency,omegan);
+                     *}
+                     */
+                    //f_down << freqency << "  " << omegan << "  " << (*pf)(freqency,-1.0*omegan) << endl;
+                }
+            }
+            sum=sum+sum_n;
+            delete [] matrix_rho_KK;
+            delete [] matrix_B;
+            delete [] matrix_prod1_DK;
+            delete [] matrix_prod2_KD;
+        }
+        return sum;
+    }
 
-double P_K(double freqency, double omegan)//centered at omegan! not -1.0*omegan.
-{
-    double P_L(double,double);
-    double P_G(double,double);
-    double P_h(double);
-    double ans;
-    ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));// P_h(omegan)
-    //ans=P_L(freqency,omegan)*P_h(freqency)+P_G(freqency,omegan)*(1-P_h(freqency));// P_h(freqency)
-    return ans;
-}
-double P_L(double freqency,double omegan)
-{
-    double theta(double);
-    double gamma=alpha/4.0;
-    double ans;
-    //ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));//Log-Gaussian
-    if (fabs(omegan)<=1e-13 || fabs(freqency)<=1e-13){
-        ans=0;
-    }else{
-        ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));//eq. 1b final
-        //ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(freqency))*exp(-1.0*pow(log10(fabs(freqency/omegan))/alpha-gamma,2.0));//eq. 1b middle
+    double P_K(double freqency, double omegan)//centered at omegan! not -1.0*omegan.
+    {
+        double P_L(double,double);
+        double P_G(double,double);
+        double P_h(double);
+        double ans;
+        ans=P_L(freqency,omegan)*P_h(omegan)+P_G(freqency,omegan)*(1-P_h(omegan));// P_h(omegan)
+        //ans=P_L(freqency,omegan)*P_h(freqency)+P_G(freqency,omegan)*(1-P_h(freqency));// P_h(freqency)
+        return ans;
     }
-    return ans;
-}
-double P_G(double freqency,double omegan)
-{
-    double ans;
-    ans=1.0/(omega0*sqrt(Pi))*exp(-1.0*pow((freqency-omegan)/omega0,2.0));
-    return ans;
-}
-double theta(double freqency)
-{
-    double ans;
-    if (freqency > 1e-13 ){
+    double P_L(double freqency,double omegan)
+    {
+        double theta(double);
+        double gamma=alpha/4.0;
+        double ans;
+        //ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));//Log-Gaussian
+        if (fabs(omegan)<=1e-13 || fabs(freqency)<=1e-13){
+            ans=0;
+        }else{
+            ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));//eq. 1b final
+            //ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(freqency))*exp(-1.0*pow(log10(fabs(freqency/omegan))/alpha-gamma,2.0));//eq. 1b middle
+        }
+        return ans;
+    }
+    double P_G(double freqency,double omegan)
+    {
+        double ans;
+        ans=1.0/(omega0*sqrt(Pi))*exp(-1.0*pow((freqency-omegan)/omega0,2.0));
+        return ans;
+    }
+    double theta(double freqency)
+    {
+        double ans;
+        if (freqency > 1e-13 ){
+            ans=1.0;
+        }else if (fabs(freqency)<=1e-13){
+            ans=1.0/2.0;
+            //}else if (freqency > 0 && freqency < 1e-20){
+            //ans=1.0/2.0;
+        }else {
+            ans=0.0;
+        }
+        return ans;
+    }
+    double P_h(double omegan)
+    {
+        double ans;
+        if (smear && (fabs(omegan) < omega0)){
+            ans=exp(-1.0*pow(log(fabs(omegan/omega0))/alpha,2.0));
+        }else{
+            ans=1.0;
+        }
+        return ans;
+    }
+    double P_sum_rule(double freqency, double omegan)
+    {
+        double ans;
         ans=1.0;
-    }else if (fabs(freqency)<=1e-13){
-        ans=1.0/2.0;
-        //}else if (freqency > 0 && freqency < 1e-20){
-        //ans=1.0/2.0;
-    }else {
-        ans=0.0;
+        return ans;
     }
-    return ans;
-}
-double P_h(double omegan)
-{
-    double ans;
-    if (smear && (fabs(omegan) < omega0)){
-        ans=exp(-1.0*pow(log(fabs(omegan/omega0))/alpha,2.0));
-    }else{
-        ans=1.0;
-    }
-    return ans;
-}
-double P_sum_rule(double freqency, double omegan)
-{
-    double ans;
-    ans=1.0;
-    return ans;
-}
