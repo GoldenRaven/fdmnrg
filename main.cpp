@@ -1,4 +1,4 @@
-//2016/02/27
+//2016/02/27
 //2016/03/03只剩对角化与文件读入tn与en.
 //2016/03/09完成对角化.
 #include<iostream>
@@ -21,7 +21,7 @@ int main()
 {
     using namespace std;
     cout << "Job started on: "; date_time();
-    double S_band,S_total,E_band=0,E_total=0;
+    double S_band,S_total;
     clock_t start,finish;
     start=clock();
     ifstream f_id("job_id");
