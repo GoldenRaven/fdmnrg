@@ -42,8 +42,6 @@ int main()
         cout << "chain of band: " << endl;
         iterative_dia_total();
         func_wn(1);
-        S_total=entropy_kB(1);
-        cout << "entropy: " << setprecision(15) << setw(30) << temperature << setw(30) << S_total << "    " <<  setw(30) << S_band << "    " << setw(30) << S_total-S_band << endl;
         occu_imp();
         density_of_state();
     }
