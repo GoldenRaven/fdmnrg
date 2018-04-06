@@ -16,6 +16,9 @@ Q=0
 Q_Sz=0
 N_up_N_down=1
 occupation=1
+stm_dos=1
+tc=0.5
+td=0.5
 N_max=0
 
 Gamma0=0.01
@@ -69,6 +72,9 @@ do
                 echo $Q_Sz        >> input_total
                 echo $N_up_N_down >> input_total
                 echo $occupation  >> input_total
+                echo $stm_dos     >> input_total
+                echo $tc          >> input_total
+                echo $td          >> input_total
                 echo $N_max       >> input_total
 
                 echo $temperature >> input_band
