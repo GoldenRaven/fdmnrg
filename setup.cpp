@@ -16,14 +16,16 @@ double alpha;
 double temperature;//k_B*T/D
 double Beta;
 double omega0=temperature;
-double *** c_dag_up_basis;
-double *** c_dag_down_basis;
-double *** c_up_basis;
-double *** c_down_basis;
+double tc;
+double td;
 double *** c_dag_up_eigen;
 double *** c_dag_down_eigen;
 double *** c_up_eigen;
 double *** c_down_eigen;
+double *** occu_imp_up_eigen;
+double *** occu_imp_down_eigen;
+double *** stm_f_up_eigen;
+double *** stm_f_down_eigen;
 double * E_GS;
 int * num_basis;
 int * num_eigen_kept;//[N_max+2]
@@ -36,3 +38,4 @@ bool Q;
 bool Q_Sz;
 bool N_up_N_down;
 bool occupation;
+bool stm_dos;

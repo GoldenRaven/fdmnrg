@@ -9,7 +9,7 @@ void iterative_dia_total(void);
 void func_wn(int);
 void date_time(void);
 void density_of_state(void);
-void deallocate(void);
+//void deallocate(void);
 void occu_imp(void);
 double inner_energy(int);
 double entropy_kB(int);
