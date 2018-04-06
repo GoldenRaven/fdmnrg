@@ -7,7 +7,7 @@ void date_time(void);
 void genoutput(void)
 {
     cout << "  ##########################################################################################################################" << endl;
-    cout << "  " << " job_id      = " << left << setw(30) << job_id     << " :job_id, 1 for entroy, 2 for DOS"      << endl;
+    cout << "  " << " job_id      = " << left << setw(30) << job_id     << " :job_id, 1 for entropy, 2 for DOS"     << endl;
     cout << "  " << " U           = " << left << setw(30) << U          << " :Cloumb U"                             << endl;
     cout << "  " << " Ed_up       = " << left << setw(30) << Ed_up      << " :Level up"                             << endl;
     cout << "  " << " Ed_down     = " << left << setw(30) << Ed_down    << " :Level down"                           << endl;

@@ -52,7 +52,7 @@ void func_wn(int diff)
     }
     fwn.close();
     delete [] wn;
-    cout << "Time leaved:    ";date_time();cout << endl;
+    cout << "  Time leaved:    ";date_time();cout << endl;
 }
 
 double exp_Z(int n,int l,int diff)
