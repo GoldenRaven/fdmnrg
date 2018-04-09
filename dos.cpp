@@ -132,7 +132,7 @@ void density_of_state(void)
     DOS1_DOWN=dos1(c_down_eigen, c_down_eigen, freqency);
     DOS2_DOWN=dos2(c_down_eigen, c_down_eigen, freqency);
     DOS3_DOWN=dos3(c_down_eigen, c_down_eigen, freqency);
-    cout << "d sum_rule  ";
+    cout << "imp_dos sum_rule  ";
     cout << setw(14) << setprecision(5) << freqency;
     cout << setw(14) << setprecision(5) << DOS1_UP;
     cout << setw(14) << setprecision(5) << DOS2_UP;
@@ -148,69 +148,124 @@ void density_of_state(void)
     pf=P_K;
     if (smear) {
         ifstream f_freqency("freqency");
-        ofstream f_dos_smeared("freq_dos_smeared.dat");
+        ofstream f_imp_dos_smeared("imp_dos_smeared.dat");
+        ofstream f_stm_dos_smeared("stm_dos_smeared.dat");
         while (!f_freqency.eof()){//???????????
             f_freqency >> freqency;
-            //if (fabs(freqency) < omega0){
-            DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
-            DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
-            DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
-            DOS1_DOWN=dos1(c_up_eigen, c_down_eigen, freqency);
-            DOS2_DOWN=dos2(c_up_eigen, c_down_eigen, freqency);
-            DOS3_DOWN=dos3(c_up_eigen, c_down_eigen, freqency);
-            cout << "            ";
-            cout << setw(14) << setprecision(5) << freqency;
-            cout << setw(14) << setprecision(5) << DOS1_UP;
-            cout << setw(14) << setprecision(5) << DOS2_UP;
-            cout << setw(14) << setprecision(5) << DOS3_UP;
-            cout << setw(14) << setprecision(5) << DOS1_DOWN;
-            cout << setw(14) << setprecision(5) << DOS2_DOWN;
-            cout << setw(14) << setprecision(5) << DOS3_DOWN;
-            date_time();cout << endl;
-            //}
-            f_dos_smeared << left;
-            f_dos_smeared << setw(20) << setprecision(10) << freqency;
-            f_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
-            f_dos_smeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-            f_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-            f_dos_smeared << endl;
+            if (imp_dos) {
+                DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
+                DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
+                DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
+                DOS1_DOWN=dos1(c_up_eigen, c_down_eigen, freqency);
+                DOS2_DOWN=dos2(c_up_eigen, c_down_eigen, freqency);
+                DOS3_DOWN=dos3(c_up_eigen, c_down_eigen, freqency);
+                cout << "    imp          ";
+                cout << setw(14) << setprecision(5) << freqency;
+                cout << setw(14) << setprecision(5) << DOS1_UP;
+                cout << setw(14) << setprecision(5) << DOS2_UP;
+                cout << setw(14) << setprecision(5) << DOS3_UP;
+                cout << setw(14) << setprecision(5) << DOS1_DOWN;
+                cout << setw(14) << setprecision(5) << DOS2_DOWN;
+                cout << setw(14) << setprecision(5) << DOS3_DOWN;
+                date_time();cout << endl;
+                //}
+                f_imp_dos_smeared << left;
+                f_imp_dos_smeared << setw(20) << setprecision(10) << freqency;
+                f_imp_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+                f_imp_dos_smeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_imp_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_imp_dos_smeared << endl;
+            }
+            if (stm_dos) {
+                DOS1_UP=dos1(stm_f_up_eigen, stm_f_up_eigen, freqency);
+                DOS2_UP=dos2(stm_f_up_eigen, stm_f_up_eigen, freqency);
+                DOS3_UP=dos3(stm_f_up_eigen, stm_f_up_eigen, freqency);
+                DOS1_DOWN=dos1(stm_f_up_eigen, stm_f_down_eigen, freqency);
+                DOS2_DOWN=dos2(stm_f_up_eigen, stm_f_down_eigen, freqency);
+                DOS3_DOWN=dos3(stm_f_up_eigen, stm_f_down_eigen, freqency);
+                cout << "    stm          ";
+                cout << setw(14) << setprecision(5) << freqency;
+                cout << setw(14) << setprecision(5) << DOS1_UP;
+                cout << setw(14) << setprecision(5) << DOS2_UP;
+                cout << setw(14) << setprecision(5) << DOS3_UP;
+                cout << setw(14) << setprecision(5) << DOS1_DOWN;
+                cout << setw(14) << setprecision(5) << DOS2_DOWN;
+                cout << setw(14) << setprecision(5) << DOS3_DOWN;
+                date_time();cout << endl;
+                //}
+                f_stm_dos_smeared << left;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << freqency;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_stm_dos_smeared << endl;
+            }
         }
         f_freqency.close();
-        f_dos_smeared.close();
+        f_imp_dos_smeared.close();
+        f_stm_dos_smeared.close();
     }
     if (unsmear){
         bool smear_tmp=smear;
         smear=false;
         ifstream f_freqency("freqency");
-        ofstream f_dos_unsmeared("freq_dos_unsmeared.dat");
-        while (!f_freqency.eof()){//???????????
+        ofstream f_imp_dos_unsmeared("imp_dos_unsmeared.dat");
+        ofstream f_stm_dos_unsmeared("stm_dos_unsmeared.dat");
+        while (!f_freqency.eof()){
             f_freqency >> freqency;
-            DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
-            DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
-            DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
-            DOS1_DOWN=dos1(c_up_eigen, c_down_eigen, freqency);
-            DOS2_DOWN=dos2(c_up_eigen, c_down_eigen, freqency);
-            DOS3_DOWN=dos3(c_up_eigen, c_down_eigen, freqency);
-            cout << "           ";
-            //cout << "  unsmeared << c_up_eigen, c_up_eigen, setw(14) << setprecision(5) << freqency;
-            cout << setw(14) << setprecision(5) << DOS1_UP;
-            cout << setw(14) << setprecision(5) << DOS2_UP;
-            cout << setw(14) << setprecision(5) << DOS3_UP;
-            cout << setw(14) << setprecision(5) << DOS1_DOWN;
-            cout << setw(14) << setprecision(5) << DOS2_DOWN;
-            cout << setw(14) << setprecision(5) << DOS3_DOWN;
-            date_time();cout << endl;
-            f_dos_unsmeared << left;
-            f_dos_unsmeared << setw(20) << setprecision(10) << freqency;
-            f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
-            f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-            f_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-            f_dos_unsmeared << endl;
+            if (imp_dos) {
+                DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
+                DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
+                DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
+                DOS1_DOWN=dos1(c_up_eigen, c_down_eigen, freqency);
+                DOS2_DOWN=dos2(c_up_eigen, c_down_eigen, freqency);
+                DOS3_DOWN=dos3(c_up_eigen, c_down_eigen, freqency);
+                cout << "    imp          ";
+                //cout << "  unsmeared << c_up_eigen, c_up_eigen, setw(14) << setprecision(5) << freqency;
+                cout << setw(14) << setprecision(5) << DOS1_UP;
+                cout << setw(14) << setprecision(5) << DOS2_UP;
+                cout << setw(14) << setprecision(5) << DOS3_UP;
+                cout << setw(14) << setprecision(5) << DOS1_DOWN;
+                cout << setw(14) << setprecision(5) << DOS2_DOWN;
+                cout << setw(14) << setprecision(5) << DOS3_DOWN;
+                date_time();cout << endl;
+                f_imp_dos_unsmeared << left;
+                f_imp_dos_unsmeared << setw(20) << setprecision(10) << freqency;
+                f_imp_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+                f_imp_dos_unsmeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_imp_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_imp_dos_unsmeared << endl;
+            }
+            if_imp (stm_dos) {
+                DOS1_UP=dos1(stm_f_up_eigen, stm_f_up_eigen, freqency);
+                DOS2_UP=dos2(stm_f_up_eigen, stm_f_up_eigen, freqency);
+                DOS3_UP=dos3(stm_f_up_eigen, stm_f_up_eigen, freqency);
+                DOS1_DOWN=dos1(stm_f_up_eigen, stm_f_down_eigen, freqency);
+                DOS2_DOWN=dos2(stm_f_up_eigen, stm_f_down_eigen, freqency);
+                DOS3_DOWN=dos3(stm_f_up_eigen, stm_f_down_eigen, freqency);
+                cout << "    stm          ";
+                cout << setw(14) << setprecision(5) << freqency;
+                cout << setw(14) << setprecision(5) << DOS1_UP;
+                cout << setw(14) << setprecision(5) << DOS2_UP;
+                cout << setw(14) << setprecision(5) << DOS3_UP;
+                cout << setw(14) << setprecision(5) << DOS1_DOWN;
+                cout << setw(14) << setprecision(5) << DOS2_DOWN;
+                cout << setw(14) << setprecision(5) << DOS3_DOWN;
+                date_time();cout << endl;
+                //}
+                f_stm_dos_smeared << left;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << freqency;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_stm_dos_smeared << endl;
+            }
         }
         smear=smear_tmp;
         //exit(0);
         f_freqency.close();
-        f_dos_unsmeared.close();
+        f_imp_dos_unsmeared.close();
+        f_stm_dos_unsmeared.close();
     }
     cout << "Time leaved:    ";date_time();cout << endl;
 }
@@ -346,8 +401,6 @@ double dos1(double *** operatorA, double *** operatorB, double freqency)
 double dos2(double *** operatorA, double *** operatorB, double freqency)
 {
     double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
     for (int n=n0;n<N_max-1;n++){
         double sum_n=0;
 #pragma omp parallel for reduction(+:sum_n)
@@ -366,8 +419,6 @@ double dos2(double *** operatorA, double *** operatorB, double freqency)
 double dos3(double *** operatorA, double *** operatorB, double freqency)
 {
     double sum=0;
-    double P_h_unsmeared(double freqency);
-    double P_h_smeared(double freqency);
     //ofstream f_up("up.dat");
     for (int n=n0;n<N_max-1;n++){
         double sum_n=0;

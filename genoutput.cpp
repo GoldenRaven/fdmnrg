@@ -23,6 +23,10 @@ void genoutput(void)
     cout << "  " << " smear       = " << left << setw(30) << smear      << " :smear or unsmear"                     << endl;
     cout << "  " << " unsmear     = " << left << setw(30) << unsmear    << " :smear or unsmear"                     << endl;
     cout << "  " << " occupation  = " << left << setw(30) << occupation << " :calulate impurity occupation or not"  << endl;
+    cout << "  " << " imp_dos     = " << left << setw(30) << imp_dos    << " :calulate imp DOS or not"              << endl;
+    cout << "  " << " stm_dos     = " << left << setw(30) << stm_dos    << " :calulate stm DOS or not"              << endl;
+    cout << "  " << " tc          = " << left << setw(30) << tc         << " :coupling tc"                          << endl;
+    cout << "  " << " td          = " << left << setw(30) << td         << " :coupling td"                          << endl;
     if (Q){
         cout << "   Quantum number Charge(Q) is used in sorting." << endl;
     }else if(Q_Sz){

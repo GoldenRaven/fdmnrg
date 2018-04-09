@@ -56,6 +56,7 @@ void iterative_dia_total(void)
     f_input >> Q_Sz        ;
     f_input >> N_up_N_down ;
     f_input >> occupation  ;
+    f_input >> imp_dos     ;
     f_input >> stm_dos     ;
     f_input >> tc          ;
     f_input >> td          ;

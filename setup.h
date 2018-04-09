@@ -40,6 +40,7 @@ extern bool Q;
 extern bool Q_Sz;
 extern bool N_up_N_down;
 extern bool occupation;
+extern bool imp_dos;
 extern bool stm_dos;
 
 extern EIGEN_STATE ** eigen;

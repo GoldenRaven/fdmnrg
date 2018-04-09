@@ -16,7 +16,8 @@ Q=0
 Q_Sz=0
 N_up_N_down=1
 occupation=1
-stm_dos=1
+imp_dos=1
+stm_dos=0
 tc=0.5
 td=0.5
 N_max=0
@@ -72,6 +73,7 @@ do
                 echo $Q_Sz        >> input_total
                 echo $N_up_N_down >> input_total
                 echo $occupation  >> input_total
+                echo $imp_dos     >> input_total
                 echo $stm_dos     >> input_total
                 echo $tc          >> input_total
                 echo $td          >> input_total
