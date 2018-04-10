@@ -1089,7 +1089,7 @@ void stm_c0_operator(int n)
 
 void stm_f_operator(void)
 {
-    for (int n=1;n<N_max+2;n++){//f = tc * c0 + td * d
+    for (int n=1;n<N_max;n++){//f = tc * c0 + td * d
         for (int i=0;i<num_basis[n];i++){
             for (int j=0;j<num_basis[n];j++){
                 stm_f_up_eigen[n][i][j]=(stm_f_up_eigen[n][i][j]*tc+c_up_eigen[n][i][j]*td)/sqrt(tc*tc+td*td);
