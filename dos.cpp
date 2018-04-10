@@ -236,7 +236,7 @@ void density_of_state(void)
                 f_imp_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
                 f_imp_dos_unsmeared << endl;
             }
-            if_imp (stm_dos) {
+            if (stm_dos) {
                 DOS1_UP=dos1(stm_f_up_eigen, stm_f_up_eigen, freqency);
                 DOS2_UP=dos2(stm_f_up_eigen, stm_f_up_eigen, freqency);
                 DOS3_UP=dos3(stm_f_up_eigen, stm_f_up_eigen, freqency);
@@ -253,12 +253,12 @@ void density_of_state(void)
                 cout << setw(14) << setprecision(5) << DOS3_DOWN;
                 date_time();cout << endl;
                 //}
-                f_stm_dos_smeared << left;
-                f_stm_dos_smeared << setw(20) << setprecision(10) << freqency;
-                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
-                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-                f_stm_dos_smeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
-                f_stm_dos_smeared << endl;
+                f_stm_dos_unsmeared << left;
+                f_stm_dos_unsmeared << setw(20) << setprecision(10) << freqency;
+                f_stm_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP;
+                f_stm_dos_unsmeared << setw(20) << setprecision(10) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_stm_dos_unsmeared << setw(20) << setprecision(10) << DOS1_UP+DOS2_UP+DOS3_UP + DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
+                f_stm_dos_unsmeared << endl;
             }
         }
         smear=smear_tmp;

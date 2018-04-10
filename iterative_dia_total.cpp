@@ -340,11 +340,11 @@ void iterative_dia_total(void)
         delete [] temp6;
     }
     if (stm_dos){
-        stm_f_up_basis=new double ** [N_max+2];
-        stm_f_down_basis=new double ** [N_max+2];
-        stm_f_up_eigen=new double ** [N_max+2];
-        stm_f_down_eigen=new double ** [N_max+2];
-        for (int n=0;n<N_max+2;n++){//n=0 unused!
+        stm_f_up_basis=new double ** [N_max];
+        stm_f_down_basis=new double ** [N_max];
+        stm_f_up_eigen=new double ** [N_max];
+        stm_f_down_eigen=new double ** [N_max];
+        for (int n=0;n<N_max;n++){//n=0 unused!
             stm_f_up_basis[n]=new double * [num_basis[n]];
             stm_f_down_basis[n]=new double * [num_basis[n]];
             stm_f_up_eigen[n]=new double * [num_basis[n]];
@@ -966,7 +966,7 @@ void iterative_dia_total(void)
         delete [] num_basis_block;
         //if (n==6) exit(0);
     }
-    stm_f_operator();
+    if (stm_dos) stm_f_operator();
     cout << "  Time leaved:    ";date_time();cout << endl;
 }
 

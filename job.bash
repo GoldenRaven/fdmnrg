@@ -1,13 +1,13 @@
 #rm -fr `find .|grep -v "\<job.bash\>"`
 
-job_id=1
+job_id=2
 U=0.2
 Ed_up=-0.1
 Ed_down=-0.1
 Lambda=10
 alpha=0.69
-num_kept=512
-smear=1
+num_kept=100
+smear=0
 unsmear=1
 dim_imp=4
 dim_dot=4
