@@ -26,8 +26,6 @@ extern int * num_eigen_kept;//[N_max+2]
 extern double * E_GS;
 extern double ** exp_z;
 extern double *** vect;
-extern double *** c_dag_up_eigen;
-extern double *** c_dag_down_eigen;
 extern double *** c_up_eigen;
 extern double *** c_down_eigen;
 extern double *** occu_imp_up_eigen;

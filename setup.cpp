@@ -18,8 +18,6 @@ double Beta;
 double omega0=temperature;
 double tc;
 double td;
-double *** c_dag_up_eigen;
-double *** c_dag_down_eigen;
 double *** c_up_eigen;
 double *** c_down_eigen;
 double *** occu_imp_up_eigen;
