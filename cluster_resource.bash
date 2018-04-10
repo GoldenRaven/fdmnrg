@@ -22,5 +22,6 @@ do
 done
 echo "###########################################" >> tmpp
 #
+cat tmpp
 cat tmpp |grep -v 'exclusive'|grep -v down
 rm -f tmp tmpp
