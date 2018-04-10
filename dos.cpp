@@ -116,9 +116,12 @@ void density_of_state(void)
     delete [] rho;
     cout << "  Time finished all reduced density matrice:    ";date_time();cout << endl;
     cout << scientific << left << "                     ";
-    cout << setw(14) << "freqency"<< setw(14) << "dos1_up"<< setw(14) << "dos2_up";
+    cout << setw(14) << "freqency";
+    cout << setw(14) << "dos1_up";
+    cout << setw(14) << "dos2_up";
     cout << setw(14) << "dos3_up";
-    cout << setw(14) << "dos1_down"<< setw(14) << "dos2_down";
+    cout << setw(14) << "dos1_down";
+    cout << setw(14) << "dos2_down";
     cout << setw(14) << "dos3_down";
     cout << endl;
     double DOS1_UP,DOS2_UP,DOS3_UP,DOS1_DOWN,DOS2_DOWN,DOS3_DOWN;
