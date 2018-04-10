@@ -115,7 +115,7 @@ void density_of_state(void)
     }
     delete [] rho;
     cout << "  Time finished all reduced density matrice:    ";date_time();cout << endl;
-    cout << scientific << left << "            ";
+    cout << scientific << left << "                     ";
     cout << setw(14) << "freqency"<< setw(14) << "dos1_up"<< setw(14) << "dos2_up";
     cout << setw(14) << "dos3_up";
     cout << setw(14) << "dos1_down"<< setw(14) << "dos2_down";
@@ -221,7 +221,7 @@ void density_of_state(void)
                 DOS2_DOWN=dos2(c_up_eigen, c_down_eigen, freqency);
                 DOS3_DOWN=dos3(c_up_eigen, c_down_eigen, freqency);
                 cout << "    imp          ";
-                //cout << "  unsmeared << c_up_eigen, c_up_eigen, setw(14) << setprecision(5) << freqency;
+                cout << setw(14) << setprecision(5) << freqency;
                 cout << setw(14) << setprecision(5) << DOS1_UP;
                 cout << setw(14) << setprecision(5) << DOS2_UP;
                 cout << setw(14) << setprecision(5) << DOS3_UP;
