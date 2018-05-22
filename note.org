@@ -6,12 +6,14 @@
 - mkl_?imatcopy
 ** DONE dos_down
 - change c operator to f operator
+* <2018-04-11 Wed>
 ** TODO delete dag operator (d660)
 dir: dag_100_Vg0_h0.001 V.S. 100_Vg0_h0.001
 - job_type=2
 - iterative_dia_total.cpp error !!!
 - different energy !!!
 - erorr maybe !!!
+- No error.
 ** Fang's opinion
 - add fig
   - Ed_up-Ed_down and shoulder V.S. h
