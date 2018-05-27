@@ -1,13 +1,14 @@
 #!/bin/bash
 pbsnodes > tmp
+sed -i '1,16d' tmp
 echo "###########################################" > tmpp
 echo "Total node number:   8" >> tmpp
 echo "CPU number per node: 2" >> tmpp
 echo "Core number per CPU: 14" >> tmpp
 echo "###########################################" >> tmpp
-echo "CPU    free_core        state" >> tmpp
+echo "Node   CPU  free_core        state" >> tmpp
 i=1
-for ((node=3;node<=10;node++))
+for ((node=5;node<=10;node++))
 do
     for sub_node in 0 1
     do
@@ -15,7 +16,7 @@ do
 	free_core=`cat tmp|grep 'jobs ='|sed -n "${i}p"|grep -o '.node'|wc -l`
 	free_core=`echo "14-${free_core}"|bc`
 	# exit 1
-	echo $i "    " $free_core "            " $state >> tmpp
+	echo $node "    " $sub_node "    " $free_core "            " $state >> tmpp
 	# i=$[$i+1]
 	((i++))
     done
