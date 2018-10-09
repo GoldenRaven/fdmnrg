@@ -8,7 +8,7 @@ objects=main.o setup.o genoutput.o iterative_dia_band.o iterative_dia_total.o do
 
 #CPPFLAGS=-O0 -g
 #CPPFLAGS=-O3
-MKL_FLAGS=-mkl=sequential
+MKL_FLAGS=-mkl=parallel
 OPENMP_FLAGS=-qopenmp
 
 $(name): $(objects)
