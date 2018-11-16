@@ -4,15 +4,15 @@
 using namespace std;
 void uniform(void);
 void logarithm(double,double, int,double);
-void userdefined1(double a,double b,double c,double d, int N1, int N2, int N3, double lambda);
+void uniform_log_uniform(double a,double b,double c,double d, int N1, int N2, int N3, double lambda);
 void userdefined2(double, int,double);
 int main(void)
 {
-    //uniform();
-    //userdefined2(1,300,0.92);
-    logarithm(-1,1,560,0.92);
-    //userdefined1(-0.5*0.02,0.5*0.02,60,0.7);
-    //userdefined1(-1,-0.5,0.5,1,10,380,10,0.9);
+    // uniform();
+    // userdefined2(1,300,0.92);
+    // logarithm(-1,1,560,0.92);
+    // userdefined1(-0.5*0.02,0.5*0.02,60,0.7);
+    uniform_log_uniform(-0.2,-0.05,0.05,0.2,50,200,50,0.9);
     return 0;
 }
 
@@ -22,13 +22,13 @@ void uniform(void)
     int N1,N2,N3;
     double dx1,dx2,dx3;
     ofstream f_freq("freqency");
-    a=-1.0;
-    b=-0.08;
-    c=0.08;
-    d=1.0;
-    N1=100;
-    N2=400;
-    N3=100;
+    a=-0.2;
+    b=-0.05;
+    c=0.05;
+    d=0.2;
+    N1=50;
+    N2=200;
+    N3=50;
     /*
      *a=-3.0;
      *b=-0.1;
@@ -73,7 +73,7 @@ void logarithm(double a,double b, int N, double lambda)
         f_freq << b*pow(lambda,i) << endl;
     }
 }
-void userdefined1(double a,double b,double c,double d, int N1, int N2, int N3, double lambda)
+void uniform_log_uniform(double a,double b,double c,double d, int N1, int N2, int N3, double lambda)
 {
     double dx1,dx3;
     ofstream f_freq("freqency");
