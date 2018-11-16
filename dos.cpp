@@ -9,6 +9,8 @@
 using namespace std;
 double Pi=3.141592653589793238;
 double *** rho_red_temp;
+double ** matrix_prod1_DK;
+double ** matrix_prod2_KD;
 double (*pf)(double,double);
 double P_K(double,double);
 double **** eigen_sigma;
@@ -115,6 +117,41 @@ void density_of_state(void)
     }
     delete [] rho;
     cout << "  Time finished all reduced density matrice:    ";date_time();cout << endl;
+    matrix_prod1_DK=new double * [N_max];
+    matrix_prod2_KD=new double * [N_max];
+    for (int n=n0;n<N_max-1;n++){
+        double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
+        double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_prod1_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_prod2_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
+        {int k=0;
+            for (int i=0;i<num_eigen_kept[n];i++){
+                for (int j=0;j<num_eigen_kept[n];j++){
+                    matrix_rho_KK[k]=rho_red_temp[n][j][i];
+                    k++;
+                }
+            }}
+        {int k=0;
+            for (int i=0;i<num_eigen_kept[n];i++){
+                for (int j=num_eigen_kept[n];j<num_basis[n];j++){
+                    matrix_B[k]=operatorB[n][i][j];
+                    k++;
+                }
+            }}
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK[n],num_basis[n]-num_eigen_kept[n]);
+        {int k=0;
+            for (int i=num_kept;i<num_basis[n];i++){
+                for (int j=0;j<num_kept;j++){
+                    matrix_B[k]=operatorB[n][i][j];
+                    k++;
+                }
+            }}
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B,num_kept,0,matrix_prod2_KD[n],num_kept);
+        delete [] matrix_rho_KK;
+        delete [] matrix_B;
+        delete [] matrix_prod1_DK;
+        delete [] matrix_prod2_KD;
+    }
     cout << scientific << left << "                     ";
     cout << setw(14) << "freqency";
     cout << setw(14) << "dos1_up";
@@ -422,46 +459,15 @@ double dos3(double *** operatorA, double *** operatorB, double freqency)
     //ofstream f_up("up.dat");
     for (int n=n0;n<N_max-1;n++){
         double sum_n=0;
-        double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
-        double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod1_DK=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod2_KD=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
-        {int k=0;
-            for (int i=0;i<num_eigen_kept[n];i++){
-                for (int j=0;j<num_eigen_kept[n];j++){
-                    matrix_rho_KK[k]=rho_red_temp[n][j][i];
-                    k++;
-                }
-            }}
-        {int k=0;
-            for (int i=0;i<num_eigen_kept[n];i++){
-                for (int j=num_eigen_kept[n];j<num_basis[n];j++){
-                    matrix_B[k]=operatorB[n][i][j];
-                    k++;
-                }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK,num_basis[n]-num_eigen_kept[n]);
-        {int k=0;
-            for (int i=num_kept;i<num_basis[n];i++){
-                for (int j=0;j<num_kept;j++){
-                    matrix_B[k]=operatorB[n][i][j];
-                    k++;
-                }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B,num_kept,0,matrix_prod2_KD,num_kept);
 #pragma omp parallel for reduction(+:sum_n)
         for (int i=0;i<num_kept;i++){
             for (int j=num_kept;j<num_basis[n];j++){
                 double omegan=0;
                 omegan=(eigen_value[n][i]-eigen_value[n][j])*pow(Lambda,-1.0*(n-1-1)/2.0);
-                sum_n=sum_n+operatorA[n][i][j]*matrix_prod1_DK[(j-num_kept)+(num_basis[n]-num_kept)*i]*(*pf)(freqency,-1.0*omegan)+matrix_prod2_KD[i+num_kept*(j-num_kept)]*operatorA[n][j][i]*(*pf)(freqency,omegan);
+                sum_n=sum_n+operatorA[n][i][j]*matrix_prod1_DK[n][(j-num_kept)+(num_basis[n]-num_kept)*i]*(*pf)(freqency,-1.0*omegan)+matrix_prod2_KD[n][i+num_kept*(j-num_kept)]*operatorA[n][j][i]*(*pf)(freqency,omegan);
             }
         }
         sum=sum+sum_n;
-        delete [] matrix_rho_KK;
-        delete [] matrix_B;
-        delete [] matrix_prod1_DK;
-        delete [] matrix_prod2_KD;
     }
     return sum;
 }
