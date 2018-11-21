@@ -124,6 +124,22 @@ void density_of_state(void)
     matrix_prod1_down_DK=new double * [N_max];
     matrix_prod2_up_KD=new double * [N_max];
     matrix_prod2_down_KD=new double * [N_max];
+    for (int n=0;n<n0;n++){
+        double * matrix_B_up=new double [1];
+        double * matrix_B_down=new double [1];
+        double * matrix_prod1_up_DK[n]=new double [1];
+        double * matrix_prod1_down_DK[n]=new double [1];
+        double * matrix_prod2_up_KD[n]=new double [1];
+        double * matrix_prod2_down_KD[n]=new double [1];
+        for (int i=0;i<1;i++){
+            matrix_B_up[n][0]=0;
+            matrix_B_down[n][0]=0;
+            matrix_prod1_up_DK[n][0]=0;
+            matrix_prod1_down_DK[n][0]=0;
+            matrix_prod2_up_KD[n][0]=0;
+            matrix_prod2_down_KD[n][0]=0;
+          }
+    }
     for (int n=n0;n<N_max-1;n++){
         double * matrix_B_up=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
         double * matrix_B_down=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
@@ -137,6 +153,8 @@ void density_of_state(void)
             matrix_prod2_up_KD[n][i]=0;
             matrix_prod2_down_KD[n][i]=0;
         }
+    }
+    for (int n=n0;n<N_max-1;n++){
         {int k=0;
             for (int i=0;i<num_eigen_kept[n];i++){
                 for (int j=0;j<num_eigen_kept[n];j++){
@@ -167,14 +185,14 @@ void density_of_state(void)
         delete [] matrix_B_up;
         delete [] matrix_B_down;
         delete [] matrix_prod1_up_DK;
-        delete [] matrix_prod2_up_KD;
         delete [] matrix_prod1_down_DK;
+        delete [] matrix_prod2_up_KD;
         delete [] matrix_prod2_down_KD;
     }
     delete [] matrix_rho_KK;
     delete [] matrix_prod1_up_DK;
-    delete [] matrix_prod2_up_KD;
     delete [] matrix_prod1_down_DK;
+    delete [] matrix_prod2_up_KD;
     delete [] matrix_prod2_down_KD;
     cout << scientific << left << "                     ";
     cout << setw(14) << "freqency";
@@ -219,10 +237,10 @@ void density_of_state(void)
             if (imp_dos) {
                 DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
                 DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
-                DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
+                DOS3_UP=dos3(c_up_eigen, matrix_prod1_up_DK, matrix_prod2_up_KD, freqency);
                 DOS1_DOWN=dos1(c_down_eigen, c_down_eigen, freqency);
                 DOS2_DOWN=dos2(c_down_eigen, c_down_eigen, freqency);
-                DOS3_DOWN=dos3(c_down_eigen, c_down_eigen, freqency);
+                DOS3_DOWN=dos3(c_down_eigen, matrix_prod1_up_DK, matrix_prod2_down_KD, freqency);
                 cout << "    imp          ";
                 cout << setw(14) << setprecision(5) << freqency;
                 cout << setw(14) << setprecision(5) << DOS1_UP;
@@ -280,10 +298,10 @@ void density_of_state(void)
             if (imp_dos) {
                 DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
                 DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
-                DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
+                DOS3_UP=dos3(c_up_eigen, matrix_prod1_up_DK, matrix_prod2_up_KD, freqency);
                 DOS1_DOWN=dos1(c_down_eigen, c_down_eigen, freqency);
                 DOS2_DOWN=dos2(c_down_eigen, c_down_eigen, freqency);
-                DOS3_DOWN=dos3(c_down_eigen, c_down_eigen, freqency);
+                DOS3_DOWN=dos3(c_down_eigen, matrix_prod1_down_DK, matrix_prod2_down_KD, freqency);
                 cout << "    imp          ";
                 cout << setw(14) << setprecision(5) << freqency;
                 cout << setw(14) << setprecision(5) << DOS1_UP;
