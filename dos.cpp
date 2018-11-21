@@ -131,6 +131,12 @@ void density_of_state(void)
         double * matrix_prod1_down_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
         double * matrix_prod2_up_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
         double * matrix_prod2_down_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
+        for (int i=0;i<(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n];i++){
+            matrix_prod1_up_DK[n][i]=0;
+            matrix_prod1_down_DK[n][i]=0;
+            matrix_prod2_up_KD[n][i]=0;
+            matrix_prod2_down_KD[n][i]=0;
+        }
         {int k=0;
             for (int i=0;i<num_eigen_kept[n];i++){
                 for (int j=0;j<num_eigen_kept[n];j++){
@@ -143,8 +149,6 @@ void density_of_state(void)
                 for (int i=0;i<num_eigen_kept[n];i++){
                     matrix_B_up[k]=c_up_eigen[n][i][j]; // c_up^{dag, DK} = c_up^{KD}, ColMajor
                     matrix_B_down[k]=c_down_eigen[n][i][j];
-                    matrix_prod1_up_DK[n][k]=0;
-                    matrix_prod1_down_DK[n][k]=0;
                     k++;
                 }
             }}
@@ -155,8 +159,6 @@ void density_of_state(void)
                 for (int j=num_eigen_kept[n];j<num_basis[n];j++){
                     matrix_B_up[k]=c_up_eigen[n][j][i]; // c_up^{dag, KD} = c_up^{DK}, ColMajor
                     matrix_B_down[k]=c_down_eigen[n][j][i];
-                    matrix_prod2_up_KD[n][k]=0;
-                    matrix_prod2_down_KD[n][k]=0;
                     k++;
                 }
             }}
