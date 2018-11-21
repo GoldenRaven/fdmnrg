@@ -132,8 +132,6 @@ void density_of_state(void)
         double * matrix_prod2_up_KD[n]=new double [1];
         double * matrix_prod2_down_KD[n]=new double [1];
         for (int i=0;i<1;i++){
-            matrix_B_up[n][0]=0;
-            matrix_B_down[n][0]=0;
             matrix_prod1_up_DK[n][0]=0;
             matrix_prod1_down_DK[n][0]=0;
             matrix_prod2_up_KD[n][0]=0;
@@ -141,8 +139,6 @@ void density_of_state(void)
           }
     }
     for (int n=n0;n<N_max-1;n++){
-        double * matrix_B_up=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_B_down=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
         double * matrix_prod1_up_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
         double * matrix_prod1_down_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
         double * matrix_prod2_up_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
@@ -155,9 +151,13 @@ void density_of_state(void)
         }
     }
     for (int n=n0;n<N_max-1;n++){
+        double * matrix_B_up=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_B_down=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
         {int k=0;
             for (int i=0;i<num_eigen_kept[n];i++){
                 for (int j=0;j<num_eigen_kept[n];j++){
+                    matrix_B_up[k]=0;
+                    matrix_B_down[k]=0;
                     matrix_rho_KK[k]=rho_red_temp[n][j][i];
                     k++;
                 }
