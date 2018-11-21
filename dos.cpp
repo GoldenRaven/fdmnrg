@@ -9,8 +9,10 @@
 using namespace std;
 double Pi=3.141592653589793238;
 double *** rho_red_temp;
-double ** matrix_prod1_DK;
-double ** matrix_prod2_KD;
+double ** matrix_prod1_up_DK;
+double ** matrix_prod1_down_KD;
+double ** matrix_prod2_up_DK;
+double ** matrix_prod2_down_KD;
 double (*pf)(double,double);
 double P_K(double,double);
 double **** eigen_sigma;
@@ -21,7 +23,7 @@ void density_of_state(void)
     cout << "density_of_state: "; date_time();cout << endl;
     double dos1(double ***, double ***, double);
     double dos2(double ***, double ***, double);
-    double dos3(double ***, double ***, double);
+    double dos3(double ***, double **,double **, double);
     void   rho_red(int);
     double P_LG(double,double);
     double P_G(double,double);
@@ -117,13 +119,18 @@ void density_of_state(void)
     }
     delete [] rho;
     cout << "  Time finished all reduced density matrice:    ";date_time();cout << endl;
-    matrix_prod1_DK=new double * [N_max];
-    matrix_prod2_KD=new double * [N_max];
+    double * matrix_rho_KK=new double [num_kept*num_kept];
+    matrix_prod1_up_DK=new double * [N_max];
+    matrix_prod1_down_DK=new double * [N_max];
+    matrix_prod2_up_KD=new double * [N_max];
+    matrix_prod2_down_KD=new double * [N_max];
     for (int n=n0;n<N_max-1;n++){
-        double * matrix_rho_KK=new double [num_eigen_kept[n]*num_eigen_kept[n]];
-        double * matrix_B=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod1_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
-        double * matrix_prod2_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
+        double * matrix_B_up=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_B_down=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_prod1_up_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_prod1_down_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
+        double * matrix_prod2_up_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
+        double * matrix_prod2_down_KD[n]=new double [num_eigen_kept[n]*(num_basis[n]-num_eigen_kept[n])];
         {int k=0;
             for (int i=0;i<num_eigen_kept[n];i++){
                 for (int j=0;j<num_eigen_kept[n];j++){
@@ -132,26 +139,41 @@ void density_of_state(void)
                 }
             }}
         {int k=0;
+            for (int j=num_eigen_kept[n];j<num_basis[n];j++){
+                for (int i=0;i<num_eigen_kept[n];i++){
+                    matrix_B_up[k]=c_up_eigen[n][i][j]; // c_up^{dag, DK} = c_up^{KD}, ColMajor
+                    matrix_B_down[k]=c_down_eigen[n][i][j];
+                    matrix_prod1_up_DK[n][k]=0;
+                    matrix_prod1_down_DK[n][k]=0;
+                    k++;
+                }
+            }}
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_kept,num_kept,num_kept,1,matrix_B_up,num_basis[n]-num_kept,matrix_rho_KK,num_kept,0,matrix_prod1_up_DK[n],num_basis[n]-num_kept);
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_kept,num_kept,num_kept,1,matrix_B_down,num_basis[n]-num_kept,matrix_rho_KK,num_kept,0,matrix_prod1_down_DK[n],num_basis[n]-num_kept);
+        {int k=0;
             for (int i=0;i<num_eigen_kept[n];i++){
                 for (int j=num_eigen_kept[n];j<num_basis[n];j++){
-                    matrix_B[k]=operatorB[n][i][j];
+                    matrix_B_up[k]=c_up_eigen[n][j][i]; // c_up^{dag, KD} = c_up^{DK}, ColMajor
+                    matrix_B_down[k]=c_down_eigen[n][j][i];
+                    matrix_prod2_up_KD[n][k]=0;
+                    matrix_prod2_down_KD[n][k]=0;
                     k++;
                 }
             }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_eigen_kept[n],num_eigen_kept[n],num_eigen_kept[n],1,matrix_B,num_basis[n]-num_eigen_kept[n],matrix_rho_KK,num_eigen_kept[n],0,matrix_prod1_DK[n],num_basis[n]-num_eigen_kept[n]);
-        {int k=0;
-            for (int i=num_kept;i<num_basis[n];i++){
-                for (int j=0;j<num_kept;j++){
-                    matrix_B[k]=operatorB[n][i][j];
-                    k++;
-                }
-            }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B,num_kept,0,matrix_prod2_KD[n],num_kept);
-        delete [] matrix_rho_KK;
-        delete [] matrix_B;
-        delete [] matrix_prod1_DK;
-        delete [] matrix_prod2_KD;
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B_up,num_kept,0,matrix_prod2_up_KD[n],num_kept);
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B_down,num_kept,0,matrix_prod2_down_KD[n],num_kept);
+        delete [] matrix_B_up;
+        delete [] matrix_B_down;
+        delete [] matrix_prod1_up_DK;
+        delete [] matrix_prod2_up_KD;
+        delete [] matrix_prod1_down_DK;
+        delete [] matrix_prod2_down_KD;
     }
+    delete [] matrix_rho_KK;
+    delete [] matrix_prod1_up_DK;
+    delete [] matrix_prod2_up_KD;
+    delete [] matrix_prod1_down_DK;
+    delete [] matrix_prod2_down_KD;
     cout << scientific << left << "                     ";
     cout << setw(14) << "freqency";
     cout << setw(14) << "dos1_up";
@@ -168,10 +190,10 @@ void density_of_state(void)
     pf=P_sum_rule;
     DOS1_UP=dos1(c_up_eigen, c_up_eigen, freqency);
     DOS2_UP=dos2(c_up_eigen, c_up_eigen, freqency);
-    DOS3_UP=dos3(c_up_eigen, c_up_eigen, freqency);
+    DOS3_UP=dos3(c_up_eigen, matrix_prod1_up_DK, matrix_prod2_up_KD,freqency);
     DOS1_DOWN=dos1(c_down_eigen, c_down_eigen, freqency);
     DOS2_DOWN=dos2(c_down_eigen, c_down_eigen, freqency);
-    DOS3_DOWN=dos3(c_down_eigen, c_down_eigen, freqency);
+    DOS3_DOWN=dos3(c_down_eigen, matrix_prod1_down_DK, matrix_prod2_down_KD, freqency);
     cout << "imp_dos sum_rule  ";
     cout << setw(14) << setprecision(5) << freqency;
     cout << setw(14) << setprecision(5) << DOS1_UP;
@@ -453,7 +475,7 @@ double dos2(double *** operatorA, double *** operatorB, double freqency)
     }
     return sum;
 }
-double dos3(double *** operatorA, double *** operatorB, double freqency)
+double dos3(double *** operatorA, double ** matrix_prod1_DK, double ** matrix_prod2_KD, double freqency)
 {
     double sum=0;
     //ofstream f_up("up.dat");
