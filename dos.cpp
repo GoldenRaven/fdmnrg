@@ -132,11 +132,11 @@ void density_of_state(void)
         double * matrix_prod2_up_KD[n]=new double [1];
         double * matrix_prod2_down_KD[n]=new double [1];
         for (int i=0;i<1;i++){
-            matrix_prod1_up_DK[n][0]=0;
-            matrix_prod1_down_DK[n][0]=0;
-            matrix_prod2_up_KD[n][0]=0;
-            matrix_prod2_down_KD[n][0]=0;
-          }
+            matrix_prod1_up_DK[n][i]=0;
+            matrix_prod1_down_DK[n][i]=0;
+            matrix_prod2_up_KD[n][i]=0;
+            matrix_prod2_down_KD[n][i]=0;
+        }
     }
     for (int n=n0;n<N_max-1;n++){
         double * matrix_prod1_up_DK[n]=new double [(num_basis[n]-num_eigen_kept[n])*num_eigen_kept[n]];
@@ -165,23 +165,23 @@ void density_of_state(void)
         {int k=0;
             for (int j=num_eigen_kept[n];j<num_basis[n];j++){
                 for (int i=0;i<num_eigen_kept[n];i++){
-                    matrix_B_up[k]=c_up_eigen[n][i][j]; // c_up^{dag, DK} = c_up^{KD}, ColMajor
+                    matrix_B_up[k]=c_up_eigen[n][i][j]; // c_up^{dag, DK} = c_up^{KD, dag}, ColMajor
                     matrix_B_down[k]=c_down_eigen[n][i][j];
                     k++;
                 }
             }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_kept,num_kept,num_kept,1,matrix_B_up,num_basis[n]-num_kept,matrix_rho_KK,num_kept,0,matrix_prod1_up_DK[n],num_basis[n]-num_kept);
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_basis[n]-num_kept,num_kept,num_kept,1,matrix_B_down,num_basis[n]-num_kept,matrix_rho_KK,num_kept,0,matrix_prod1_down_DK[n],num_basis[n]-num_kept);
+        cblas_dgemm(CblasColMajor,CblasConjTrans,CblasNoTrans,num_basis[n]-num_kept,num_kept,num_kept,1,matrix_B_up,num_basis[n]-num_kept,matrix_rho_KK,num_kept,0,matrix_prod1_up_DK[n],num_basis[n]-num_kept);
+        cblas_dgemm(CblasColMajor,CblasConjTrans,CblasNoTrans,num_basis[n]-num_kept,num_kept,num_kept,1,matrix_B_down,num_basis[n]-num_kept,matrix_rho_KK,num_kept,0,matrix_prod1_down_DK[n],num_basis[n]-num_kept);
         {int k=0;
             for (int i=0;i<num_eigen_kept[n];i++){
                 for (int j=num_eigen_kept[n];j<num_basis[n];j++){
-                    matrix_B_up[k]=c_up_eigen[n][j][i]; // c_up^{dag, KD} = c_up^{DK}, ColMajor
+                    matrix_B_up[k]=c_up_eigen[n][j][i]; // c_up^{dag, KD} = c_up^{DK, dag}, ColMajor
                     matrix_B_down[k]=c_down_eigen[n][j][i];
                     k++;
                 }
             }}
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B_up,num_kept,0,matrix_prod2_up_KD[n],num_kept);
-        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasNoTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B_down,num_kept,0,matrix_prod2_down_KD[n],num_kept);
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasConjTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B_up,num_basis[n]-num_kept,0,matrix_prod2_up_KD[n],num_kept);
+        cblas_dgemm(CblasColMajor,CblasNoTrans,CblasConjTrans,num_kept,num_basis[n]-num_kept,num_kept,1,matrix_rho_KK,num_kept,matrix_B_down,num_basis[n]-num_kept,0,matrix_prod2_down_KD[n],num_kept);
         delete [] matrix_B_up;
         delete [] matrix_B_down;
         delete [] matrix_prod1_up_DK;
