@@ -36,7 +36,7 @@ func_wn.o: func_wn.cpp setup.h struct.h
 	$(cc)  $(CPPFLAGS) $(OPENMP_FLAGS) -c func_wn.cpp
 
 dos.o: dos.cpp setup.h struct.h
-	$(cc)  $(CPPFLAGS) $(OPENMP_FLAGS) -c dos.cpp
+	$(cc)  $(CPPFLAGS) $(MKL_FLAGS) $(OPENMP_FLAGS) -c dos.cpp
 
 # deallocate.o: deallocate.cpp setup.h struct.h
 # 	$(cc)  $(CPPFLAGS)  -c deallocate.cpp
