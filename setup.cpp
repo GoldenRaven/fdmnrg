@@ -38,3 +38,4 @@ bool N_up_N_down;
 bool occupation;
 bool imp_dos;
 bool stm_dos;
+bool eig;

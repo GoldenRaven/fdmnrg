@@ -40,6 +40,7 @@ extern bool N_up_N_down;
 extern bool occupation;
 extern bool imp_dos;
 extern bool stm_dos;
+extern bool eig;
 
 extern EIGEN_STATE ** eigen;
 extern BASIS ** basis_ordered;
