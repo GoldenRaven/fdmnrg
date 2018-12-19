@@ -480,8 +480,7 @@ double P_L(double freqency,double omegan)
     double theta(double);
     double gamma=alpha/4.0;
     double ans;
-    //ans=1.0/(sqrt(Pi)*alpha*fabs(omegan))*exp(-pow(log10(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2))*exp(-alpha*(gamma-alpha/4.0));//Log-Gaussian
-    if (fabs(omegan)<=1e-13 || fabs(freqency)<=1e-13){
+    if (freqncy == 0 ){
         ans=0;
     }else{
         ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));//eq. 1b final
@@ -498,12 +497,8 @@ double P_G(double freqency,double omegan)
 double theta(double freqency)
 {
     double ans;
-    if (freqency > 1e-13 ){
+    if (freqency > 0 ){
         ans=1.0;
-    }else if (fabs(freqency)<=1e-13){
-        ans=1.0/2.0;
-        //}else if (freqency > 0 && freqency < 1e-20){
-        //ans=1.0/2.0;
     }else {
         ans=0.0;
     }
