@@ -480,7 +480,7 @@ double P_L(double freqency,double omegan)
     double theta(double);
     double gamma=alpha/4.0;
     double ans;
-    if (freqncy == 0 ){
+    if (freqency == 0 ){
         ans=0;
     }else{
         ans=theta(freqency*omegan)/(sqrt(Pi)*alpha*fabs(omegan))*exp(-1.0*pow(log(fabs(omegan/freqency))/alpha+gamma-alpha/2.0,2.0))*exp(-1.0*alpha*(gamma-alpha/4.0));//eq. 1b final
