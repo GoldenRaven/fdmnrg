@@ -499,7 +499,7 @@ double theta(double freqency)
     double ans;
     if (freqency > 0 ){
         ans=1.0;
-    }else if (freqency = 0){
+    }else if (freqency == 0){
         ans=0.5;
     }else{
         ans=0.0;
