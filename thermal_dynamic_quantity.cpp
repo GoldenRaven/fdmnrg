@@ -43,63 +43,63 @@ void occu_imp(void)
 
 double inner_energy(int diff)
 {
-        //cout << "inner_energy: " << endl;
-        sumn_E=0;
-        for (int n=n0;n<N_max-1;n++){
-                sum_E=0;
-                for (int l=num_kept;l<num_basis[n];l++){
-                        sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
-                }
-                sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
-        }
-        for (int n=N_max-1;n<N_max;n++){
-                sum_E=0;
-                for (int l=0;l<num_basis[n];l++){
-                        sum_E=sum_E+exp_z[n][l]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
-                }
-                sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
-        }
-        //cout << setw(35) << "  inner energy : " << scientific << setprecision(15) << setw(25) << sumn_E << endl;
-        //cout << "Time leaved:    ";date_time();cout << endl;
-        return sumn_E;
+    //cout << "inner_energy: " << endl;
+    sumn_E=0;
+    for (int n=n0;n<N_max-1;n++){
+	sum_E=0;
+	for (int l=num_kept;l<num_basis[n];l++){
+	    sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
+	}
+	sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
+    }
+    for (int n=N_max-1;n<N_max;n++){
+	sum_E=0;
+	for (int l=0;l<num_basis[n];l++){
+	    sum_E=sum_E+exp_z[n][l]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
+	}
+	sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
+    }
+    //cout << setw(35) << "  inner energy : " << scientific << setprecision(15) << setw(25) << sumn_E << endl;
+    //cout << "Time leaved:    ";date_time();cout << endl;
+    return sumn_E;
 }
 
 double entropy_kB(int diff)
 {
-        //cout << "entropy: " << endl;
-        sumn_E=0;
-        sumn_Z=0;
-        for (int n=n0;n<N_max-1;n++){
-                sum_E=0;
-                sum_Z=0;
-                for (int l=num_kept;l<num_basis[n];l++){
-                        sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
-                        sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)));
-                        //cout << n << "   " << l << "  " << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "    " << (eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0) << endl;
-                        //cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
-                        //cout << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][l].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][l].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][l].eig_val_relat << (eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0) << "   " << eigen[n][l].k << endl;
-                }
-                sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
-                sumn_Z=sumn_Z+pow(4,N_max-1-n)*sum_Z;
-        }
-        for (int n=N_max-1;n<N_max;n++){
-                sum_E=0;
-                sum_Z=0;
-                for (int l=0;l<num_basis[n];l++){
-                        sum_E=sum_E+exp_z[n][l]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
-                        sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)));
-                        //cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
-                }
-                sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
-                sumn_Z=sumn_Z+pow(4,N_max-1-n)*sum_Z;
-        }
-        //cout << -1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << endl;
-        //cout << " xxxxxxxxx    " << sumn_Z << endl;
-        //cout << log(sumn_Z) << " xxxxxxxxx" << endl;
-        lnZ=-1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)+log(sumn_Z);
-        //cout << setw(35) << "  entropy : " << scientific << setprecision(15) << setw(25) << Beta*sumn_E + lnZ << endl;
-        //cout << "Time leaved:    ";date_time();cout << endl;
-        //cout << "inner energy in S: " << setprecision(15) << setw(25) << sumn_E << endl;
-        //cout << "lnZ   in S:        " << setprecision(15) << setw(25) << lnZ << endl;
-        return Beta*sumn_E + lnZ;
+    //cout << "entropy: " << endl;
+    sumn_E=0;
+    sumn_Z=0;
+    for (int n=n0;n<N_max-1;n++){
+	sum_E=0;
+	sum_Z=0;
+	for (int l=num_kept;l<num_basis[n];l++){
+	    sum_E=sum_E+exp_z[n][l-num_kept]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
+	    sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)));
+	    //cout << n << "   " << l << "  " << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "    " << (eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0) << endl;
+	    //cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
+	    //cout << "Dot  " << n << "  N_up_" << left << setw(5) << scientific << eigen[n][l].quant_num_upnum << "  N_down_" << left << setw(5) << scientific << eigen[n][l].quant_num_downnum << setw(25) << setprecision(15) << eigen[n][l].eig_val_relat << (eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0) << "   " << eigen[n][l].k << endl;
+	}
+	sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
+	sumn_Z=sumn_Z+pow(4,N_max-1-n)*sum_Z;
+    }
+    for (int n=N_max-1;n<N_max;n++){
+	sum_E=0;
+	sum_Z=0;
+	for (int l=0;l<num_basis[n];l++){
+	    sum_E=sum_E+exp_z[n][l]*(eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0);
+	    sum_Z=sum_Z+exp(-1.0*Beta*((eigen[n][l].eig_val_relat+E_GS[n])*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)));
+	    //cout << n << "   " << l << "   "  << eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0) << "     " << E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << "   1xxxxx    " << exp(-1.0*Beta*(eigen[n][l].eig_val*pow(Lambda,-1.0*(n-1-diff)/2.0)-E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0))) << endl;
+	}
+	sumn_E=sumn_E+pow(4,N_max-1-n)*sum_E;
+	sumn_Z=sumn_Z+pow(4,N_max-1-n)*sum_Z;
+    }
+    //cout << -1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0) << endl;
+    //cout << " xxxxxxxxx    " << sumn_Z << endl;
+    //cout << log(sumn_Z) << " xxxxxxxxx" << endl;
+    lnZ=-1.0*Beta*E_GS[N_max-1]*pow(Lambda,-1.0*(N_max-1-1-diff)/2.0)+log(sumn_Z);
+    //cout << setw(35) << "  entropy : " << scientific << setprecision(15) << setw(25) << Beta*sumn_E + lnZ << endl;
+    //cout << "Time leaved:    ";date_time();cout << endl;
+    //cout << "inner energy in S: " << setprecision(15) << setw(25) << sumn_E << endl;
+    //cout << "lnZ   in S:        " << setprecision(15) << setw(25) << lnZ << endl;
+    return Beta*sumn_E + lnZ;
 }

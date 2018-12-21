@@ -27,6 +27,10 @@ void genoutput(void)
     cout << "  " << " stm_dos     = " << left << setw(30) << stm_dos    << " :calulate stm DOS or not"              << endl;
     cout << "  " << " tc          = " << left << setw(30) << tc         << " :coupling tc"                          << endl;
     cout << "  " << " td          = " << left << setw(30) << td         << " :coupling td"                          << endl;
+    cout << "  " << " N_max       = " << left << setw(30) << N_max      << " :max chain length"                     << endl;
+    cout << "  " << " eig         = " << left << setw(30) << eig        << " :output energy flow or note"           << endl;
+    cout << "  " << " Omega       = " << left << setw(30) << Omega      << " :cutoff in P_newsc"                    << endl;
+    cout << "  " << " smooth      = " << left << setw(30) << smooth     << " :smooth method"                        << endl;
     if (Q){
         cout << "   Quantum number Charge(Q) is used in sorting." << endl;
     }else if(Q_Sz){

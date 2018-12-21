@@ -5,12 +5,14 @@
 #include<math.h>
 #include<mkl.h>
 #include<omp.h>
+#include<cstring>
 #include"setup.h"
 using namespace std;
 double Pi=3.141592653589793238;
 double *** rho_red_temp;
 double (*pf)(double,double);
 double P_K(double,double);
+double P_newsc(double,double);
 double **** eigen_sigma;
 double ** eigen_value;
 double **** rho;
@@ -148,7 +150,11 @@ void density_of_state(void)
     cout << "  sum_down= ";
     cout << setw(20) << setprecision(15) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
     cout << endl;
-    pf=P_K;
+    if (0 == strcmp(smooth, "wvd") ){
+	pf=P_K;
+    } else if (0 == strcmp(smooth, "newsc") ){
+	pf=P_newsc;
+    }
     if (smear) {
         ifstream f_freqency("freqency");
         ofstream f_imp_dos_smeared("imp_dos_smeared.dat");
@@ -520,5 +526,14 @@ double P_sum_rule(double freqency, double omegan)
 {
     double ans;
     ans=1.0;
+    return ans;
+}
+double P_newsc(double freqency, double omegan)
+{
+    double P_L(double,double);
+    double P_G(double,double);
+    double theta(double);
+    double ans;
+    ans=P_L(freqency,omegan)*theta(fabs(freqency)-Omega)+P_G(freqency,omegan)*theta(Omega-fabs(freqency));
     return ans;
 }

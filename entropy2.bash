@@ -5,25 +5,25 @@ cd -
 dir=`pwd`
 for file in h*
 do
-	cd $file
-	pwd
-	h=`echo $file |cut -d "_" -f 1 |cut -d h -f 2`
-	Vg=`echo $file |cut -d "_" -f 2 |cut -d g -f 2`
-	for z in 0*
-	do
-		cd $z
-		cat `find .|grep out` |grep ent |grep -vi job> ent
-		awk '{print $2,"      ",$5/0.69314718}' ent > s
-		cat s|wc -l > raw_num
-		cp /home/ligy/my-tool-box/sort/sort.x .
-		./sort.x
-		cp s ../s$z
-		cd ..
-	done
-	paste s0* > s
-	awk '{print $1,"      ",($2+$4+$6+$8)/4}' s > S
-	cp S ../S_h${h}_Vg${Vg}
+    cd $file
+    pwd
+    h=`echo $file |cut -d "_" -f 1 |cut -d h -f 2`
+    Vg=`echo $file |cut -d "_" -f 2 |cut -d g -f 2`
+    for z in 0*
+    do
+	cd $z
+	cat `find .|grep out` |grep ent |grep -vi job> ent
+	awk '{print $2,"      ",$5/0.69314718}' ent > s
+	cat s|wc -l > raw_num
+	cp /home/ligy/my-tool-box/sort/sort.x .
+	./sort.x
+	cp s ../s$z
 	cd ..
+    done
+    paste s0* > s
+    awk '{print $1,"      ",($2+$4+$6+$8)/4}' s > S
+    cp S ../S_h${h}_Vg${Vg}
+    cd ..
 done
 #
 #for h in 0.1
