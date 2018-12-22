@@ -5,7 +5,7 @@
 #include<math.h>
 #include<mkl.h>
 #include<omp.h>
-#include<string>
+#include<cstring>
 #include"setup.h"
 using namespace std;
 double Pi=3.141592653589793238;
@@ -150,9 +150,9 @@ void density_of_state(void)
     cout << "  sum_down= ";
     cout << setw(20) << setprecision(15) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
     cout << endl;
-    if (smooth == "wvd" ){
+    if (0 == strcmp(smooth, "wvd") ){
 	pf=P_K;
-    } else if (smooth == "newsc" ){
+    } else if (0 == strcmp(smooth, "newsc") ){
 	pf=P_newsc;
     }
     if (smear) {
@@ -535,5 +535,14 @@ double P_newsc(double freqency, double omegan)
     double theta(double);
     double ans;
     ans=P_L(freqency,omegan)*theta(fabs(freqency)-Omega)+P_G(freqency,omegan)*theta(Omega-fabs(freqency));
+    return ans;
+}
+double P_logGauss_Lorentz(double freqency, double omegan)
+{
+    double theta(double);
+    double logGauss,Lorentz,ans;
+    logGauss=exp()*exp(-1.0*pow(log(fabs(/))/alpha,2))/(b*omegan*sqrt(Pi));
+    Lorentz=;
+    ans=logGauss*theta(fabs(freqency)-Omega)+Lorentz*theta(Omega-fabs(freqency));
     return ans;
 }
