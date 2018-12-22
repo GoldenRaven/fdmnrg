@@ -40,4 +40,4 @@ bool imp_dos=1;
 bool stm_dos=0;
 bool eig=0;
 double Omega=0;
-char * smooth="newsc";
+string smooth="newsc";

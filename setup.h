@@ -42,7 +42,7 @@ extern bool imp_dos;
 extern bool stm_dos;
 extern bool eig;
 extern double Omega;
-extern char * smooth;
+extern string smooth;
 extern EIGEN_STATE ** eigen;
 extern BASIS ** basis_ordered;
 extern NEW_BASIS *** basis_kj;
