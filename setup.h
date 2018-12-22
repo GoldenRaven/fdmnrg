@@ -1,6 +1,7 @@
 #ifndef SETUP_H_
 #define SETUP_H_
 #include"struct.h"
+using namespace std;
 
 extern int job_id;
 extern int dim_imp;//=4;

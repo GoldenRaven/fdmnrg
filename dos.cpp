@@ -5,7 +5,7 @@
 #include<math.h>
 #include<mkl.h>
 #include<omp.h>
-#include<cstring>
+#include<string>
 #include"setup.h"
 using namespace std;
 double Pi=3.141592653589793238;
@@ -150,9 +150,9 @@ void density_of_state(void)
     cout << "  sum_down= ";
     cout << setw(20) << setprecision(15) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
     cout << endl;
-    if (0 == strcmp(smooth, "wvd") ){
+    if (smooth == "wvd" ){
 	pf=P_K;
-    } else if (0 == strcmp(smooth, "newsc") ){
+    } else if (smooth == "newsc" ){
 	pf=P_newsc;
     }
     if (smear) {

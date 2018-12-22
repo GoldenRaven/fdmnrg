@@ -45,4 +45,4 @@ thermal_dynamic_quantity.o: thermal_dynamic_quantity.cpp setup.h struct.h
 	$(cc)  $(CPPFLAGS)  -c thermal_dynamic_quantity.cpp
 
 clean:
-	rm $(name) $(objects)
+	rm $(objects)

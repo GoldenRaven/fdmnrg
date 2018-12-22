@@ -1,4 +1,6 @@
+#include<string>
 #include"struct.h"
+using namespace std;
 int job_id=1;
 int dim_imp=4;
 int dim_dot=4;
