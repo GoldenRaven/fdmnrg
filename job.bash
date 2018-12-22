@@ -80,6 +80,7 @@ do
 		echo $N_max       >> input_total
 		echo $eig         >> input_total
 		echo $Omega       >> input_total
+		echo $smooth      >> input_total
 
 		echo $temperature >> input_band
 		echo $Lambda      >> input_band
@@ -92,12 +93,12 @@ do
 		echo $N_up_N_down >> input_band
 		echo $N_max       >> input_band
 
-				# cp /home/ligy/NRG/makefreq.cpp .
+		# cp /home/ligy/NRG/makefreq.cpp .
 		cp  $dir/freqency .
 		cp $dir/test.submit .
 
-				# icpc makefreq.cpp -o makefreq.x
-				# ./makefreq.x
+		# icpc makefreq.cpp -o makefreq.x
+		# ./makefreq.x
 
 		cp ~/data_chain_fitting/chain_Lambda${Lambda}_r1_k${Gamma0}_Vg${Vg}_h${h}_z${z}.dat chain_band.dat
 		cp ~/data_chain_fitting/chain_Lambda${Lambda}_r1_k${Gamma0}_Vg${Vg}_h${h}_z${z}.dat chain_total.dat
