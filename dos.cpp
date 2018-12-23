@@ -13,6 +13,7 @@ double *** rho_red_temp;
 double (*pf)(double,double);
 double P_K(double,double);
 double P_newsc(double,double);
+double P_logGauss_Lorentz(double,double);
 double **** eigen_sigma;
 double ** eigen_value;
 double **** rho;
@@ -150,10 +151,12 @@ void density_of_state(void)
     cout << "  sum_down= ";
     cout << setw(20) << setprecision(15) << DOS1_DOWN+DOS2_DOWN+DOS3_DOWN;
     cout << endl;
-    if (0 == strcmp(smooth, "wvd") ){
+    if (smooth == "wvd" ){
 	pf=P_K;
-    } else if (0 == strcmp(smooth, "newsc") ){
+    } else if (smooth == "newsc" ){
 	pf=P_newsc;
+    } else if (smooth == "LG_Lorentz"){
+	pf=P_logGauss_Lorentz;
     }
     if (smear) {
         ifstream f_freqency("freqency");
@@ -539,10 +542,15 @@ double P_newsc(double freqency, double omegan)
 }
 double P_logGauss_Lorentz(double freqency, double omegan)
 {
-    double theta(double);
-    double logGauss,Lorentz,ans;
-    logGauss=exp()*exp(-1.0*pow(log(fabs(/))/alpha,2))/(b*omegan*sqrt(Pi));
-    Lorentz=;
-    ans=logGauss*theta(fabs(freqency)-Omega)+Lorentz*theta(Omega-fabs(freqency));
+    double ans;
+    if ( fabs(omegan) < Omega ){
+	ans=alpha/(2*Pi*(pow(freqency-omegan,2)+pow(alpha,2))); //Lorentzian
+    }else{
+	if ( freqency == 0 ){
+	    ans=0;
+	}else {
+	    ans=exp(-1.0*alpha*alpha/4.0)*exp(-1.0*pow(log(fabs(freqency/omegan))/alpha,2))/(alpha*fabs(omegan)*sqrt(Pi));
+	}
+    }
     return ans;
 }
