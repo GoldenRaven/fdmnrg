@@ -18,8 +18,10 @@ void genoutput(void)
     cout << "  " << " N_T         = " << left << setw(30) << N          << " :Dot corresponds to temperature"       << endl;
     cout << "  " << " N_max       = " << left << setw(30) << N_max      << " :Total number of dots"                 << endl;
     cout << "  " << " Lambda      = " << left << setw(30) << Lambda     << " :Logarithmic descritization parameter" << endl;
+    cout << "  " << " smooth      = " << left << setw(30) << smooth     << " :smooth method"                        << endl;
     cout << "  " << " alpha       = " << left << setw(30) << alpha      << " :Width in log-Gaussian"                << endl;
     cout << "  " << " omega0      = " << left << setw(30) << omega0     << " :Width in Gaussian"                    << endl;
+    cout << "  " << " Omega       = " << left << setw(30) << Omega      << " :cutoff in P_smooth"                   << endl;
     cout << "  " << " smear       = " << left << setw(30) << smear      << " :smear or unsmear"                     << endl;
     cout << "  " << " unsmear     = " << left << setw(30) << unsmear    << " :smear or unsmear"                     << endl;
     cout << "  " << " occupation  = " << left << setw(30) << occupation << " :calulate impurity occupation or not"  << endl;
@@ -29,8 +31,6 @@ void genoutput(void)
     cout << "  " << " td          = " << left << setw(30) << td         << " :coupling td"                          << endl;
     cout << "  " << " N_max       = " << left << setw(30) << N_max      << " :max chain length"                     << endl;
     cout << "  " << " eig         = " << left << setw(30) << eig        << " :output energy flow or note"           << endl;
-    cout << "  " << " Omega       = " << left << setw(30) << Omega      << " :cutoff in P_newsc"                    << endl;
-    cout << "  " << " smooth      = " << left << setw(30) << smooth     << " :smooth method"                        << endl;
     if (Q){
         cout << "   Quantum number Charge(Q) is used in sorting." << endl;
     }else if(Q_Sz){
