@@ -544,7 +544,7 @@ double P_logGauss_Lorentz(double freqency, double omegan)
 {
     double ans;
     if ( fabs(omegan) < Omega ){
-	ans=alpha/(2*Pi*(pow(freqency-omegan,2)+pow(alpha,2))); //Lorentzian
+	ans=lorentz_b/(2*Pi*(pow(freqency-omegan,2)+pow(lorentz_b,2))); //Lorentzian
     }else{
 	if ( freqency == 0 ){
 	    ans=0;

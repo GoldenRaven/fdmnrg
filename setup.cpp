@@ -43,3 +43,4 @@ bool stm_dos=0;
 bool eig=0;
 double Omega=0;
 string smooth="newsc";
+double lorentz_b=0.6*temperature;

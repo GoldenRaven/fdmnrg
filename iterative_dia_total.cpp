@@ -62,6 +62,7 @@ void iterative_dia_total(void)
     f_input >> eig         ;
     f_input >> Omega       ;
     f_input >> smooth      ;
+    f_input >> lorentz_b   ;
 
     Beta=1.0/temperature;//1.0/(k_B*T/D)
     N = int(1-(2.0*log(Beta_bar/Beta)/log(Lambda)));//site -1,0,...,N_max

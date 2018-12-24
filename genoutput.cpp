@@ -20,6 +20,7 @@ void genoutput(void)
     cout << "  " << " Lambda      = " << left << setw(30) << Lambda     << " :Logarithmic descritization parameter" << endl;
     cout << "  " << " smooth      = " << left << setw(30) << smooth     << " :smooth method"                        << endl;
     cout << "  " << " alpha       = " << left << setw(30) << alpha      << " :Width in log-Gaussian"                << endl;
+    cout << "  " << " lorentz_b   = " << left << setw(30) << lorentz_b  << " :width of Lorentzian distribution"     << endl;
     cout << "  " << " omega0      = " << left << setw(30) << omega0     << " :Width in Gaussian"                    << endl;
     cout << "  " << " Omega       = " << left << setw(30) << Omega      << " :cutoff in P_smooth"                   << endl;
     cout << "  " << " smear       = " << left << setw(30) << smear      << " :smear or unsmear"                     << endl;

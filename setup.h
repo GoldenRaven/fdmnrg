@@ -22,6 +22,7 @@ extern double alpha;//width in log-Gaussian
 extern double omega0;//width in Gaussian
 extern double tc;//stm coupling with c electron
 extern double td;//stm coupling with d electron
+extern double lorentz_b;//width of Lorentzian distribution
 extern int * num_basis;//[N_max+2].
 extern int * num_eigen_kept;//[N_max+2]
 extern double * E_GS;

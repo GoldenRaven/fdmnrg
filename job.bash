@@ -39,9 +39,10 @@ do
 	dir1=`pwd`
 	for temperature in 1e-$t
 	do
+	    lorentz_b=`awk -v T=$temperature '{print 0.6*T}'`
 	    omega0=$temperature
 	    Omega=$temperature
-			#rm -fr $temperature
+	    # rm -fr $temperature
 	    mkdir $temperature
 	    cd $temperature
 	    for z in 0 0.25 0.5 0.75
@@ -81,6 +82,7 @@ do
 		echo $eig         >> input_total
 		echo $Omega       >> input_total
 		echo $smooth      >> input_total
+		echo $lorentz_b   >> input_total
 
 		echo $temperature >> input_band
 		echo $Lambda      >> input_band
