@@ -20,7 +20,7 @@ imp_dos=1
 stm_dos=0
 tc=0.5
 td=0.5
-N_max=0
+N_tmp=0
 eig=1
 smooth='newsc' #'wvd'
 
@@ -78,7 +78,7 @@ do
 		echo $stm_dos     >> input_total
 		echo $tc          >> input_total
 		echo $td          >> input_total
-		echo $N_max       >> input_total
+		echo $N_tmp       >> input_total
 		echo $eig         >> input_total
 		echo $Omega       >> input_total
 		echo $smooth      >> input_total

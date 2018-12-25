@@ -520,9 +520,7 @@ double P_h(double omegan)
     double ans;
     if (smear && (fabs(omegan) < omega0)){
         ans=exp(-1.0*pow(log(fabs(omegan/omega0))/alpha,2.0));
-        cout << smear << '  1  ' << endl;
     }else{
-        cout << smear << '  2  ' << endl;
         ans=1.0;
     }
     return ans;
