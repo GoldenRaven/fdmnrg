@@ -1,7 +1,9 @@
 #!/bin/bash
 pbsnodes > tmp
 # sed -i '1,16d' tmp
+curr_time=`date`
 echo "###########################################" > tmpp
+echo 'current time:' $curr_time >> tmpp
 echo "Total node number:   8" >> tmpp
 echo "CPU number per node: 2" >> tmpp
 echo "Core number per CPU: 14" >> tmpp

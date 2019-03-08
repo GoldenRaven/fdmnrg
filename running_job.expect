@@ -1,0 +1,12 @@
+#!/usr/bin/expect
+set timeout 7
+for {set i 3} {$i<=9} {incr i} {
+spawn ssh ligy@node00$i
+expect "*password:" { send "ligy123456\r" }
+expect "*#*" { send "exit 1\r" }
+}
+for {set i 10} {$i<=10} {incr i} {
+spawn ssh ligy@node0$i
+expect "*password:" { send "ligy123456\r" }
+expect "*#*" { send "exit 1\r" }
+}
