@@ -16,7 +16,7 @@ void genoutput(void)
     cout << "  " << " Temperature = " << left << setw(30) << temperature<< " :Temperature Beta"                     << endl;
     cout << "  " << " Beta_bar    = " << left << setw(30) << Beta_bar   << " :Beta_bar"                             << endl;
     cout << "  " << " N_T         = " << left << setw(30) << N          << " :Dot corresponds to temperature"       << endl;
-    cout << "  " << " N_max       = " << left << setw(30) << N_max      << " :Total number of dots"                 << endl;
+    cout << "  " << " N_max       = " << left << setw(30) << N_max      << " :max chain length"                     << endl;
     cout << "  " << " Lambda      = " << left << setw(30) << Lambda     << " :Logarithmic descritization parameter" << endl;
     cout << "  " << " smooth      = " << left << setw(30) << smooth     << " :smooth method"                        << endl;
     cout << "  " << " alpha       = " << left << setw(30) << alpha      << " :Width in log-Gaussian"                << endl;
@@ -30,7 +30,6 @@ void genoutput(void)
     cout << "  " << " stm_dos     = " << left << setw(30) << stm_dos    << " :calulate stm DOS or not"              << endl;
     cout << "  " << " tc          = " << left << setw(30) << tc         << " :coupling tc"                          << endl;
     cout << "  " << " td          = " << left << setw(30) << td         << " :coupling td"                          << endl;
-    cout << "  " << " N_max       = " << left << setw(30) << N_max      << " :max chain length"                     << endl;
     cout << "  " << " eig         = " << left << setw(30) << eig        << " :output energy flow or note"           << endl;
     if (Q){
         cout << "   Quantum number Charge(Q) is used in sorting." << endl;
